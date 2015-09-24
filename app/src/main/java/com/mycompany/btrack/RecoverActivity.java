@@ -8,22 +8,21 @@ import android.view.MenuItem;
 import android.view.View;
 
 
-public class SignUpActivity extends ActionBarActivity {
+public class RecoverActivity extends ActionBarActivity {
 
-    private static final String TAG = "SignUpActivity";
-
+    private static final String TAG = "RecoverActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_up);
+        setContentView(R.layout.activity_recover);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu_sign_up, menu);
+//        getMenuInflater().inflate(R.menu.menu_recover, menu);
         return true;
     }
 
@@ -42,7 +41,7 @@ public class SignUpActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void signUp(View view) {
-        Log.i(TAG, "signUp()");
+    public void recover(View view) {
+        Log.i(TAG, "recover()");
     }
 }
