@@ -18,12 +18,12 @@
         android:inputType="textPassword"
         android:hint="@string/hint_password"/>
 
-    <Button
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/password_conf"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/login"
-        android:onClick="login"/>
+        android:inputType="textPassword"
+        android:hint="@string/hint_password_conf"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -31,12 +31,5 @@
         android:layout_gravity="center"
         android:text="@string/sign_up"
         android:onClick="signUp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/forgot_password"
-        android:onClick="recover"/>
 
 </LinearLayout>
