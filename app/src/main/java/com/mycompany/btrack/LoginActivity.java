@@ -8,6 +8,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
+
+import java.util.Map;
+
 
 public class LoginActivity extends ActionBarActivity {
 
@@ -18,6 +25,7 @@ public class LoginActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+//        Firebase.setAndroidContext(this);
     }
 
 
@@ -46,6 +54,20 @@ public class LoginActivity extends ActionBarActivity {
     public void login(View view) {
 
         Log.i(TAG, "login()");
+//        Firebase myFirebaseRef = new Firebase("https://burning-torch-5586.firebaseio.com/");
+//        myFirebaseRef.child("message").setValue("Do you have data? You'll love Firebase.");
+//        myFirebaseRef.child("message").addValueEventListener(new ValueEventListener() {
+//
+//            @Override
+//            public void onDataChange(DataSnapshot snapshot) {
+//                System.out.println(snapshot.getValue());  //prints "Do you have data? You'll love Firebase."
+//            }
+//
+//            @Override public void onCancelled(FirebaseError error) { }
+//
+//        });
+
+
     }
 
     public void signUp(View view) {
