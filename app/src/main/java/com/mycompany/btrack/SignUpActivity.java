@@ -1,5 +1,6 @@
 package com.mycompany.btrack;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -21,11 +22,20 @@ public class SignUpActivity extends ActionBarActivity {
 
     private static final String TAG = "SignUpActivity";
 
-
+    private static EditText emailET, passwordET, passwordConfET;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+
+        emailET = (EditText) findViewById(R.id.email);
+        passwordET = (EditText) findViewById(R.id.password);
+        passwordConfET = (EditText) findViewById(R.id.password_conf);
+        // get login intent (the intent that started this activity)
+        Intent intent = getIntent();
+        // fill email and password fields with values from login activity
+        emailET.setText(intent.getExtras().getString(LoginActivity.EXTRA_EMAIL));
+        passwordET.setText(intent.getExtras().getString(LoginActivity.EXTRA_PASSWORD));
     }
 
 
@@ -54,9 +64,6 @@ public class SignUpActivity extends ActionBarActivity {
     public void signUp(View view) {
         Log.i(TAG, "signUp()");
 
-        EditText emailET = (EditText) findViewById(R.id.email);
-        EditText passwordET = (EditText) findViewById(R.id.password);
-        EditText passwordConfET = (EditText) findViewById(R.id.password_conf);
         final String email = String.valueOf(emailET.getText());
         final String password = String.valueOf(passwordET.getText());
         final String passwordConf = String.valueOf(passwordConfET.getText());
@@ -84,9 +91,17 @@ public class SignUpActivity extends ActionBarActivity {
                 @Override
                 public void onSuccess(Map<String, Object> result) {
                     Log.i(TAG, "onSuccess():"+result.toString());
-                    // sign up successful, save user credentials in app
-                    app.setUser(new User(email, String.valueOf(result.get("uid"))));
-                    // TODO: go to all transactions activity
+                    // sign up successful, does not login user to firebase
+//                    // save user credentials in app
+//                    app.setUser(new User(email, String.valueOf(result.get("uid"))));
+//                    // login user
+//                    // TODO: go to login activity and login, or call login()?
+                    // return to login activity
+                    Intent intent = new Intent();
+                    intent.putExtra(LoginActivity.EXTRA_EMAIL, email);
+                    intent.putExtra(LoginActivity.EXTRA_PASSWORD, password);
+                    setResult(RESULT_OK, intent);
+                    finish();
                 }
 
                 @Override

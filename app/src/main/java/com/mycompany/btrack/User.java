@@ -34,4 +34,7 @@ public class User {
     protected static final boolean isValidPassword(String p1, String p2) {
         return p1.length() >= MIN_PASS_LEN && p1.equals(p2);
     }
+    protected static final boolean isValidPassword(String p1) {
+        return p1.length() >= MIN_PASS_LEN;
+    }
 }

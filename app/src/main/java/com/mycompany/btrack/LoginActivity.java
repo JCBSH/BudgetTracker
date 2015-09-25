@@ -7,7 +7,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 
+import com.firebase.client.AuthData;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -19,13 +22,21 @@ import java.util.Map;
 public class LoginActivity extends ActionBarActivity {
 
     private static final String TAG = "LoginActivity";
+    // extras
+    protected static final String EXTRA_EMAIL = "com.mycompany.btrack.EMAIL";
+    protected static final String EXTRA_PASSWORD = "com.mycompany.btrack.PASSWORD";
+    // result codes
+    protected static final int INTENT_SIGN_UP = 1;
 
+    private static EditText emailET, passwordET;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-//        Firebase.setAndroidContext(this);
+
+        emailET = (EditText) findViewById(R.id.email);
+        passwordET = (EditText) findViewById(R.id.password);
     }
 
 
@@ -54,26 +65,90 @@ public class LoginActivity extends ActionBarActivity {
     public void login(View view) {
 
         Log.i(TAG, "login()");
-//        Firebase myFirebaseRef = new Firebase("https://burning-torch-5586.firebaseio.com/");
-//        myFirebaseRef.child("message").setValue("Do you have data? You'll love Firebase.");
-//        myFirebaseRef.child("message").addValueEventListener(new ValueEventListener() {
-//
-//            @Override
-//            public void onDataChange(DataSnapshot snapshot) {
-//                System.out.println(snapshot.getValue());  //prints "Do you have data? You'll love Firebase."
-//            }
-//
-//            @Override public void onCancelled(FirebaseError error) { }
-//
-//        });
 
+        final String email = String.valueOf(emailET.getText());
+        final String password = String.valueOf(passwordET.getText());
+
+        Log.i(TAG, "email:" + email);
+        Log.i(TAG, "password:" + password);
+        // invalid email error
+        if (!User.isValidEmail(email)) {
+            Toast toast = Toast.makeText(getApplicationContext(),
+                    "Invalid Email",
+                    Toast.LENGTH_SHORT);
+            toast.show();
+        // invalid password error
+        } else if (!User.isValidPassword(password)) {
+            Toast toast = Toast.makeText(getApplicationContext(),
+                    "Password must be 8 or more characters",
+                    Toast.LENGTH_SHORT);
+            toast.show();
+        // email and passwords valid, attempt to login user
+        } else {
+            authUser(email, password);
+        }
 
     }
 
+    /**
+     * authenticate/login user with email and password
+     * if login is successful, the all transactions activity will start
+     * @param email
+     * @param password
+     */
+    private final void authUser(final String email, String password) {
+        final App app = (App) getApplicationContext();
+        app.getFirebase().authWithPassword(email, password,
+                new Firebase.AuthResultHandler() {
+
+            @Override
+            public void onAuthenticated(AuthData authData) {
+                // login successful, move to next activity
+                Log.i(TAG, authData.toString());
+                app.setUser(new User(email, authData.getUid()));
+                Intent intent = new Intent(LoginActivity.this, BlankActivity.class);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onAuthenticationError(FirebaseError firebaseError) {
+                // login unsuccessful, show error
+                Log.i(TAG, firebaseError.toString());
+                Toast toast = Toast.makeText(getApplicationContext(),
+                        firebaseError.getMessage(),
+                        Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        });
+    }
+
+    /**
+     * start sign up activity, passing email and password values
+     * on onActivityResult, the user is logged in and directed to all transactions activity
+     * @param view
+     */
     public void signUp(View view) {
         Log.i(TAG, "signUp()");
+        final String email = String.valueOf(emailET.getText());
+        final String password = String.valueOf(passwordET.getText());
         Intent intent = new Intent(this, SignUpActivity.class);
-        startActivity(intent);
+        intent.putExtra(EXTRA_EMAIL, email);
+        intent.putExtra(EXTRA_PASSWORD, password);
+        startActivityForResult(intent, INTENT_SIGN_UP);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == INTENT_SIGN_UP) {
+            if (resultCode == RESULT_OK) {
+                final String email = data.getStringExtra(EXTRA_EMAIL);
+                final String password = data.getStringExtra(EXTRA_PASSWORD);
+                emailET.setText(email);
+                passwordET.setText(password);
+                authUser(email, password);
+            }
+        }
     }
 
     public void recover(View view) {
