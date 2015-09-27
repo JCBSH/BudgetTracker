@@ -5,6 +5,7 @@ import android.text.format.DateFormat;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.UUID;
 
@@ -63,8 +64,10 @@ public class Transaction {
         return mAmount;
     }
 
-    public double getFormattedAmount() {
-        return mAmount;
+    public String getFormattedAmount() {
+        DecimalFormat df = new DecimalFormat("#.00");
+        String formatted = df.format(mAmount);
+        return formatted;
     }
 
 
