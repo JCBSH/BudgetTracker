@@ -49,6 +49,14 @@
             android:name=".BlankActivity"
             android:label="@string/title_activity_blank" >
         </activity>
+        <activity
+            android:name=".HomeActivity"
+            android:label="@string/title_activity_home"
+            android:parentActivityName=".LoginActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mycompany.btrack.LoginActivity" />
+        </activity>
     </application>
 
 </manifest>

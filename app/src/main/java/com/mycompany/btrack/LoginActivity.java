@@ -1,8 +1,8 @@
 package com.mycompany.btrack;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,12 +11,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.firebase.client.AuthData;
-import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
-
-import java.util.Map;
 
 
 public class LoginActivity extends ActionBarActivity {
@@ -106,7 +102,7 @@ public class LoginActivity extends ActionBarActivity {
                 // login successful, move to next activity
                 Log.i(TAG, authData.toString());
                 app.setUser(new User(email, authData.getUid()));
-                Intent intent = new Intent(LoginActivity.this, BlankActivity.class);
+                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                 startActivity(intent);
             }
 
