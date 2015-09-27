@@ -7,7 +7,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.mycompany.btrack.LoginActivity">
+    tools:context="com.mycompany.btrack.RecoverActivity">
 
     <EditText
         android:id="@+id/email"
@@ -16,32 +16,12 @@
         android:inputType="textEmailAddress"
         android:hint="@string/hint_email"/>
 
-    <EditText
-        android:id="@+id/password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:hint="@string/hint_password"/>
-
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="@string/login"
-        android:onClick="login"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/sign_up"
-        android:onClick="signUp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/forgot_password"
+        android:text="@string/recover_account"
         android:onClick="recover"/>
+
 
 </LinearLayout>
