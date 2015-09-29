@@ -74,6 +74,8 @@ public class EditTransactionActivity extends ActionBarActivity implements DateTi
                 mTransaction.setRecipient(String.valueOf(mRecipient.getText()));
                 mTransaction.setDescription(String.valueOf(mDescription.getText()));
                 mTransaction.setDate(mDate);
+                UserInfo.get(getApplicationContext()).sortTransactions();
+                finish();
             }
         });
     }
