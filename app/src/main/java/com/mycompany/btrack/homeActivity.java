@@ -74,7 +74,10 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
         if (id == R.id.action_logout) {
             App app = (App) getApplicationContext();
             app.getFirebase().unauth();
-            finish();
+            Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
             return true;
         }
 
