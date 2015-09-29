@@ -39,4 +39,7 @@ public class BlankActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+    public boolean something() {
+        return true;
+    }
 }
