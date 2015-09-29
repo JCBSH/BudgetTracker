@@ -6,9 +6,13 @@ import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckedTextView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -23,8 +27,12 @@ public class TransactionFragment extends ListFragment {
     public static final String TAG = TransactionFragment.class.getSimpleName();
 
     private ArrayList<Transaction> mTransactions;
-    private ImageButton mAddButton;
+    private ArrayList<Transaction> mDeleteTransactionsList;
+    private ArrayList<Integer> mDeleteListPosition;
+    private ImageButton mAddDeleteButton;
     private Callbacks mCallbacks;
+    private boolean mDeleteStatus;
+    private ImageButton mCancelButton;
 
     /**
      * Required interface for hosting activities.
@@ -40,32 +48,77 @@ public class TransactionFragment extends ListFragment {
 
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_delete) {
+            //getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+            mDeleteStatus = true;
+            mAddDeleteButton.setImageResource(R.drawable.bin);
+            mCancelButton.setVisibility(View.VISIBLE);
+            ((TransactionAdapter)getListAdapter()).notifyDataSetChanged();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView()");
         View rootView = inflater.inflate(R.layout.fragment_transaction,
                 container, false);
 //
 //
-//        ListView listView = (ListView) rootView.findViewById(android.R.id.list);
-//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-//            // Use floating context menus on Froyo and Gingerbread registerForContextMenu(listView);
-//            registerForContextMenu(listView);
-//        } else {
-//            // Use contextual action bar on Honeycomb and higher
-//            listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-//        }
-
-        mAddButton = (ImageButton) rootView.findViewById(R.id.transaction_AddButton);
-        mAddButton.setOnClickListener(new View.OnClickListener() {
+        //ListView listView = (ListView) rootView.findViewById(android.R.id.list);
+        //listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+        
+        mAddDeleteButton = (ImageButton) rootView.findViewById(R.id.transaction_AddDeleteButton);
+        mAddDeleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Transaction t = new Transaction();
-                UserInfo.get(getActivity().getApplicationContext()).addTransaction(t);
-                ((TransactionAdapter)getListAdapter()).notifyDataSetChanged();
-                mCallbacks.onTransactionSelected(t);
+                if (mDeleteStatus == false) {
+                    Transaction t = new Transaction();
+                    UserInfo.get(getActivity().getApplicationContext()).addTransaction(t);
+                    ((TransactionAdapter) getListAdapter()).notifyDataSetChanged();
+                    mCallbacks.onTransactionSelected(t);
+                } else {
+                    for (Integer i : mDeleteListPosition) {
+                        CheckedTextView ch = (CheckedTextView) getListView().getChildAt(i).findViewById(R.id.delete_check);
+                        ch.setChecked(false);
+                    }
+                    for (Transaction t : mDeleteTransactionsList) {
+                        UserInfo.get(getActivity().getApplicationContext()).deleteTransaction(t);
+                        mTransactions.remove(t);
+                    }
+
+                    mDeleteTransactionsList.clear();
+                    mDeleteListPosition.clear();
+                    //mAddDeleteButton.setImageResource(R.drawable.add);
+                    ((TransactionAdapter) getListAdapter()).notifyDataSetChanged();
+                    //mDeleteStatus = false;
+                }
             }
         });
-
+        
+        mCancelButton = (ImageButton) rootView.findViewById(R.id.transaction_cancelDeleteButton);
+        mCancelButton.setVisibility(View.INVISIBLE);
+        mCancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                for (Integer i : mDeleteListPosition) {
+                    CheckedTextView ch = (CheckedTextView) getListView().getChildAt(i).findViewById(R.id.delete_check);
+                    ch.setChecked(false);
+                }
+                mDeleteTransactionsList.clear();
+                mDeleteListPosition.clear();
+                mAddDeleteButton.setImageResource(R.drawable.add);
+                mDeleteStatus = false;
+                mCancelButton.setVisibility(View.INVISIBLE);
+                ((TransactionAdapter) getListAdapter()).notifyDataSetChanged();
+            }
+        });
 
 
         return rootView;
@@ -77,26 +130,23 @@ public class TransactionFragment extends ListFragment {
         setHasOptionsMenu(true);
         setRetainInstance(true);
 
+        //mDeleteStatus = false;
+        mDeleteStatus = false;
+
         mTransactions = UserInfo.get(getActivity().getApplicationContext()).getTransactions();
-//        Transaction t = new Transaction();
-//        t.setAmount(666.77);
-//        t.setDescription("i brought a keep");
-//        t.setRecipient("dealership");
-//
-//        Transaction s = new Transaction();
-//        s.setAmount(1026.3);
-//        s.setDescription("i brought a cow");
-//
-//        Transaction u = new Transaction();
-//        u.setAmount(1026.3);
-//
-//        mTransactions.add(t);
-//        mTransactions.add(s);
-//        mTransactions.add(u);
+        mDeleteTransactionsList = new ArrayList<Transaction>();
+        mDeleteListPosition =  new ArrayList<Integer>();
         TransactionAdapter adapter = new TransactionAdapter(mTransactions);
         setListAdapter(adapter);
 
         Log.d(TAG, "onCreate()");
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_transaction_menu, menu);
+
     }
 
 
@@ -123,10 +173,26 @@ public class TransactionFragment extends ListFragment {
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        // Get the Crime from the adapter
+        super.onListItemClick(l, v, position, id);
         Transaction t = ((TransactionAdapter)getListAdapter()).getItem(position);
-        // Start CrimePagerActivity
-        mCallbacks.onTransactionSelected(t);
+        if (mDeleteStatus == true) {
+            CheckedTextView ch = (CheckedTextView) v.findViewById(R.id.delete_check);
+            if (ch.isChecked() == true) {
+                ch.setChecked(false);
+                mDeleteTransactionsList.remove(ch);
+                mDeleteListPosition.remove(position);
+            } else {
+                ch.setChecked(true);
+                mDeleteTransactionsList.add(t);
+                mDeleteListPosition.add(position);
+            }
+        } else {
+
+            mCallbacks.onTransactionSelected(t);
+        }
+
+
+
     }
 
 
@@ -158,6 +224,16 @@ public class TransactionFragment extends ListFragment {
             TextView descriptionTextView =
                     (TextView)convertView.findViewById(R.id.transaction_list_item_description_TextView);
             descriptionTextView.setText(c.getDescription());
+
+            CheckedTextView ch = (CheckedTextView) convertView.findViewById(R.id.delete_check);
+            if (mDeleteStatus == true) {
+                ch.setVisibility(View.VISIBLE);
+            } else {
+                //ch.setChecked(false);
+                ch.setVisibility(View.INVISIBLE);
+            }
+
+
             return convertView;
         }
     }

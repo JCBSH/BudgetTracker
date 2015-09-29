@@ -19,13 +19,31 @@
         android:text="@string/empty_transactions_message"
         android:textSize="30sp"/>
 
-    <ImageButton
-        android:src = "@drawable/plus_blue"
+
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/transaction_AddButton"
-        android:background="@null"
         android:layout_gravity="right|bottom"
-        android:padding="5dp"/>
+        android:orientation="horizontal">
+        <ImageButton
+            android:src = "@drawable/close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/transaction_cancelDeleteButton"
+            android:background="@null"
+            android:padding="5dp"/>
+
+        <ImageButton
+            android:src = "@drawable/add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/transaction_AddDeleteButton"
+            android:background="@null"
+            android:padding="5dp"/>
+
+
+        </LinearLayout>
+
 
 </FrameLayout>
