@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -78,6 +79,7 @@ public class EditTransactionActivity extends ActionBarActivity implements DateTi
                 finish();
             }
         });
+        Log.d(TAG, "onCreate()");
     }
 
 
@@ -89,4 +91,34 @@ public class EditTransactionActivity extends ActionBarActivity implements DateTi
         mDateButton.setText(dateString);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume()");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart()");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop()");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        UserInfo.get(getApplicationContext()).saveTransactions();
+        Log.d(TAG, "onPause()");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy()");
+    }
 }

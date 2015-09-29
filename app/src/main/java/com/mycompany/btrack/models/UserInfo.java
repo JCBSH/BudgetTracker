@@ -42,6 +42,7 @@ public class UserInfo {
         mTransactionSerializer = new TransactionJSONSerializer(mAppContext,FILENAME);
         try {
             mTransactions = mTransactionSerializer.loadTransactions();
+            Log.d(TAG, "load transaction");
             sortTransactions();
 
         } catch (Exception e) {
@@ -65,8 +66,10 @@ public class UserInfo {
     public boolean saveTransactions() {
         try {
             mTransactionSerializer.saveTransactions(mTransactions);
+            int d = Log.d(TAG, "Transactions saved to file");
             return true;
         } catch (Exception e) {
+            Log.e(TAG, "Error saving Transactions: ", e);
             e.printStackTrace();
             return false;
         }

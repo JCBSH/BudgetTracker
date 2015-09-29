@@ -1,6 +1,7 @@
 package com.mycompany.btrack.models.JSONParsers;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.mycompany.btrack.models.Transaction;
 
@@ -22,6 +23,7 @@ import java.util.ArrayList;
  * Created by JCBSH on 28/09/2015.
  */
 public class TransactionJSONSerializer {
+    public static final String TAG = TransactionJSONSerializer.class.getSimpleName();
     private Context mContext;
     private String mFilename;
     public TransactionJSONSerializer(Context c, String f) {
@@ -50,6 +52,7 @@ public class TransactionJSONSerializer {
     public ArrayList<Transaction> loadTransactions() throws IOException, JSONException {
         ArrayList<Transaction> crimes = new ArrayList<Transaction>();
         BufferedReader reader = null;
+        Log.d(TAG, "loading");
         try {
             // Open and read the file into a StringBuilder
             InputStream in = mContext.openFileInput(mFilename);
@@ -63,11 +66,14 @@ public class TransactionJSONSerializer {
             // Parse the JSON using JSONTokener
             JSONArray array = (JSONArray) new JSONTokener(jsonString.toString())
                     .nextValue();
+            Log.d(TAG, "trying");
+            Log.d(TAG, jsonString.toString());
             // Build the array of crimes from JSONObjects
             for (int i = 0; i < array.length(); i++) {
                 crimes.add(new Transaction(array.getJSONObject(i)));
             }
         } catch (FileNotFoundException e) {
+            Log.d(TAG, "not found");
             // Ignore this one; it happens when starting fresh
         } finally {
             if (reader != null)
