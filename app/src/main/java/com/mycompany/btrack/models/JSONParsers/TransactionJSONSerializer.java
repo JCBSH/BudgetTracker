@@ -7,7 +7,6 @@ import com.mycompany.btrack.models.Transaction;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -28,14 +27,13 @@ public class TransactionJSONSerializer {
     }
 
     public ArrayList<Transaction> loadTransactions(JSONArray array) throws IOException, JSONException {
-        ArrayList<Transaction> crimes = new ArrayList<Transaction>();
-        BufferedReader reader = null;
+        ArrayList<Transaction> transactions = new ArrayList<Transaction>();
         Log.d(TAG, "loading");
 
         // Build the array of Transactions from JSONObjects
         for (int i = 0; i < array.length(); i++) {
-            crimes.add(new Transaction(array.getJSONObject(i)));
+            transactions.add(new Transaction(array.getJSONObject(i)));
         }
-        return crimes;
+        return transactions;
     }
 }

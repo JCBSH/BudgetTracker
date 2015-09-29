@@ -3,6 +3,7 @@ package com.mycompany.btrack.models;
 import android.content.Context;
 import android.util.Log;
 
+import com.mycompany.btrack.models.JSONParsers.DebtorJSONSerializer;
 import com.mycompany.btrack.models.JSONParsers.TransactionJSONSerializer;
 
 import org.json.JSONArray;
@@ -24,34 +25,27 @@ import java.util.UUID;
  * Created by JCBSH on 27/09/2015.
  */
 public class UserInfo {
+
     private JSONObject mJsonObject;
     private ArrayList<Transaction> mTransactions;
+    private ArrayList<Debtor> mDebtors;
     private static UserInfo sUserInfo;
     private Context mAppContext;
 
     public static final String JSON_TRANSACTIONS = "transactions";
+    public static final String JSON_DEBTORS = "debtors";
+    public static final String JSON_DEBTOR_COUNT = "debtor_count";
 
     private static final String TAG = UserInfo.class.getSimpleName();
     private static final String FILENAME = "crimes.json";
     private TransactionJSONSerializer mTransactionSerializer;
+    private DebtorJSONSerializer mDebtorSerializer;
 
-    public class TransactionComparator implements Comparator<Transaction> {
-        @Override
-        public int compare(Transaction o1, Transaction o2) {
-            int i = o1.getDate().compareTo(o2.getDate());
-            if (i == 1) {
-                return -1;
-            } else if (i == -1) {
-                return 1;
-            } else {
-                return 0;
-            }
-        }
-    }
 
     private UserInfo(Context appContext) {
         mAppContext = appContext;
         mTransactionSerializer = new TransactionJSONSerializer();
+        mDebtorSerializer = new DebtorJSONSerializer();
         try {
             BufferedReader reader = null;
             try {
@@ -70,12 +64,20 @@ public class UserInfo {
 
                 JSONArray transactionsJSONArray = mJsonObject.getJSONArray(UserInfo.JSON_TRANSACTIONS);
                 mTransactions = mTransactionSerializer.loadTransactions(transactionsJSONArray);
+
+                JSONArray debtorsJSONArray = mJsonObject.getJSONArray(UserInfo.JSON_DEBTORS);
+                mDebtors = mDebtorSerializer.loadDebtors(debtorsJSONArray);
+
+                int debtorsCount = mJsonObject.getInt(JSON_DEBTOR_COUNT);
+                Debtor.setCount(debtorsCount);
+
                 Log.d(TAG, "successfully load transaction");
                 sortTransactions();
 
             } catch (Exception e) {
                 mTransactions = new ArrayList<Transaction>();
-                Log.e(TAG, "Error loading crimes: ", e);
+                mDebtors = new ArrayList<Debtor>();
+                Log.e(TAG, "Error loading UserInfo: ", e);
                 e.printStackTrace();
             } finally {
                 if (reader != null)
@@ -98,7 +100,7 @@ public class UserInfo {
 
     public boolean saveTransactions() {
         try {
-            JSONArray transactionsJsonArray = mTransactionSerializer.createJSONTransactions(mTransactions);;
+            JSONArray transactionsJsonArray = mTransactionSerializer.createJSONTransactions(mTransactions);
             mJsonObject.put(JSON_TRANSACTIONS, transactionsJsonArray);
             int d = Log.d(TAG, "Transactions saved to JSONObject");
             return true;
@@ -107,9 +109,24 @@ public class UserInfo {
             e.printStackTrace();
             return false;
         }
-
-
     }
+
+    public boolean saveDebtors() {
+        try {
+            JSONArray debtorsJsonArray = mDebtorSerializer.createJSONDebtors(mDebtors);
+            mJsonObject.put(JSON_DEBTORS, debtorsJsonArray);
+
+            mJsonObject.put(JSON_DEBTOR_COUNT, Debtor.getCount());
+
+            int d = Log.d(TAG, "Debtors saved to JSONObject");
+            return true;
+        } catch (Exception e) {
+            Log.e(TAG, "Error saving Debtors: ", e);
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public boolean saveUserInfo() {
         try {
             Writer writer = null;
@@ -155,5 +172,51 @@ public class UserInfo {
 
     public void sortTransactions () {
         Collections.sort(mTransactions, new TransactionComparator());
+    }
+
+    public class TransactionComparator implements Comparator<Transaction> {
+        @Override
+        public int compare(Transaction o1, Transaction o2) {
+            int i = o1.getDate().compareTo(o2.getDate());
+            if (i == 1) {
+                return -1;
+            } else if (i == -1) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+    }
+
+    public void addDebtor(Debtor c) {
+        if(mDebtors.contains(c) == false) {
+            mDebtors.add(c);
+            sortDebtors();
+        }
+    }
+
+    public void deleteDebtor(Debtor c) {mDebtors.remove(c); }
+
+    public ArrayList<Debtor> getDebtors() {
+        return mDebtors;
+    }
+
+
+    public void sortDebtors () {
+        Collections.sort(mDebtors, new DebtorComparator());
+    }
+
+    public class DebtorComparator implements Comparator<Debtor> {
+        @Override
+        public int compare(Debtor o1, Debtor o2) {
+            int i = o1.getName().compareTo(o2.getName());
+            if (i == 1) {
+                return -1;
+            } else if (i == -1) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
     }
 }
