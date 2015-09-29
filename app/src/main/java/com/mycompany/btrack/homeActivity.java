@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
@@ -15,6 +16,7 @@ import com.mycompany.btrack.models.Transaction;
 
 public class HomeActivity extends ActionBarActivity implements ActionBar.TabListener, TransactionFragment.Callbacks{
 
+    public static final String TAG = HomeActivity.class.getSimpleName();
     private TabsAdapter mTabsAdapter;
     private ViewPager mViewPager;
 
@@ -52,7 +54,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
                     .setText(mTabsAdapter.getPageTitle(i))
                     .setTabListener(this));
         }
-
+        Log.d(TAG, "onCreate()");
     }
 
 
@@ -83,6 +85,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
 
         return super.onOptionsItemSelected(item);
     }
+
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
         mViewPager.setCurrentItem(tab.getPosition());
@@ -106,5 +109,34 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
         startActivity(i);
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart()");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume()");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause()");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop()");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy()");
+    }
 
 }

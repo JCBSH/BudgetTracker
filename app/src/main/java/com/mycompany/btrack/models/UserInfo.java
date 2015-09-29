@@ -98,18 +98,29 @@ public class UserInfo {
 
     public boolean saveTransactions() {
         try {
+            JSONArray transactionsJsonArray = mTransactionSerializer.createJSONTransactions(mTransactions);;
+            mJsonObject.put(JSON_TRANSACTIONS, transactionsJsonArray);
+            int d = Log.d(TAG, "Transactions saved to JSONObject");
+            return true;
+        } catch (Exception e) {
+            Log.e(TAG, "Error saving Transactions: ", e);
+            e.printStackTrace();
+            return false;
+        }
+
+
+    }
+    public boolean saveUserInfo() {
+        try {
             Writer writer = null;
             try {
-                JSONArray transactionsJsonArray = mTransactionSerializer.createJSONTransactions(mTransactions);
-                JSONObject userInfoJsonObject = new JSONObject();
-                userInfoJsonObject.put(JSON_TRANSACTIONS, transactionsJsonArray);
                 OutputStream out = mAppContext
                         .openFileOutput(FILENAME, Context.MODE_PRIVATE);
                 writer = new OutputStreamWriter(out);
-                writer.write(userInfoJsonObject.toString());
-                int d = Log.d(TAG, "Transactions saved to file");
+                writer.write(mJsonObject.toString());
+                int d = Log.d(TAG, "UserInfo saved to file");
             } catch (Exception e) {
-                Log.e(TAG, "Error saving Transactions: ", e);
+                Log.e(TAG, "Error saving UserInfo: ", e);
                 e.printStackTrace();
                 return false;
             } finally {
@@ -122,11 +133,6 @@ public class UserInfo {
             e.printStackTrace();
             return true;
         }
-
-
-    }
-    public boolean saveUserInfo() {
-        return true;
     }
 
     public void addTransaction(Transaction c) {
