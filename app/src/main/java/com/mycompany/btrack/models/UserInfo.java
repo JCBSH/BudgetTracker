@@ -5,6 +5,16 @@ import android.util.Log;
 
 import com.mycompany.btrack.models.JSONParsers.TransactionJSONSerializer;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -14,10 +24,12 @@ import java.util.UUID;
  * Created by JCBSH on 27/09/2015.
  */
 public class UserInfo {
+    private JSONObject mJsonObject;
     private ArrayList<Transaction> mTransactions;
     private static UserInfo sUserInfo;
-    private static int temp = 0;
     private Context mAppContext;
+
+    public static final String JSON_TRANSACTIONS = "transactions";
 
     private static final String TAG = UserInfo.class.getSimpleName();
     private static final String FILENAME = "crimes.json";
@@ -39,24 +51,45 @@ public class UserInfo {
 
     private UserInfo(Context appContext) {
         mAppContext = appContext;
-        mTransactionSerializer = new TransactionJSONSerializer(mAppContext,FILENAME);
+        mTransactionSerializer = new TransactionJSONSerializer();
         try {
-            mTransactions = mTransactionSerializer.loadTransactions();
-            Log.d(TAG, "load transaction");
-            sortTransactions();
+            BufferedReader reader = null;
+            try {
+                InputStream in = mAppContext.openFileInput(FILENAME);
+                reader = new BufferedReader(new InputStreamReader(in));
+                StringBuilder jsonString = new StringBuilder();
+                String line = null;
+                while ((line = reader.readLine()) != null) {
+                    // Line breaks are omitted and irrelevant
+                    jsonString.append(line);
+                }
 
-        } catch (Exception e) {
-            mTransactions = new ArrayList<Transaction>();
-            Log.e(TAG, "Error loading crimes: ", e);
+                mJsonObject = new JSONObject(jsonString.toString());
+                Log.d(TAG, mJsonObject.toString());
+
+
+                JSONArray transactionsJSONArray = mJsonObject.getJSONArray(UserInfo.JSON_TRANSACTIONS);
+                mTransactions = mTransactionSerializer.loadTransactions(transactionsJSONArray);
+                Log.d(TAG, "successfully load transaction");
+                sortTransactions();
+
+            } catch (Exception e) {
+                mTransactions = new ArrayList<Transaction>();
+                Log.e(TAG, "Error loading crimes: ", e);
+                e.printStackTrace();
+            } finally {
+                if (reader != null)
+                    reader.close();
+            }
+        } catch (IOException e) {
+            Log.e(TAG, "reader closing error: ", e);
+            e.printStackTrace();
         }
     }
 
     public static UserInfo get(Context c) {
         if (sUserInfo == null) {
             sUserInfo = new UserInfo(c.getApplicationContext());
-        }
-        if (temp == 0) {
-            temp = 4;
         }
         return sUserInfo;
     }
@@ -65,14 +98,35 @@ public class UserInfo {
 
     public boolean saveTransactions() {
         try {
-            mTransactionSerializer.saveTransactions(mTransactions);
-            int d = Log.d(TAG, "Transactions saved to file");
+            Writer writer = null;
+            try {
+                JSONArray transactionsJsonArray = mTransactionSerializer.createJSONTransactions(mTransactions);
+                JSONObject userInfoJsonObject = new JSONObject();
+                userInfoJsonObject.put(JSON_TRANSACTIONS, transactionsJsonArray);
+                OutputStream out = mAppContext
+                        .openFileOutput(FILENAME, Context.MODE_PRIVATE);
+                writer = new OutputStreamWriter(out);
+                writer.write(userInfoJsonObject.toString());
+                int d = Log.d(TAG, "Transactions saved to file");
+            } catch (Exception e) {
+                Log.e(TAG, "Error saving Transactions: ", e);
+                e.printStackTrace();
+                return false;
+            } finally {
+                if (writer != null)
+                    writer.close();
+            }
             return true;
-        } catch (Exception e) {
-            Log.e(TAG, "Error saving Transactions: ", e);
+        } catch (IOException e) {
+            Log.e(TAG, "writer closing error: ", e);
             e.printStackTrace();
-            return false;
+            return true;
         }
+
+
+    }
+    public boolean saveUserInfo() {
+        return true;
     }
 
     public void addTransaction(Transaction c) {
