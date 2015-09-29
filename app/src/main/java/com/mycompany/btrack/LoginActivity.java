@@ -103,6 +103,8 @@ public class LoginActivity extends ActionBarActivity {
                 Log.i(TAG, authData.toString());
                 app.setUser(new User(email, authData.getUid()));
                 Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
             }
 

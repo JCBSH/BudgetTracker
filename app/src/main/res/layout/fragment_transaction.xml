@@ -19,4 +19,13 @@
         android:text="@string/empty_transactions_message"
         android:textSize="30sp"/>
 
+    <ImageButton
+        android:src = "@drawable/plus_blue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/transaction_AddButton"
+        android:background="@null"
+        android:layout_gravity="right|bottom"
+        android:padding="5dp"/>
+
 </FrameLayout>

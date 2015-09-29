@@ -13,6 +13,10 @@ import java.util.UUID;
  * Created by JCBSH on 28/09/2015.
  */
 public class Transaction {
+    public static final  Double AMOUNT_DEFAULT = 0.00;
+    public static final  String RECIPIENT_DEFAULT = "empty";
+    public static final  String DESCRIPTION_DEFAULT = "no description";
+
     private static final String JSON_ID = "id";
     private static final String JSON_RECIPIENT = "recipient";
     private static final String JSON_AMOUNT = "amount";
@@ -31,6 +35,9 @@ public class Transaction {
     public Transaction() {
         mId = UUID.randomUUID();
         mDate = new Date();
+        mAmount = AMOUNT_DEFAULT;
+        mRecipient = RECIPIENT_DEFAULT;
+        mDescription = DESCRIPTION_DEFAULT;
     }
 
     public Transaction(JSONObject json) throws JSONException {
@@ -54,8 +61,18 @@ public class Transaction {
         return mRecipient;
     }
 
+    public String getEditTextRecipient() {
+        if (mRecipient.equalsIgnoreCase(RECIPIENT_DEFAULT)) {
+            return "";
+        } else {
+            return mRecipient;
+        }
+    }
+
     public void setRecipient(String recipient) {
-        mRecipient = recipient;
+        if (!recipient.equalsIgnoreCase("")) {
+            mRecipient = recipient;
+        }
     }
 
 
@@ -66,8 +83,12 @@ public class Transaction {
 
     public String getFormattedAmount() {
         DecimalFormat df = new DecimalFormat("#.00");
-        String formatted = df.format(mAmount);
-        return formatted;
+        if (mAmount == 0) {
+            return "0.00";
+        } else {
+            String formatted = df.format(mAmount);
+            return formatted;
+        }
     }
 
 
@@ -77,7 +98,12 @@ public class Transaction {
 
 
     public String getFormattedDate() {
-        String date = (String) DateFormat.format("EEEE, MMM dd, yyyy, h:mm a", getDate());
+        String date = (String) DateFormat.format("EEEE, MMM dd, yyyy, k:mm", getDate());
+        return date;
+    }
+
+    public String getFormattedDate2() {
+        String date = (String) DateFormat.format("EEEE, dd/MM/yy, k:mm", getDate());
         return date;
     }
 
@@ -94,8 +120,18 @@ public class Transaction {
         return mDescription;
     }
 
+    public String getEditTextDescription() {
+        if (mDescription.equalsIgnoreCase(DESCRIPTION_DEFAULT)) {
+            return "";
+        } else {
+            return mDescription;
+        }
+    }
+
     public void setDescription(String description) {
-        mDescription = description;
+        if (!description.equalsIgnoreCase("")) {
+            mDescription = description;
+        }
     }
 
 

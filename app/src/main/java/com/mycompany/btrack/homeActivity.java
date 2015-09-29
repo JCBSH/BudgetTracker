@@ -1,5 +1,6 @@
 package com.mycompany.btrack;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
@@ -9,8 +10,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 
+import com.mycompany.btrack.models.Transaction;
 
-public class HomeActivity extends ActionBarActivity implements ActionBar.TabListener {
+
+public class HomeActivity extends ActionBarActivity implements ActionBar.TabListener, TransactionFragment.Callbacks{
 
     private TabsAdapter mTabsAdapter;
     private ViewPager mViewPager;
@@ -56,7 +59,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_home, menu);
+        getMenuInflater().inflate(R.menu.menu_blank, menu);
         return true;
     }
 
@@ -68,13 +71,15 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_logout) {
+            App app = (App) getApplicationContext();
+            app.getFirebase().unauth();
+            finish();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
-
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
         mViewPager.setCurrentItem(tab.getPosition());
@@ -90,4 +95,13 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
 
     }
+
+    @Override
+    public void onTransactionSelected(Transaction transaction) {
+        Intent i = new Intent(this, EditTransactionActivity.class);
+        i.putExtra(EditTransactionActivity.EXTRA_TRANSACTION_ID, transaction.getId());
+        startActivity(i);
+    }
+
+
 }

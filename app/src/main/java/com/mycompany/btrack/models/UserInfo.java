@@ -45,7 +45,7 @@ public class UserInfo {
 
 
 
-    public boolean saveCrimes() {
+    public boolean saveTransactions() {
         try {
             mTransactionSerializer.saveTransactions(mTransactions);
             Log.d(TAG, "crimes saved to file");

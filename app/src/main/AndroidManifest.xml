@@ -51,11 +51,17 @@
         </activity>
         <activity
             android:name=".HomeActivity"
-            android:label="@string/title_activity_home"
-            android:parentActivityName=".LoginActivity" >
+            android:label="@string/title_activity_home" >
+
+
+        </activity>
+        <activity
+            android:name=".EditTransactionActivity"
+            android:label="@string/title_activity_edit_transaction_actitvity"
+            android:parentActivityName=".HomeActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.mycompany.btrack.LoginActivity" />
+                android:value="com.mycompany.btrack.HomeActivity" />
         </activity>
     </application>
 
