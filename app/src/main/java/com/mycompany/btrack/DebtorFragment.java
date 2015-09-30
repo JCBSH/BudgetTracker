@@ -2,7 +2,9 @@ package com.mycompany.btrack;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -44,7 +46,7 @@ public class DebtorFragment extends ListFragment {
     private Callbacks mCallbacks;
     private boolean mDeleteStatus;
     private String mCurrentEditName;
-    private Debtor mCurrentAddingDebtor;
+    private Debtor mCurrentSelectedDebtor;
 
     /**
      * Required interface for hosting activities.
@@ -112,13 +114,13 @@ public class DebtorFragment extends ListFragment {
             @Override
             public void onClick(View view) {
                 if (mDeleteStatus == false) {
-                    mCurrentAddingDebtor = new Debtor();
-                    UserInfo.get(getActivity().getApplicationContext()).addDebtor(mCurrentAddingDebtor);
+                    mCurrentSelectedDebtor = new Debtor();
+                    UserInfo.get(getActivity().getApplicationContext()).addDebtor(mCurrentSelectedDebtor);
                     FragmentManager fm = getActivity().getSupportFragmentManager();
                     //DatePickerFragment dialog = DatePickerFragment.newInstance(mCrime.getDate());
                     //TimePickerFragment dialog = TimePickerFragment.newInstance(mCrime.getDate());
                     EditDebtorFragment editFragment = new EditDebtorFragment();
-                    editFragment.setOldName(mCurrentAddingDebtor.getName());
+                    editFragment.setOldName(mCurrentSelectedDebtor.getName());
                     editFragment.setTargetFragment(DebtorFragment.this, REQUEST_NAME);
                     //Log.d(TAG, "before");
                     editFragment.show(fm, EDIT_NAME);
@@ -199,7 +201,7 @@ public class DebtorFragment extends ListFragment {
                 }
                 //Log.d(TAG,"no skipped");
                 if(UserInfo.get(getActivity().getApplicationContext()).
-                    changeName(mCurrentAddingDebtor, mCurrentEditName) == true) {
+                    changeName(mCurrentSelectedDebtor, mCurrentEditName) == true) {
                     UserInfo.get(getActivity().getApplicationContext()).sortDebtors();
                     UserInfo.get(getActivity().getApplicationContext()).saveDebtors();
                     UserInfo.get(getActivity().getApplicationContext()).saveUserInfo();
@@ -248,12 +250,27 @@ public class DebtorFragment extends ListFragment {
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        UserInfo.get(getActivity().getApplicationContext()).deleteDebtor(c);
-                        mDebtors.remove(c);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-                        UserInfo.get(getActivity().getApplicationContext()).saveDebtors();
-                        UserInfo.get(getActivity().getApplicationContext()).saveUserInfo();
-                        ((DebtorAdapter) getListAdapter()).notifyDataSetChanged();
+                        builder.setTitle("Delete Debtor")
+                                .setMessage("Are you sure you want to delete " + c.getName() + "?")
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        UserInfo.get(getActivity().getApplicationContext()).deleteDebtor(c);
+                                        mDebtors.remove(c);
+
+                                        UserInfo.get(getActivity().getApplicationContext()).saveDebtors();
+                                        UserInfo.get(getActivity().getApplicationContext()).saveUserInfo();
+                                        ((DebtorAdapter) getListAdapter()).notifyDataSetChanged();
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // do nothing
+                                    }
+                                })
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
                     }
                 });
             } else {
@@ -261,10 +278,10 @@ public class DebtorFragment extends ListFragment {
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        mCurrentAddingDebtor = c;
+                        mCurrentSelectedDebtor = c;
                         FragmentManager fm = getActivity().getSupportFragmentManager();
                         EditDebtorFragment editFragment = new EditDebtorFragment();
-                        editFragment.setOldName(mCurrentAddingDebtor.getName());
+                        editFragment.setOldName(mCurrentSelectedDebtor.getName());
                         editFragment.setTargetFragment(DebtorFragment.this, REQUEST_NAME);
                         //Log.d(TAG, "before");
                         editFragment.show(fm, EDIT_NAME);
