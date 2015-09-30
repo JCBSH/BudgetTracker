@@ -175,6 +175,7 @@ public class UserInfo {
         Collections.sort(mTransactions, new TransactionComparator());
     }
 
+
     public class TransactionComparator implements Comparator<Transaction> {
         @Override
         public int compare(Transaction o1, Transaction o2) {
@@ -189,12 +190,26 @@ public class UserInfo {
         }
     }
 
+    //LEGACY code, useless
     public void addDebtor(Debtor c) {
         if(mDebtors.contains(c) == false) {
             mDebtors.add(c);
             sortDebtors();
         }
     }
+
+    public Debtor createAndAddNewDebtor() {
+        Debtor debtor =  new Debtor();
+        int i = 1;
+        debtor.setName(Debtor.getDefaultName() + String.valueOf(i));
+        while(mDebtors.contains(debtor) == true) {
+            i++;
+            debtor.setName(Debtor.getDefaultName() + String.valueOf(i));
+        }
+        mDebtors.add(debtor);
+        return debtor;
+    }
+
 
     public boolean changeName (Debtor c, String newName) {
         String oldName = c.getName();

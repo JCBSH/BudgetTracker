@@ -114,8 +114,9 @@ public class DebtorFragment extends ListFragment {
             @Override
             public void onClick(View view) {
                 if (mDeleteStatus == false) {
-                    mCurrentSelectedDebtor = new Debtor();
-                    UserInfo.get(getActivity().getApplicationContext()).addDebtor(mCurrentSelectedDebtor);
+                    //mCurrentSelectedDebtor = new Debtor();
+                    //UserInfo.get(getActivity().getApplicationContext()).addDebtor(mCurrentSelectedDebtor);
+                    mCurrentSelectedDebtor = UserInfo.get(getActivity().getApplicationContext()).createAndAddNewDebtor();
                     FragmentManager fm = getActivity().getSupportFragmentManager();
                     //DatePickerFragment dialog = DatePickerFragment.newInstance(mCrime.getDate());
                     //TimePickerFragment dialog = TimePickerFragment.newInstance(mCrime.getDate());

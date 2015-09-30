@@ -45,8 +45,12 @@ public class Debtor {
         Debtor.count = count;
     }
 
-    public String getNextDefaultName() {
+    public static String getNextDefaultName() {
         return DEFAULT_NAME + String.valueOf(count);
+    }
+
+    public static String getDefaultName() {
+        return DEFAULT_NAME;
     }
 
     @Override
