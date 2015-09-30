@@ -11,6 +11,8 @@ import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.widget.EditText;
 
+import com.mycompany.btrack.utils.StringTextWatcher;
+
 /**
  * Created by JCBSH on 30/09/2015.
  */
@@ -20,8 +22,9 @@ public class EditDebtorFragment extends DialogFragment {
 
     private String mName;
     private String mOldName = "blank";
+    private EditText mNameField;
 
-    public void getOldName(String name) {
+    public void setOldName(String name) {
         mOldName = name;
     }
 
@@ -33,7 +36,8 @@ public class EditDebtorFragment extends DialogFragment {
 
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
-        final EditText nameField = (EditText) v.findViewById(R.id.debtor_name_EditText);
+        mNameField = (EditText) v.findViewById(R.id.debtor_name_EditText);
+        mNameField.addTextChangedListener(new StringTextWatcher(mNameField, 20));
         Resources res = getResources();
         builder.setTitle(String.format(res.getString(R.string.edit_debtor_dialog_title), mOldName));
         builder.setView(v)
@@ -41,7 +45,7 @@ public class EditDebtorFragment extends DialogFragment {
                 .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        mName = String.valueOf(nameField.getText());
+                        mName = String.valueOf(mNameField.getText());
                         sendResult(Activity.RESULT_OK);
                     }
                 })

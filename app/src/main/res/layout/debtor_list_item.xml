@@ -3,25 +3,29 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/selected_background">
-    <CheckedTextView android:id="@+id/delete_check"
-                     android:layout_width="wrap_content"
-                     android:layout_height="?android:attr/listPreferredItemHeightSmall"
-                     android:gravity="center_vertical"
-                     android:checkMark="?android:attr/textCheckMark"
-                     android:layout_alignParentRight="true"/>
+    <ImageButton
+        android:src = "@drawable/edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:id="@+id/debtor_editDeleteButton"
+        android:background="@null"
+        android:layout_margin="@dimen/list_item_standard_1_margin"/>
+
     <TextView android:id="@+id/debtor_list_item_amount_TextView"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:layout_toLeftOf="@id/delete_check"
-              android:padding="4dp"
-              android:text="" />
+              android:layout_toLeftOf="@id/debtor_editDeleteButton"
+              android:padding="@dimen/TextView_standard_1_padding"
+              android:layout_marginRight="@dimen/list_item_standard_2_margin"
+              android:text="800.00" />
     <TextView android:id="@+id/debtor_list_item_name_TextView"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:layout_toLeftOf="@id/debtor_list_item_amount_TextView"
+              android:layout_alignParentLeft="true"
               android:textStyle="bold"
-              android:paddingLeft="4dp"
-              android:paddingRight="4dp" />
+              android:padding="@dimen/TextView_standard_1_padding"/>
+
 
 
 </RelativeLayout>

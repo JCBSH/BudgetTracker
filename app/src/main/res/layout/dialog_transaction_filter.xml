@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <LinearLayout android:orientation="horizontal"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="50"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_margin="@dimen/activity_standard_1_margin"
+            android:padding="@dimen/TextView_standard_1_padding"
+            android:textStyle="bold"
+            android:text="@string/transaction_filter_from_date_label"
+            style="?android:listSeparatorTextViewStyle"
+            />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="50"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_margin="@dimen/activity_standard_1_margin"
+            android:padding="@dimen/TextView_standard_1_padding"
+            android:textStyle="bold"
+            android:text="@string/transaction_filter_to_date_label"
+            style="?android:listSeparatorTextViewStyle"
+            />
+
+    </LinearLayout>
+
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/transaction_filter_picker_container">
+
+    </RelativeLayout>
+    <EditText
+        android:id="@+id/transaction_filter_recipient_EditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_standard_1_margin"
+        android:hint="@string/transaction_recipient_hint" />
+    <EditText
+        android:id="@+id/transaction_filter_amount_EditText"
+        android:inputType="numberDecimal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_standard_1_margin"
+        android:hint="@string/transaction_amount_hint" />
+    <EditText
+        android:id="@+id/transaction_filter_description_EditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_standard_1_margin"
+        android:hint="@string/transaction_description_keywords_hint" />
+</LinearLayout>

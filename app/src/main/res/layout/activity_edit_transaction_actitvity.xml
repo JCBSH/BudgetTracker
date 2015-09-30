@@ -2,18 +2,48 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+<<<<<<< HEAD
               android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+=======
+              android:layout_marginLeft="@dimen/activity_standard_1_margin"
+              android:layout_marginRight="@dimen/activity_standard_1_margin"
+              android:orientation="vertical"
+    >
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_standard_1_margin"
+>>>>>>> c11989de0f07eb0d32eae8ab4151dd0c774b759d
         android:orientation="vertical">
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+<<<<<<< HEAD
             android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginRight="16dp"
             android:orientation="vertical">
+=======
+            android:text="@string/transaction_amount_label"
+            style="?android:listSeparatorTextViewStyle"
+            />
+        <EditText android:id="@+id/transaction_amount_EditText"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:inputType="numberDecimal"
+                  android:ems="10"
+                  android:hint="@string/transaction_amount_hint"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_standard_1_margin"
+        android:orientation="vertical">
+>>>>>>> c11989de0f07eb0d32eae8ab4151dd0c774b759d
 
             <TextView
                 android:layout_width="match_parent"
@@ -48,9 +78,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 
+<<<<<<< HEAD
                 android:hint="@string/transaction_recipient_hint"
                 />
         </LinearLayout>
+=======
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_standard_1_margin"
+        android:orientation="vertical">
+>>>>>>> c11989de0f07eb0d32eae8ab4151dd0c774b759d
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -77,6 +115,7 @@
         <Button android:id="@+id/transaction_date_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+<<<<<<< HEAD
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             />
@@ -91,6 +130,19 @@
             android:text="@string/transaction_update_button_text"/>
 
     </LinearLayout>
+=======
+            android:layout_marginTop="@dimen/activity_standard_1_margin"
+        />
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/transaction_update_button"
+        android:layout_margin="@dimen/activity_standard_1_margin"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/transaction_update_button_text"/>
+>>>>>>> c11989de0f07eb0d32eae8ab4151dd0c774b759d
 
 </ScrollView>
 

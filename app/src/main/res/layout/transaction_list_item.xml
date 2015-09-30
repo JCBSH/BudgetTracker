@@ -13,29 +13,26 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_toLeftOf="@id/delete_check"
-              android:padding="4dp"
+              android:padding="@dimen/TextView_standard_1_padding"
               android:text="Crime date" />
     <TextView android:id="@+id/transaction_list_item_recipient_TextView"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_toLeftOf="@id/transaction_list_item_amount_TextView"
               android:textStyle="bold"
-              android:paddingLeft="4dp"
-              android:paddingRight="4dp" />
+              android:padding="@dimen/TextView_standard_1_padding" />
     <TextView android:id="@+id/transaction_list_item_date_TextView"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_below="@id/transaction_list_item_amount_TextView"
               android:layout_toLeftOf="@id/transaction_list_item_amount_TextView"
-              android:paddingLeft="4dp"
-              android:paddingRight="4dp" />
+              android:padding="@dimen/TextView_standard_1_padding" />
     <TextView android:id="@+id/transaction_list_item_description_TextView"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_below="@id/transaction_list_item_date_TextView"
               android:layout_toLeftOf="@id/transaction_list_item_amount_TextView"
-              android:paddingLeft="4dp"
-              android:paddingRight="4dp" />
+              android:padding="@dimen/TextView_standard_1_padding"/>
 
 
 </RelativeLayout>
