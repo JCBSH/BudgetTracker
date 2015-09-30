@@ -11,7 +11,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -27,7 +26,6 @@ import java.util.UUID;
  * Created by JCBSH on 27/09/2015.
  */
 public class UserInfo {
-
     private JSONObject mJsonObject;
     private ArrayList<Transaction> mTransactions;
     private ArrayList<Debtor> mDebtors;
@@ -39,7 +37,7 @@ public class UserInfo {
     public static final String JSON_DEBTOR_COUNT = "debtor_count";
 
     private static final String TAG = UserInfo.class.getSimpleName();
-    private static final String FILENAME = "userInfo.json";
+    private static final String FILENAME = "crimes.json";
     private TransactionJSONSerializer mTransactionSerializer;
     private DebtorJSONSerializer mDebtorSerializer;
 
@@ -48,74 +46,62 @@ public class UserInfo {
         mAppContext = appContext;
         mTransactionSerializer = new TransactionJSONSerializer();
         mDebtorSerializer = new DebtorJSONSerializer();
-        try {
-            loadUserInfo();
-
-        } catch (Exception e) {
-            mTransactions = new ArrayList<Transaction>();
-            mDebtors = new ArrayList<Debtor>();
-            Log.e(TAG, "Error loading UserInfo: ", e);
-            e.printStackTrace();
-        }
-    }
-
-    private void loadUserInfo() throws IOException, JSONException {
-        mTransactions = new ArrayList<Transaction>();
-        mDebtors = new ArrayList<Debtor>();
         mJsonObject = new JSONObject();
-        BufferedReader reader = null;
         try {
-            InputStream in = mAppContext.openFileInput(FILENAME);
-            reader = new BufferedReader(new InputStreamReader(in));
-            StringBuilder jsonString = new StringBuilder();
-            String line = null;
-            while ((line = reader.readLine()) != null) {
-                // Line breaks are omitted and irrelevant
-                jsonString.append(line);
-            }
-
-            Log.d(TAG, jsonString.toString());
-            mJsonObject = new JSONObject(jsonString.toString());
-            Log.d(TAG, mJsonObject.toString());
-
-
+            BufferedReader reader = null;
             try {
-                JSONArray transactionsJSONArray = mJsonObject.getJSONArray(UserInfo.JSON_TRANSACTIONS);
-                mTransactions = mTransactionSerializer.loadTransactions(transactionsJSONArray);
-            } catch (JSONException e) {
+                InputStream in = mAppContext.openFileInput(FILENAME);
+                reader = new BufferedReader(new InputStreamReader(in));
+                StringBuilder jsonString = new StringBuilder();
+                String line = null;
+                while ((line = reader.readLine()) != null) {
+                    // Line breaks are omitted and irrelevant
+                    jsonString.append(line);
+                }
+
+                mJsonObject = new JSONObject(jsonString.toString());
+                Log.d(TAG, mJsonObject.toString());
+
+
+                try {
+                    JSONArray transactionsJSONArray = mJsonObject.getJSONArray(UserInfo.JSON_TRANSACTIONS);
+                    mTransactions = mTransactionSerializer.loadTransactions(transactionsJSONArray);
+                } catch (JSONException e) {
+                    mTransactions = new ArrayList<Transaction>();
+                    Log.d(TAG, "Error loading Transactions, possibly that it doesn't exist");
+                }
+
+                try {
+                    JSONArray debtorsJSONArray = mJsonObject.getJSONArray(UserInfo.JSON_DEBTORS);
+                    mDebtors = mDebtorSerializer.loadDebtors(debtorsJSONArray);
+                } catch (JSONException e) {
+                    mDebtors = new ArrayList<Debtor>();
+                    Log.d(TAG, "Error loading Debtors, possibly that it doesn't exist");
+                }
+                try {
+                    int debtorsCount = mJsonObject.getInt(JSON_DEBTOR_COUNT);
+                    Debtor.setCount(debtorsCount);
+                } catch (JSONException e) {
+                    Debtor.setCount(0);
+                    Log.d(TAG, "Error loading Debtor count, possibly that it doesn't exist");
+                }
+
+                Log.d(TAG, "successfully load transaction");
+                sortTransactions();
+                sortDebtors();
+
+            } catch (Exception e) {
                 mTransactions = new ArrayList<Transaction>();
-                Log.e(TAG, "Error loading Transaction: ", e);
-            }
-
-
-            try {
-                JSONArray debtorsJSONArray = mJsonObject.getJSONArray(UserInfo.JSON_DEBTORS);
-                mDebtors = mDebtorSerializer.loadDebtors(debtorsJSONArray);
-
-            } catch (JSONException e) {
                 mDebtors = new ArrayList<Debtor>();
-                Log.e(TAG, "Error loading Debtors: ", e);
+                Log.e(TAG, "Error loading UserInfo: ", e);
+                e.printStackTrace();
+            } finally {
+                if (reader != null)
+                    reader.close();
             }
-
-
-            try {
-                int debtorsCount = mJsonObject.getInt(JSON_DEBTOR_COUNT);
-                Debtor.setCount(debtorsCount);
-            } catch (JSONException e) {
-                Debtor.setCount(0);
-                Log.e(TAG, "Error loading Debtor count: ", e);
-            }
-
-
-            Log.d(TAG, "successfully load transaction");
-            sortTransactions();
-            sortDebtors();
-
-        } catch (FileNotFoundException e) {
-            Log.d(TAG, "no file");
-        } finally {
-            if (reader != null)
-                reader.close();
+        } catch (IOException e) {
+            Log.e(TAG, "reader closing error: ", e);
+            e.printStackTrace();
         }
     }
 
