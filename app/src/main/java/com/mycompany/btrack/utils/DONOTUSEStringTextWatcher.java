@@ -9,14 +9,14 @@ import android.widget.Toast;
 /**
  * Created by JCBSH on 29/09/2015.
  */
-public class StringTextWatcher implements TextWatcher {
-    public final String TAG = StringTextWatcher.class.getSimpleName();
+public class DONOTUSEStringTextWatcher implements TextWatcher {
+    public final String TAG = DONOTUSEStringTextWatcher.class.getSimpleName();
     private final EditText mAmount;
     private int mSizeLimit;
     private String mBefore;
     private Toast mToast;
 
-    public StringTextWatcher (EditText amount, int sizeLimit) {
+    public DONOTUSEStringTextWatcher (EditText amount, int sizeLimit) {
         mAmount = amount;
         mSizeLimit = sizeLimit;
         mToast = Toast.makeText(mAmount.getContext(), "blah", Toast.LENGTH_SHORT);

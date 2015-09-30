@@ -13,6 +13,8 @@ import android.widget.Toast;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.mycompany.btrack.utils.ErrorUtil;
+import com.mycompany.btrack.utils.UserUtil;
 
 
 public class LoginActivity extends ActionBarActivity {
@@ -25,6 +27,11 @@ public class LoginActivity extends ActionBarActivity {
     protected static final int INTENT_SIGN_UP = 1;
 
     private static EditText emailET, passwordET;
+    private final ErrorUtil error;
+
+    public LoginActivity() {
+        error = new ErrorUtil();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,15 +75,15 @@ public class LoginActivity extends ActionBarActivity {
         Log.i(TAG, "email:" + email);
         Log.i(TAG, "password:" + password);
         // invalid email error
-        if (!User.isValidEmail(email)) {
+        if (!UserUtil.isValidEmail(email, error)) {
             Toast toast = Toast.makeText(getApplicationContext(),
-                    "Invalid Email",
+                    error.getMessage(),
                     Toast.LENGTH_SHORT);
             toast.show();
         // invalid password error
-        } else if (!User.isValidPassword(password)) {
+        } else if (!UserUtil.isValidPassword(password, error)) {
             Toast toast = Toast.makeText(getApplicationContext(),
-                    "Password must be 8 or more characters",
+                    error.getMessage(),
                     Toast.LENGTH_SHORT);
             toast.show();
         // email and passwords valid, attempt to login user
