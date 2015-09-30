@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:id="@android:id/empty"
         android:text="@string/empty_debtors_message"
-        android:textSize="30sp"/>
+        android:textSize="@dimen/empty_list_text_size_1"/>
 
 
 
@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/debtor_AddCancelButton"
             android:background="@null"
-            android:padding="5dp"/>
+            android:layout_margin="@dimen/bottom_button_margin_1"/>
 
 
     </LinearLayout>

@@ -3,6 +3,7 @@ package com.mycompany.btrack;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,6 +27,9 @@ public class TransactionFragment extends ListFragment {
 
     public static final String TAG = TransactionFragment.class.getSimpleName();
 
+    private static final int REQUEST_FILTER_INFO = 0;
+    private static final String EDIT_FILTER_INFO = "edit filter info";
+
     private ArrayList<Transaction> mTransactions;
     private ArrayList<Transaction> mDeleteTransactionsList;
     private ArrayList<Integer> mDeleteListPosition;
@@ -33,6 +37,8 @@ public class TransactionFragment extends ListFragment {
     private Callbacks mCallbacks;
     private boolean mDeleteStatus;
     private ImageButton mCancelButton;
+    private ImageButton mFilterButton;
+    private ImageButton mCancelFilterButton;
 
     /**
      * Required interface for hosting activities.
@@ -121,6 +127,21 @@ public class TransactionFragment extends ListFragment {
                 ((TransactionAdapter) getListAdapter()).notifyDataSetChanged();
             }
         });
+
+        mFilterButton = (ImageButton) rootView.findViewById(R.id.transaction_FilterButton);
+        mFilterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                FilterTransactionFragment filterTransactionFragment = new FilterTransactionFragment();
+                filterTransactionFragment.setTargetFragment(TransactionFragment.this, REQUEST_FILTER_INFO);
+                filterTransactionFragment.show(fm, EDIT_FILTER_INFO);
+            }
+        });
+
+        mCancelFilterButton = (ImageButton) rootView.findViewById(R.id.transaction_cancelFilterButton);
+        mCancelFilterButton.setVisibility(View.INVISIBLE);
+
 
 
         return rootView;

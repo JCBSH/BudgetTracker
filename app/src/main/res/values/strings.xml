@@ -37,4 +37,9 @@
     <string name="debtor_name_hint">Enter name</string>
     <string name="edit_debtor_dialog_title">Edit %1$s</string>
     <string name="debtor_name_exist_message">Name Already Exist</string>
+    <string name="transaction_description_keywords_hint">Enter a key phase of description</string>
+    <string name="transaction_filter_apply_button_text">Apply</string>
+    <string name="transaction_filter_date_hint">DD/MM/YYYY</string>
+    <string name="transaction_filter_dialog_title">Transaction Filter</string>
+    <string name="apply">Apply</string>
 </resources>
