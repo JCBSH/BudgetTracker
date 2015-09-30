@@ -3,29 +3,39 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
-    <RelativeLayout android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-        <DatePicker
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:scaleX="0.6"
-            android:scaleY="0.6"
-            android:transformPivotX = "@dimen/transaction_filter_left_date_transformX"
-            android:transformPivotY = "@dimen/transaction_filter_date_transformY"
-            android:calendarViewShown="false"
-            android:spinnersShown="true"
-            android:layout_alignParentLeft="true"/>
-        <DatePicker
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:scaleX="0.6"
-            android:scaleY="0.6"
-            android:transformPivotX = "@dimen/transaction_filter_right_date_transformX"
-            android:transformPivotY = "@dimen/transaction_filter_date_transformY"
-            android:calendarViewShown="false"
-            android:spinnersShown="true"
-            android:layout_alignParentRight="true"/>
 
+    <LinearLayout android:orientation="horizontal"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="50"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_margin="@dimen/activity_standard_1_margin"
+            android:padding="@dimen/TextView_standard_1_padding"
+            android:textStyle="bold"
+            android:text="@string/transaction_filter_from_date_label"
+            style="?android:listSeparatorTextViewStyle"
+            />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="50"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_margin="@dimen/activity_standard_1_margin"
+            android:padding="@dimen/TextView_standard_1_padding"
+            android:textStyle="bold"
+            android:text="@string/transaction_filter_to_date_label"
+            style="?android:listSeparatorTextViewStyle"
+            />
+
+    </LinearLayout>
+
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/transaction_filter_picker_container">
 
     </RelativeLayout>
     <EditText

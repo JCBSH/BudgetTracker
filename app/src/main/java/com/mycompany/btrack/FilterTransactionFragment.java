@@ -9,6 +9,7 @@ import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 
 /**
  * Created by JCBSH on 30/09/2015.
@@ -26,7 +27,8 @@ public class FilterTransactionFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         // Get the layout inflater
         View v = getActivity().getLayoutInflater().inflate(R.layout.dialog_transaction_filter,null);
-
+        RelativeLayout pickerContainer = (RelativeLayout) v.findViewById(R.id.transaction_filter_picker_container);
+        View pickersView = getActivity().getLayoutInflater().inflate(R.layout.transaction_filter_pickers, pickerContainer);
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
 

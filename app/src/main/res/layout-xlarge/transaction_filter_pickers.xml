@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+    <DatePicker
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleX="1.10"
+        android:scaleY="1.10"
+        android:transformPivotX = "@dimen/transaction_filter_left_date_transformX"
+        android:transformPivotY = "@dimen/transaction_filter_date_transformY"
+        android:calendarViewShown="false"
+        android:spinnersShown="true"
+        android:layout_alignParentLeft="true"/>
+    <DatePicker
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleX="1.10"
+        android:scaleY="1.10"
+        android:transformPivotX = "@dimen/transaction_filter_right_date_transformX"
+        android:transformPivotY = "@dimen/transaction_filter_date_transformY"
+        android:calendarViewShown="false"
+        android:spinnersShown="true"
+        android:layout_alignParentRight="true"/>
+
+
+</RelativeLayout>

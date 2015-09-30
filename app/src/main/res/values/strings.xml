@@ -42,4 +42,6 @@
     <string name="transaction_filter_date_hint">DD/MM/YYYY</string>
     <string name="transaction_filter_dialog_title">Transaction Filter</string>
     <string name="apply">Apply</string>
+    <string name="transaction_filter_from_date_label">FROM</string>
+    <string name="transaction_filter_to_date_label">TO</string>
 </resources>
