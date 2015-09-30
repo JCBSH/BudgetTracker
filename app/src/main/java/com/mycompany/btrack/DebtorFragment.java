@@ -16,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CheckedTextView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -41,10 +40,9 @@ public class DebtorFragment extends ListFragment {
     private ArrayList<Debtor> mDebtors;
     private ArrayList<Debtor> mDeleteDebtorsList;
     private ArrayList<Integer> mDeleteListPosition;
-    private ImageButton mAddDeleteButton;
+    private ImageButton mAddCancelButton;
     private Callbacks mCallbacks;
     private boolean mDeleteStatus;
-    private ImageButton mCancelButton;
     private String mCurrentEditName;
     private Debtor mCurrentAddingDebtor;
 
@@ -67,8 +65,7 @@ public class DebtorFragment extends ListFragment {
         if (id == R.id.action_delete) {
             //getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
             mDeleteStatus = true;
-            mAddDeleteButton.setImageResource(R.drawable.bin);
-            mCancelButton.setVisibility(View.VISIBLE);
+            mAddCancelButton.setImageResource(R.drawable.close);
             ((DebtorAdapter)getListAdapter()).notifyDataSetChanged();
             return true;
         }
@@ -110,8 +107,8 @@ public class DebtorFragment extends ListFragment {
         //ListView listView = (ListView) rootView.findViewById(android.R.id.list);
         //listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
 
-        mAddDeleteButton = (ImageButton) rootView.findViewById(R.id.debtor_AddDeleteButton);
-        mAddDeleteButton.setOnClickListener(new View.OnClickListener() {
+        mAddCancelButton = (ImageButton) rootView.findViewById(R.id.debtor_AddCancelButton);
+        mAddCancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mDeleteStatus == false) {
@@ -121,7 +118,7 @@ public class DebtorFragment extends ListFragment {
                     //DatePickerFragment dialog = DatePickerFragment.newInstance(mCrime.getDate());
                     //TimePickerFragment dialog = TimePickerFragment.newInstance(mCrime.getDate());
                     EditDebtorFragment editFragment = new EditDebtorFragment();
-                    editFragment.getOldName(mCurrentAddingDebtor.getName());
+                    editFragment.setOldName(mCurrentAddingDebtor.getName());
                     editFragment.setTargetFragment(DebtorFragment.this, REQUEST_NAME);
                     //Log.d(TAG, "before");
                     editFragment.show(fm, EDIT_NAME);
@@ -131,41 +128,10 @@ public class DebtorFragment extends ListFragment {
                     UserInfo.get(getActivity().getApplicationContext()).saveUserInfo();
 
                 } else {
-                    for (Integer i : mDeleteListPosition) {
-                        CheckedTextView ch = (CheckedTextView) getListView().getChildAt(i).findViewById(R.id.delete_check);
-                        ch.setChecked(false);
-                    }
-                    for (Debtor t : mDeleteDebtorsList) {
-                        UserInfo.get(getActivity().getApplicationContext()).deleteDebtor(t);
-                        mDebtors.remove(t);
-                    }
-
-                    mDeleteDebtorsList.clear();
-                    mDeleteListPosition.clear();
-
-                    UserInfo.get(getActivity().getApplicationContext()).saveDebtors();
-                    UserInfo.get(getActivity().getApplicationContext()).saveUserInfo();
+                    mAddCancelButton.setImageResource(R.drawable.add);
+                    mDeleteStatus = false;
                     ((DebtorAdapter) getListAdapter()).notifyDataSetChanged();
-                    //mDeleteStatus = false;
                 }
-            }
-        });
-
-        mCancelButton = (ImageButton) rootView.findViewById(R.id.debtor_cancelDeleteButton);
-        mCancelButton.setVisibility(View.INVISIBLE);
-        mCancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                for (Integer i : mDeleteListPosition) {
-                    CheckedTextView ch = (CheckedTextView) getListView().getChildAt(i).findViewById(R.id.delete_check);
-                    ch.setChecked(false);
-                }
-                mDeleteDebtorsList.clear();
-                mDeleteListPosition.clear();
-                mAddDeleteButton.setImageResource(R.drawable.add);
-                mDeleteStatus = false;
-                mCancelButton.setVisibility(View.INVISIBLE);
-                ((DebtorAdapter) getListAdapter()).notifyDataSetChanged();
             }
         });
 
@@ -251,21 +217,8 @@ public class DebtorFragment extends ListFragment {
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         Debtor t = ((DebtorAdapter)getListAdapter()).getItem(position);
-        if (mDeleteStatus == true) {
-            CheckedTextView ch = (CheckedTextView) v.findViewById(R.id.delete_check);
-            if (ch.isChecked() == true) {
-                ch.setChecked(false);
-                mDeleteDebtorsList.remove(ch);
-                mDeleteListPosition.remove(position);
-            } else {
-                ch.setChecked(true);
-                mDeleteDebtorsList.add(t);
-                mDeleteListPosition.add(position);
-            }
-        } else {
+        mCallbacks.onDebtorSelected(t);
 
-            mCallbacks.onDebtorSelected(t);
-        }
 
 
 
@@ -283,19 +236,42 @@ public class DebtorFragment extends ListFragment {
                 convertView = getActivity().getLayoutInflater()
                         .inflate(R.layout.debtor_list_item, null);
             }
-            Debtor c = getItem(position);
+            final Debtor c = getItem(position);
             TextView recipientTextView =
                     (TextView)convertView.findViewById(R.id.debtor_list_item_name_TextView);
             recipientTextView.setText(c.getName());
 
 
-            CheckedTextView ch = (CheckedTextView) convertView.findViewById(R.id.delete_check);
+            ImageButton button = (ImageButton) convertView.findViewById(R.id.debtor_editDeleteButton);
             if (mDeleteStatus == true) {
-                ch.setVisibility(View.VISIBLE);
+                button.setImageResource(R.drawable.smallbin);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        UserInfo.get(getActivity().getApplicationContext()).deleteDebtor(c);
+                        mDebtors.remove(c);
+
+                        UserInfo.get(getActivity().getApplicationContext()).saveDebtors();
+                        UserInfo.get(getActivity().getApplicationContext()).saveUserInfo();
+                        ((DebtorAdapter) getListAdapter()).notifyDataSetChanged();
+                    }
+                });
             } else {
-                //ch.setChecked(false);
-                ch.setVisibility(View.INVISIBLE);
+                button.setImageResource(R.drawable.edit);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mCurrentAddingDebtor = c;
+                        FragmentManager fm = getActivity().getSupportFragmentManager();
+                        EditDebtorFragment editFragment = new EditDebtorFragment();
+                        editFragment.setOldName(mCurrentAddingDebtor.getName());
+                        editFragment.setTargetFragment(DebtorFragment.this, REQUEST_NAME);
+                        //Log.d(TAG, "before");
+                        editFragment.show(fm, EDIT_NAME);
+                    }
+                });
             }
+
 
 
             return convertView;

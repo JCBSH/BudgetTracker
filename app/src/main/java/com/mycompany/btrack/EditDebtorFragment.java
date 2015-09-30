@@ -21,7 +21,7 @@ public class EditDebtorFragment extends DialogFragment {
     private String mName;
     private String mOldName = "blank";
 
-    public void getOldName(String name) {
+    public void setOldName(String name) {
         mOldName = name;
     }
 

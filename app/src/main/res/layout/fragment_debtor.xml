@@ -25,19 +25,12 @@
         android:layout_height="wrap_content"
         android:layout_gravity="right|bottom"
         android:orientation="horizontal">
-        <ImageButton
-            android:src = "@drawable/close"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/debtor_cancelDeleteButton"
-            android:background="@null"
-            android:padding="5dp"/>
 
         <ImageButton
             android:src = "@drawable/add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/debtor_AddDeleteButton"
+            android:id="@+id/debtor_AddCancelButton"
             android:background="@null"
             android:padding="5dp"/>
 
