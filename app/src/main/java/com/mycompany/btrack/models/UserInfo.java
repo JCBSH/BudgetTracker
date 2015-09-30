@@ -7,9 +7,11 @@ import com.mycompany.btrack.models.JSONParsers.DebtorJSONSerializer;
 import com.mycompany.btrack.models.JSONParsers.TransactionJSONSerializer;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -37,7 +39,7 @@ public class UserInfo {
     public static final String JSON_DEBTOR_COUNT = "debtor_count";
 
     private static final String TAG = UserInfo.class.getSimpleName();
-    private static final String FILENAME = "crimes.json";
+    private static final String FILENAME = "userInfo.json";
     private TransactionJSONSerializer mTransactionSerializer;
     private DebtorJSONSerializer mDebtorSerializer;
 
@@ -47,46 +49,73 @@ public class UserInfo {
         mTransactionSerializer = new TransactionJSONSerializer();
         mDebtorSerializer = new DebtorJSONSerializer();
         try {
-            BufferedReader reader = null;
+            loadUserInfo();
+
+        } catch (Exception e) {
+            mTransactions = new ArrayList<Transaction>();
+            mDebtors = new ArrayList<Debtor>();
+            Log.e(TAG, "Error loading UserInfo: ", e);
+            e.printStackTrace();
+        }
+    }
+
+    private void loadUserInfo() throws IOException, JSONException {
+        mTransactions = new ArrayList<Transaction>();
+        mDebtors = new ArrayList<Debtor>();
+        mJsonObject = new JSONObject();
+        BufferedReader reader = null;
+        try {
+            InputStream in = mAppContext.openFileInput(FILENAME);
+            reader = new BufferedReader(new InputStreamReader(in));
+            StringBuilder jsonString = new StringBuilder();
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                // Line breaks are omitted and irrelevant
+                jsonString.append(line);
+            }
+
+            Log.d(TAG, jsonString.toString());
+            mJsonObject = new JSONObject(jsonString.toString());
+            Log.d(TAG, mJsonObject.toString());
+
+
             try {
-                InputStream in = mAppContext.openFileInput(FILENAME);
-                reader = new BufferedReader(new InputStreamReader(in));
-                StringBuilder jsonString = new StringBuilder();
-                String line = null;
-                while ((line = reader.readLine()) != null) {
-                    // Line breaks are omitted and irrelevant
-                    jsonString.append(line);
-                }
-
-                mJsonObject = new JSONObject(jsonString.toString());
-                Log.d(TAG, mJsonObject.toString());
-
-
                 JSONArray transactionsJSONArray = mJsonObject.getJSONArray(UserInfo.JSON_TRANSACTIONS);
                 mTransactions = mTransactionSerializer.loadTransactions(transactionsJSONArray);
+            } catch (JSONException e) {
+                mTransactions = new ArrayList<Transaction>();
+                Log.e(TAG, "Error loading Transaction: ", e);
+            }
 
+
+            try {
                 JSONArray debtorsJSONArray = mJsonObject.getJSONArray(UserInfo.JSON_DEBTORS);
                 mDebtors = mDebtorSerializer.loadDebtors(debtorsJSONArray);
 
+            } catch (JSONException e) {
+                mDebtors = new ArrayList<Debtor>();
+                Log.e(TAG, "Error loading Debtors: ", e);
+            }
+
+
+            try {
                 int debtorsCount = mJsonObject.getInt(JSON_DEBTOR_COUNT);
                 Debtor.setCount(debtorsCount);
-
-                Log.d(TAG, "successfully load transaction");
-                sortTransactions();
-                sortDebtors();
-
-            } catch (Exception e) {
-                mTransactions = new ArrayList<Transaction>();
-                mDebtors = new ArrayList<Debtor>();
-                Log.e(TAG, "Error loading UserInfo: ", e);
-                e.printStackTrace();
-            } finally {
-                if (reader != null)
-                    reader.close();
+            } catch (JSONException e) {
+                Debtor.setCount(0);
+                Log.e(TAG, "Error loading Debtor count: ", e);
             }
-        } catch (IOException e) {
-            Log.e(TAG, "reader closing error: ", e);
-            e.printStackTrace();
+
+
+            Log.d(TAG, "successfully load transaction");
+            sortTransactions();
+            sortDebtors();
+
+        } catch (FileNotFoundException e) {
+            Log.d(TAG, "no file");
+        } finally {
+            if (reader != null)
+                reader.close();
         }
     }
 
