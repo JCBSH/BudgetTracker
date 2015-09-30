@@ -3,6 +3,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
     <DatePicker
+        android:id="@+id/from_DatePicker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:scaleX="0.4"
@@ -13,6 +14,7 @@
         android:spinnersShown="true"
         android:layout_alignParentLeft="true"/>
     <DatePicker
+        android:id="@+id/to_DatePicker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:scaleX="0.4"

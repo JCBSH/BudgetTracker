@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
@@ -32,10 +33,10 @@ public class FilterTransactionFragment extends DialogFragment {
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
 
-        //mNameField = (EditText) v.findViewById(R.id.debtor_name_EditText);
-        //mNameField.addTextChangedListener(new StringTextWatcher(mNameField, 20));;
-        //mFromDateButton = (Button) v.findViewById(R.id.transaction_filter_from_button);
-        //mToDateButton = (Button) v.findViewById(R.id.transaction_filter_to_button);
+        DatePicker fromPicker = (DatePicker) pickersView.findViewById(R.id.from_DatePicker);
+        DatePicker toPicker = (DatePicker) pickersView.findViewById(R.id.to_DatePicker);
+
+        
         mRecipientField = (EditText) v.findViewById(R.id.transaction_filter_recipient_EditText);
         mAmountField = (EditText) v.findViewById(R.id.transaction_filter_amount_EditText);
         mDescriptionPhaseField = (EditText) v.findViewById(R.id.transaction_filter_description_EditText);
