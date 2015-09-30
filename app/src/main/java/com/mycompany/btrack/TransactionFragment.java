@@ -151,6 +151,12 @@ public class TransactionFragment extends ListFragment {
 
     }
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mCallbacks = (Callbacks)activity;
+        Log.d(TAG, "onAttach()");
+    }
 
     @Override
     public void onStart() {
@@ -190,12 +196,6 @@ public class TransactionFragment extends ListFragment {
         Log.d(TAG, "onDetach()");
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mCallbacks = (Callbacks)activity;
-        Log.d(TAG, "onAttach()");
-    }
 
 
     @Override

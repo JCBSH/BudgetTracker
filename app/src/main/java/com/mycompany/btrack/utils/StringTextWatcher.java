@@ -2,6 +2,7 @@ package com.mycompany.btrack.utils;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -19,6 +20,7 @@ public class StringTextWatcher implements TextWatcher {
         mAmount = amount;
         mSizeLimit = sizeLimit;
         mToast = Toast.makeText(mAmount.getContext(), "blah", Toast.LENGTH_SHORT);
+        mToast.setGravity(Gravity.CENTER, 0, 0);
 
     }
     public int getSizeLimit() {

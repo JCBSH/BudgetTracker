@@ -122,4 +122,6 @@ public class EditTransactionActivity extends ActionBarActivity implements DateTi
         super.onDestroy();
         Log.d(TAG, "onDestroy()");
     }
+
+
 }

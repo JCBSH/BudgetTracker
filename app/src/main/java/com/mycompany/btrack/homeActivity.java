@@ -11,10 +11,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 
+import com.mycompany.btrack.models.Debtor;
 import com.mycompany.btrack.models.Transaction;
 
 
-public class HomeActivity extends ActionBarActivity implements ActionBar.TabListener, TransactionFragment.Callbacks{
+public class HomeActivity extends ActionBarActivity implements ActionBar.TabListener, TransactionFragment.Callbacks, DebtorFragment.Callbacks{
 
     public static final String TAG = HomeActivity.class.getSimpleName();
     private TabsAdapter mTabsAdapter;
@@ -139,4 +140,8 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
         Log.d(TAG, "onDestroy()");
     }
 
+    @Override
+    public void onDebtorSelected(Debtor debtor) {
+
+    }
 }

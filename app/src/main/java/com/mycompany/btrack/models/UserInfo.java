@@ -73,6 +73,7 @@ public class UserInfo {
 
                 Log.d(TAG, "successfully load transaction");
                 sortTransactions();
+                sortDebtors();
 
             } catch (Exception e) {
                 mTransactions = new ArrayList<Transaction>();
@@ -195,6 +196,24 @@ public class UserInfo {
         }
     }
 
+    public boolean changeName (Debtor c, String newName) {
+        String oldName = c.getName();
+        Debtor temp = new Debtor();
+        temp.setName(newName);
+        Debtor.setCount(Debtor.getCount() - 1);
+        Log.d(TAG, oldName);
+        Log.d(TAG, newName);
+        Log.d(TAG, "attempting to changeName");
+        if (mDebtors.contains(temp) == true) {
+            Log.d(TAG, "attempt failed");
+            return false;
+        } else {
+            c.setName(newName);
+            Log.d(TAG, "attempt success");
+            return true;
+        }
+    }
+
     public void deleteDebtor(Debtor c) {mDebtors.remove(c); }
 
     public ArrayList<Debtor> getDebtors() {
@@ -209,14 +228,11 @@ public class UserInfo {
     public class DebtorComparator implements Comparator<Debtor> {
         @Override
         public int compare(Debtor o1, Debtor o2) {
-            int i = o1.getName().compareTo(o2.getName());
-            if (i == 1) {
-                return -1;
-            } else if (i == -1) {
-                return 1;
-            } else {
-                return 0;
+            int res = String.CASE_INSENSITIVE_ORDER.compare(o1.getName(), o2.getName());
+            if (res == 0) {
+                res = o1.getName().compareTo(o2.getName());
             }
+            return res;
         }
     }
 }

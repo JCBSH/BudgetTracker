@@ -3,6 +3,7 @@ package com.mycompany.btrack.utils;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -23,6 +24,7 @@ public class MoneyTextWatcher implements TextWatcher{
     public MoneyTextWatcher (EditText amount) {
         mAmount = amount;
         mToast = Toast.makeText(mAmount.getContext(), "blah", Toast.LENGTH_SHORT);
+        mToast.setGravity(Gravity.CENTER, 0, 0);
 
     }
     @Override
