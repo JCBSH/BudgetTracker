@@ -1,90 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:orientation="vertical"
-    >
+              android:orientation="vertical">
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical">
-
-        <TextView
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/transaction_amount_label"
-            style="?android:listSeparatorTextViewStyle"
-            />
-        <EditText android:id="@+id/transaction_amount_EditText"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:inputType="numberDecimal"
-                  android:ems="10"
-                  android:hint="@string/transaction_amount_hint"
-            />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="16dp"
-        android:orientation="vertical">
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="16dp"
+            android:orientation="vertical">
 
-        <TextView
-            android:layout_width="match_parent"
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/transaction_amount_label"
+                style="?android:listSeparatorTextViewStyle"
+                />
+            <EditText android:id="@+id/transaction_amount_EditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:digits="0,1,2,3,4,5,6,7,8,9,-,."
+                android:ems="10"
+                android:hint="@string/transaction_amount_hint"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/transaction_recipient_label"
-            style="?android:listSeparatorTextViewStyle"
-            />
-        <EditText android:id="@+id/transaction_recipient_EditText"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="16dp"
+            android:orientation="vertical">
 
-                  android:hint="@string/transaction_recipient_hint"
-            />
-    </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/transaction_recipient_label"
+                style="?android:listSeparatorTextViewStyle"
+                />
+            <EditText android:id="@+id/transaction_recipient_EditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="16dp"
-        android:orientation="vertical">
+                android:hint="@string/transaction_recipient_hint"
+                />
+        </LinearLayout>
 
-        <TextView
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/transaction_description_label"
-            style="?android:listSeparatorTextViewStyle"
-            />
-        <EditText android:id="@+id/transaction_description_EditText"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:hint="@string/transaction_description_hint"
-            />
-    </LinearLayout>
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="16dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/transaction_description_label"
+                style="?android:listSeparatorTextViewStyle"
+                />
+            <EditText android:id="@+id/transaction_description_EditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/transaction_description_hint"
+                />
+        </LinearLayout>
 
 
-    <Button android:id="@+id/transaction_date_button"
+        <Button android:id="@+id/transaction_date_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-        />
+            />
 
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/transaction_update_button"
-        android:layout_marginBottom="30dp"
-        android:layout_gravity="center_horizontal"
-        android:text="@string/transaction_update_button_text"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/transaction_update_button"
+            android:layout_marginBottom="30dp"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/transaction_update_button_text"/>
 
-</LinearLayout>
+    </LinearLayout>
+
+</ScrollView>
 

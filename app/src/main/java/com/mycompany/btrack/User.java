@@ -28,13 +28,13 @@ public class User {
         this.password = password;
     }
 
-    protected static final boolean isValidEmail(String email) {
-        return !TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches();
-    }
-    protected static final boolean isValidPassword(String p1, String p2) {
-        return p1.length() >= MIN_PASS_LEN && p1.equals(p2);
-    }
-    protected static final boolean isValidPassword(String p1) {
-        return p1.length() >= MIN_PASS_LEN;
-    }
+//    protected static final boolean isValidEmail(String email) {
+//        return !TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches();
+//    }
+//    protected static final boolean isValidPassword(String p1, String p2) {
+//        return p1.length() >= MIN_PASS_LEN && p1.equals(p2);
+//    }
+//    protected static final boolean isValidPassword(String p1) {
+//        return p1.length() >= MIN_PASS_LEN;
+//    }
 }
