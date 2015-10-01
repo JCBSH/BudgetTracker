@@ -6,6 +6,7 @@
     <dimen name="transaction_filter_date_transformY">125dp</dimen>
     <dimen name="transaction_filter_right_date_transformX">220dp</dimen>
     <dimen name="activity_standard_1_margin">16dp</dimen>
+    <dimen name="activity_standard_2_margin">5dp</dimen>
     <dimen name="list_item_standard_1_margin">5dp</dimen>
     <dimen name="TextView_standard_1_padding">5dp</dimen>
     <dimen name="list_item_standard_2_margin">16dp</dimen>

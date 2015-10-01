@@ -4,19 +4,34 @@
              android:layout_height="match_parent"
              tools:context="com.mycompany.btrack.DebtorFragment">
         <!-- TODO: Update blank fragment layout -->
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@android:id/list"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@android:id/empty"
-        android:text="@string/empty_debtors_message"
-        android:textSize="@dimen/empty_list_text_size_1"/>
+        android:orientation="vertical">
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/debtor_search_EditText"
+            android:hint="@string/debtor_search_hint"/>
+        <FrameLayout android:layout_width="match_parent"
+                     android:layout_height="wrap_content">
+
+            <ListView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@android:id/list"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@android:id/empty"
+                android:text="@string/empty_debtors_message"
+                android:textSize="@dimen/empty_list_text_size_1"/>
+        </FrameLayout>
+    </LinearLayout>
+
 
 
 

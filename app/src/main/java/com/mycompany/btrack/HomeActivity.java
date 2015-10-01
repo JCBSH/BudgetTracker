@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.Window;
 
 import com.mycompany.btrack.models.Debtor;
+import com.mycompany.btrack.models.HomeActivityTabState;
 import com.mycompany.btrack.models.Transaction;
 
 
@@ -55,9 +56,14 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
                     .setText(mTabsAdapter.getPageTitle(i))
                     .setTabListener(this));
         }
+
+        int position = HomeActivityTabState.get(getApplicationContext()).getTabPosition();
+        Log.d(TAG, String.format("Restore position %d", position));
+        getSupportActionBar().setSelectedNavigationItem(position);
+        mViewPager.setCurrentItem( getSupportActionBar().getSelectedTab().getPosition());
+
         Log.d(TAG, "onCreate()");
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -136,12 +142,15 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
 
     @Override
     public void onDestroy() {
+        HomeActivityTabState.get(getApplicationContext()).setTabPosition(getSupportActionBar().getSelectedTab().getPosition());
         super.onDestroy();
         Log.d(TAG, "onDestroy()");
     }
 
     @Override
     public void onDebtorSelected(Debtor debtor) {
-
+        Intent i = new Intent(this, BlankActivity.class);
+        //i.putExtra(EditTransactionActivity.EXTRA_TRANSACTION_ID, transaction.getId());
+        startActivity(i);
     }
 }

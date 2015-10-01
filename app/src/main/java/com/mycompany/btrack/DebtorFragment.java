@@ -203,7 +203,7 @@ public class DebtorFragment extends ListFragment {
                 }
                 //Log.d(TAG,"no skipped");
                 if(UserInfo.get(getActivity().getApplicationContext()).
-                    changeName(mCurrentSelectedDebtor, mCurrentEditName) == true) {
+                        changeName(mCurrentSelectedDebtor, mCurrentEditName) == true) {
                     UserInfo.get(getActivity().getApplicationContext()).sortDebtors();
                     UserInfo.get(getActivity().getApplicationContext()).saveDebtors();
                     UserInfo.get(getActivity().getApplicationContext()).saveUserInfo();
@@ -219,7 +219,9 @@ public class DebtorFragment extends ListFragment {
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
+        //Log.d(TAG, "onListItemClick()");
         super.onListItemClick(l, v, position, id);
+        //Log.d(TAG, "onListItemClick() 2");
         Debtor t = ((DebtorAdapter)getListAdapter()).getItem(position);
         mCallbacks.onDebtorSelected(t);
 

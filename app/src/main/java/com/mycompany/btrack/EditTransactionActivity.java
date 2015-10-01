@@ -1,5 +1,6 @@
 package com.mycompany.btrack;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
@@ -12,10 +13,8 @@ import android.widget.EditText;
 
 import com.mycompany.btrack.models.Transaction;
 import com.mycompany.btrack.models.UserInfo;
-import com.mycompany.btrack.utils.DescriptionTextWatcher;
 import com.mycompany.btrack.utils.MoneyTextWatcher;
-import com.mycompany.btrack.utils.RecipientTextWatcher;
-import com.mycompany.btrack.utils.TransactionUtil;
+import com.mycompany.btrack.utils.StringTextWatcher;
 
 import java.util.Date;
 import java.util.UUID;
@@ -52,12 +51,10 @@ public class EditTransactionActivity extends ActionBarActivity implements DateTi
 
 
         mRecipient.setText(mTransaction.getEditTextRecipient());
-//        mRecipient.addTextChangedListener(new StringTextWatcher(mRecipient, 20));
-        mRecipient.addTextChangedListener(new RecipientTextWatcher(mRecipient));
+        mRecipient.addTextChangedListener(new StringTextWatcher(mRecipient, Transaction.RECIPIENT_SIZE_LIMIT));
 
         mDescription.setText(mTransaction.getEditTextDescription());
-//        mDescription.addTextChangedListener(new StringTextWatcher(mDescription, 50));
-        mDescription.addTextChangedListener(new DescriptionTextWatcher(mDescription));
+        mDescription.addTextChangedListener(new StringTextWatcher(mDescription, Transaction.DESCRIPTION_SIZE_LIMIT));
 
         mDateButton.setText(mTransaction.getFormattedDate());
         mDate = mTransaction.getDate();
@@ -75,14 +72,17 @@ public class EditTransactionActivity extends ActionBarActivity implements DateTi
         mUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                double amount = Double.parseDouble(String.valueOf(mAmount.getText()));
-                String recipient = String.valueOf(mRecipient.getText());
-                String description = String.valueOf(mDescription.getText());
-                mTransaction.setAmount(amount);
-                mTransaction.setRecipient(recipient);
-                mTransaction.setDescription(description);
+                if (!String.valueOf(mAmount.getText()).equalsIgnoreCase("")) {
+                    mTransaction.setAmount(Double.parseDouble(String.valueOf(mAmount.getText())));
+                } else {
+                    mTransaction.setAmount(0.00);
+                }
+
+                mTransaction.setRecipient(String.valueOf(mRecipient.getText()));
+                mTransaction.setDescription(String.valueOf(mDescription.getText()));
                 mTransaction.setDate(mDate);
-                UserInfo.get(getApplicationContext()).sortTransactions();
+                //UserInfo.get(getApplicationContext()).sortTransactions();
+                setResult(Activity.RESULT_OK);
                 finish();
             }
         });

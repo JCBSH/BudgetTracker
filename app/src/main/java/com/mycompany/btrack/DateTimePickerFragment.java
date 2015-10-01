@@ -23,7 +23,7 @@ public class DateTimePickerFragment extends DialogFragment {
 
     public static final String TAG = DateTimePickerFragment.class.getSimpleName();
     public static final String EXTRA_DATE =
-            "com.bignerdranch.android.criminalintent.date";
+            "com.mycompany.btrack.DateTimePickerFragment.date";
     private Date mDate;
     private Callbacks mCallbacks;
 
@@ -77,7 +77,9 @@ public class DateTimePickerFragment extends DialogFragment {
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(mDate);
                 int hour = calendar.get(Calendar.HOUR_OF_DAY);
+                Log.d(TAG, String.valueOf(hour));
                 int minute = calendar.get(Calendar.MINUTE);
+                Log.d(TAG, String.valueOf(minute));
                 // Translate year, month, day into a Date object using a calendar
                 mDate = new GregorianCalendar(year, month, day, hour,minute).getTime();
                 // Update argument to preserve selected value on rotation

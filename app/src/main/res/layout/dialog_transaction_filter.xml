@@ -44,13 +44,28 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/activity_standard_1_margin"
         android:hint="@string/transaction_recipient_hint" />
-    <EditText
-        android:id="@+id/transaction_filter_amount_EditText"
-        android:inputType="numberDecimal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/activity_standard_1_margin"
-        android:hint="@string/transaction_amount_hint" />
+    <LinearLayout android:orientation="horizontal"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/transaction_filter_amount_from_EditText"
+            android:inputType="numberDecimal"
+            android:layout_width="0dp"
+            android:layout_weight="50"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_standard_1_margin"
+            android:layout_marginLeft="@dimen/activity_standard_2_margin"
+            android:hint="@string/transaction_amount_from_hint" />
+        <EditText
+            android:id="@+id/transaction_filter_amount_to_EditText"
+            android:inputType="numberDecimal"
+            android:layout_width="0dp"
+            android:layout_weight="50"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_standard_1_margin"
+            android:layout_marginRight="@dimen/activity_standard_2_margin"
+            android:hint="@string/transaction_amount_to_hint" />
+    </LinearLayout>
     <EditText
         android:id="@+id/transaction_filter_description_EditText"
         android:layout_width="match_parent"

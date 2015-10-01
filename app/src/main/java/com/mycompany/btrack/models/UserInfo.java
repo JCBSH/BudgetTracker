@@ -5,6 +5,8 @@ import android.util.Log;
 
 import com.mycompany.btrack.models.JSONParsers.DebtorJSONSerializer;
 import com.mycompany.btrack.models.JSONParsers.TransactionJSONSerializer;
+import com.mycompany.btrack.utils.DebtorComparator;
+import com.mycompany.btrack.utils.TransactionComparator;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,13 +21,13 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.UUID;
 
 /**
  * Created by JCBSH on 27/09/2015.
  */
 public class UserInfo {
+
     private JSONObject mJsonObject;
     private ArrayList<Transaction> mTransactions;
     private ArrayList<Debtor> mDebtors;
@@ -191,19 +193,6 @@ public class UserInfo {
     }
 
 
-    public class TransactionComparator implements Comparator<Transaction> {
-        @Override
-        public int compare(Transaction o1, Transaction o2) {
-            int i = o1.getDate().compareTo(o2.getDate());
-            if (i == 1) {
-                return -1;
-            } else if (i == -1) {
-                return 1;
-            } else {
-                return 0;
-            }
-        }
-    }
 
     //LEGACY code, useless
     public void addDebtor(Debtor c) {
@@ -255,14 +244,4 @@ public class UserInfo {
         Collections.sort(mDebtors, new DebtorComparator());
     }
 
-    public class DebtorComparator implements Comparator<Debtor> {
-        @Override
-        public int compare(Debtor o1, Debtor o2) {
-            int res = String.CASE_INSENSITIVE_ORDER.compare(o1.getName(), o2.getName());
-            if (res == 0) {
-                res = o1.getName().compareTo(o2.getName());
-            }
-            return res;
-        }
-    }
 }

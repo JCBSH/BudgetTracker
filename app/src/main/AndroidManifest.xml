@@ -43,7 +43,11 @@
         </activity>
         <activity
             android:name=".BlankActivity"
-            android:label="@string/title_activity_blank" >
+            android:label="@string/title_activity_blank"
+            android:parentActivityName=".HomeActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mycompany.btrack.HomeActivity" />
         </activity>
         <activity
             android:name=".HomeActivity"

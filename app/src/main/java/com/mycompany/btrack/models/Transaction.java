@@ -6,6 +6,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
 
@@ -16,7 +17,8 @@ public class Transaction {
     public static final  Double AMOUNT_DEFAULT = 0.00;
     public static final  String RECIPIENT_DEFAULT = "empty";
     public static final  String DESCRIPTION_DEFAULT = "no description";
-
+    public static final int RECIPIENT_SIZE_LIMIT = 20;
+    public static final int DESCRIPTION_SIZE_LIMIT = 50;
     private static final String JSON_ID = "id";
     private static final String JSON_RECIPIENT = "recipient";
     private static final String JSON_AMOUNT = "amount";
@@ -154,4 +156,52 @@ public class Transaction {
         json.put(JSON_DESCRIPTION, mDescription);
         return json;
     }
+
+
+    public static ArrayList<Transaction> filterTransactions(
+            ArrayList<Transaction> transactions, Date filterFromDate, Date filterToDate,
+            double filterAmountFrom, double filterAmountTo, String filterRecipient, String filterDescription) {
+        if (filterAmountTo == 0) {
+            filterAmountTo = Double.MAX_VALUE;
+        }
+
+        ArrayList<Transaction> filteredList =  new ArrayList<Transaction>();
+        for (Transaction t : transactions) {
+            boolean testResult = true;
+//            Log.d("TransactionFragment", "     blah");
+            if (!((t.getDate().after(filterFromDate) || t.getDate().equals(filterFromDate))
+                    && (t.getDate().before(filterToDate) || t.getDate().equals(filterToDate)))) {
+//                Log.d("TransactionFragment", "testing by date failed");
+                testResult = false;
+            }
+
+//            Log.d("TransactionFragment", "testing by amount");
+//            Log.d("TransactionFragment", String.format("current amount %s", t.getAmount()));
+//            Log.d("TransactionFragment", String.format("from %s: to %s", filterAmountFrom, filterAmountTo));
+            if (!(t.getAmount() >= filterAmountFrom && t.getAmount() <= filterAmountTo)) {
+//                Log.d("TransactionFragment", "testing by amount failed");
+                testResult = false;
+            }
+
+            if (!filterRecipient.equalsIgnoreCase("")) {
+                if (!(t.getRecipient().toLowerCase().startsWith(filterRecipient.toLowerCase()))) {
+//                    Log.d("TransactionFragment", "testing by Recipient failed");
+                    testResult = false;
+                }
+            }
+
+            if (!filterDescription.equalsIgnoreCase("")) {
+                if (!(t.getDescription().toLowerCase().contains(filterDescription.toLowerCase()))) {
+//                    Log.d("TransactionFragment", "testing by Description failed");
+                    testResult = false;
+                }
+            }
+
+            if (testResult == true) {
+                filteredList.add(t);
+            }
+        }
+        return filteredList;
+    }
+
 }

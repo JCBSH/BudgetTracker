@@ -2,6 +2,7 @@ package com.mycompany.btrack;
 
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
@@ -20,15 +21,28 @@ import android.widget.TextView;
 
 import com.mycompany.btrack.models.Transaction;
 import com.mycompany.btrack.models.UserInfo;
+import com.mycompany.btrack.utils.TransactionComparator;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
 
 public class TransactionFragment extends ListFragment {
 
     public static final String TAG = TransactionFragment.class.getSimpleName();
 
+    public static final String  FILTER_FROM_DATE_BUNDLE_KEY = "from date";
+    public static final String  FILTER_TO_DATE_BUNDLE_KEY = "to date";
+    public static final String  FILTER_RECIPIENT_BUNDLE_KEY = "recipient";
+    public static final String  FILTER_AMOUNT_FROM_BUNDLE_KEY = "amount from";
+    public static final String  FILTER_AMOUNT_TO_BUNDLE_KEY = "amount to";
+    public static final String  FILTER_DESCRIPTION_BUNDLE_KEY = "description";
+
     private static final int REQUEST_FILTER_INFO = 0;
+    private static final int REQUEST_SUCCESSFUL_EDIT = 1;
     private static final String EDIT_FILTER_INFO = "edit filter info";
+
 
     private ArrayList<Transaction> mTransactions;
     private ArrayList<Transaction> mDeleteTransactionsList;
@@ -39,6 +53,13 @@ public class TransactionFragment extends ListFragment {
     private ImageButton mCancelButton;
     private ImageButton mFilterButton;
     private ImageButton mCancelFilterButton;
+    private boolean mFilterStatus;
+    private Date mFilterFromDate;
+    private Date mFilterToDate;
+    private double mFilterAmountFrom;
+    private double mFilterAmountTo;
+    private String mFilterRecipient;
+    private String mFilterDescription;
 
     /**
      * Required interface for hosting activities.
@@ -59,11 +80,8 @@ public class TransactionFragment extends ListFragment {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_delete) {
-            //getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
             mDeleteStatus = true;
-            mAddDeleteButton.setImageResource(R.drawable.bin);
-            mCancelButton.setVisibility(View.VISIBLE);
-            ((TransactionAdapter)getListAdapter()).notifyDataSetChanged();
+            adjustButtonDependencyMenuDelete();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -87,8 +105,8 @@ public class TransactionFragment extends ListFragment {
                 if (mDeleteStatus == false) {
                     Transaction t = new Transaction();
                     UserInfo.get(getActivity().getApplicationContext()).addTransaction(t);
-                    ((TransactionAdapter) getListAdapter()).notifyDataSetChanged();
-                    mCallbacks.onTransactionSelected(t);
+                    sortAndNotify(((TransactionAdapter) getListAdapter()));
+                    startEditTransaction(t);
                 } else {
                     for (Integer i : mDeleteListPosition) {
                         CheckedTextView ch = (CheckedTextView) getListView().getChildAt(i).findViewById(R.id.delete_check);
@@ -104,7 +122,7 @@ public class TransactionFragment extends ListFragment {
 
                     UserInfo.get(getActivity().getApplicationContext()).saveTransactions();
                     UserInfo.get(getActivity().getApplicationContext()).saveUserInfo();
-                    ((TransactionAdapter) getListAdapter()).notifyDataSetChanged();
+                    sortAndNotify(((TransactionAdapter) getListAdapter()));
                     //mDeleteStatus = false;
                 }
             }
@@ -115,16 +133,9 @@ public class TransactionFragment extends ListFragment {
         mCancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                for (Integer i : mDeleteListPosition) {
-                    CheckedTextView ch = (CheckedTextView) getListView().getChildAt(i).findViewById(R.id.delete_check);
-                    ch.setChecked(false);
-                }
-                mDeleteTransactionsList.clear();
-                mDeleteListPosition.clear();
-                mAddDeleteButton.setImageResource(R.drawable.add);
                 mDeleteStatus = false;
-                mCancelButton.setVisibility(View.INVISIBLE);
-                ((TransactionAdapter) getListAdapter()).notifyDataSetChanged();
+                clearDeleteList();
+                adjustButtonDependencyForCancelDelete();
             }
         });
 
@@ -134,6 +145,17 @@ public class TransactionFragment extends ListFragment {
             public void onClick(View view) {
                 FragmentManager fm = getActivity().getSupportFragmentManager();
                 FilterTransactionFragment filterTransactionFragment = new FilterTransactionFragment();
+                Bundle bundle = new Bundle();
+                if (mFilterStatus == true) {
+                    bundle.putSerializable(FILTER_FROM_DATE_BUNDLE_KEY, (Serializable) mFilterFromDate);
+                    bundle.putSerializable(FILTER_TO_DATE_BUNDLE_KEY, (Serializable) mFilterToDate);
+                    bundle.putDouble(FILTER_AMOUNT_FROM_BUNDLE_KEY,  mFilterAmountFrom);
+                    bundle.putDouble(FILTER_AMOUNT_TO_BUNDLE_KEY,  mFilterAmountTo);
+                    bundle.putString(FILTER_RECIPIENT_BUNDLE_KEY,  mFilterRecipient);
+                    bundle.putString(FILTER_DESCRIPTION_BUNDLE_KEY,  mFilterDescription);
+
+                }
+                filterTransactionFragment.setArguments(bundle);
                 filterTransactionFragment.setTargetFragment(TransactionFragment.this, REQUEST_FILTER_INFO);
                 filterTransactionFragment.show(fm, EDIT_FILTER_INFO);
             }
@@ -141,10 +163,108 @@ public class TransactionFragment extends ListFragment {
 
         mCancelFilterButton = (ImageButton) rootView.findViewById(R.id.transaction_cancelFilterButton);
         mCancelFilterButton.setVisibility(View.INVISIBLE);
+        mCancelFilterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mFilterStatus = false;
+                adjustButtonDependencyForCancelFilter();
+                mTransactions = UserInfo.get(getActivity().getApplicationContext()).getTransactions();
+                setAdapterFromTransactions();
+            }
+        });
 
 
 
         return rootView;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != Activity.RESULT_OK) return;
+        switch (requestCode) {
+            case REQUEST_FILTER_INFO:
+                mFilterStatus = true;
+                adjustButtonDependencyForApplyFilter();
+                mFilterFromDate = (Date) data
+                        .getSerializableExtra(FilterTransactionFragment.EXTRA_FROM_DATE);
+
+                mFilterToDate = (Date) data
+                        .getSerializableExtra(FilterTransactionFragment.EXTRA_TO_DATE);
+
+                mFilterAmountFrom = data.getDoubleExtra(FilterTransactionFragment.EXTRA_AMOUNT_FROM, 0);
+                mFilterAmountTo =  data.getDoubleExtra(FilterTransactionFragment.EXTRA_AMOUNT_TO, 0);
+                mFilterRecipient = data.getStringExtra(FilterTransactionFragment.EXTRA_RECIPIENT);
+                mFilterDescription = data.getStringExtra(FilterTransactionFragment.EXTRA_DESCRIPTION);
+                mCancelFilterButton.setVisibility(View.VISIBLE);
+                mTransactions = UserInfo.get(getActivity().getApplicationContext()).getTransactions();
+                Log.d(TAG, String.format("unfiltered size: %d", mTransactions.size()));
+                mTransactions = Transaction.filterTransactions(mTransactions, mFilterFromDate, mFilterToDate,
+                        mFilterAmountFrom, mFilterAmountTo,
+                        mFilterRecipient, mFilterDescription);
+
+                Log.d(TAG, String.format("filtered size: %d", mTransactions.size()));
+                setAdapterFromTransactions();
+
+                break;
+            case REQUEST_SUCCESSFUL_EDIT:
+                Log.d(TAG, "transaction edit successful");
+                sortAndNotify(((TransactionAdapter) getListAdapter()));
+                break;
+        }
+    }
+
+    private void sortAndNotify(TransactionAdapter listAdapter) {
+        listAdapter.sort(new TransactionComparator());
+        listAdapter.notifyDataSetChanged();
+    }
+    private void clearDeleteList() {
+        for (Integer i : mDeleteListPosition) {
+            CheckedTextView ch = (CheckedTextView) getListView().getChildAt(i).findViewById(R.id.delete_check);
+            ch.setChecked(false);
+        }
+        mDeleteTransactionsList.clear();
+        mDeleteListPosition.clear();
+    }
+    private void startEditTransaction(Transaction t) {
+        Intent i = new Intent(getActivity(), EditTransactionActivity.class);
+        i.putExtra(EditTransactionActivity.EXTRA_TRANSACTION_ID, t.getId());
+        startActivityForResult(i, REQUEST_SUCCESSFUL_EDIT);
+        //mCallbacks.onTransactionSelected(t);
+    }
+    private void adjustButtonDependencyMenuDelete() {
+        mAddDeleteButton.setImageResource(R.drawable.bin);
+        mCancelButton.setVisibility(View.VISIBLE);
+        mAddDeleteButton.setVisibility(View.VISIBLE);
+        ((TransactionAdapter)getListAdapter()).notifyDataSetChanged();
+    }
+    private void adjustButtonDependencyForCancelFilter() {
+        mAddDeleteButton.setVisibility(View.VISIBLE);
+        mCancelFilterButton.setVisibility(View.INVISIBLE);
+    }
+    private void adjustButtonDependencyForCancelDelete() {
+        mAddDeleteButton.setImageResource(R.drawable.add);
+        mCancelButton.setVisibility(View.INVISIBLE);
+        if (mFilterStatus == true) {
+            mAddDeleteButton.setVisibility(View.INVISIBLE);
+        } else {
+            mAddDeleteButton.setVisibility(View.VISIBLE);
+        }
+        ((TransactionAdapter) getListAdapter()).notifyDataSetChanged();
+    }
+    private void adjustButtonDependencyForApplyFilter() {
+        if (mDeleteStatus == false) {
+            mAddDeleteButton.setVisibility(View.INVISIBLE);
+        } else {
+            mAddDeleteButton.setVisibility(View.VISIBLE);
+            clearDeleteList();
+        }
+    }
+    private void setAdapterFromTransactions() {
+        TransactionAdapter adapter = new TransactionAdapter(mTransactions);
+        adapter.sort(new TransactionComparator());
+        setListAdapter(adapter);
+        //((TransactionAdapter)getListAdapter()).notifyDataSetChanged();
     }
 
     @Override
@@ -155,13 +275,19 @@ public class TransactionFragment extends ListFragment {
 
         //mDeleteStatus = false;
         mDeleteStatus = false;
+        mFilterStatus = false;
 
-        mTransactions = UserInfo.get(getActivity().getApplicationContext()).getTransactions();
+        mFilterFromDate = new Date();
+        mFilterToDate = new Date();
+        mFilterAmountFrom = 0;
+        mFilterAmountTo = 0;
+        mFilterRecipient = "";
+        mFilterDescription = "";
+
         mDeleteTransactionsList = new ArrayList<Transaction>();
         mDeleteListPosition =  new ArrayList<Integer>();
-        TransactionAdapter adapter = new TransactionAdapter(mTransactions);
-        setListAdapter(adapter);
-
+        mTransactions = UserInfo.get(getActivity().getApplicationContext()).getTransactions();
+        setAdapterFromTransactions();
         Log.d(TAG, "onCreate()");
     }
 
@@ -188,7 +314,6 @@ public class TransactionFragment extends ListFragment {
     @Override
     public void onResume() {
         super.onResume();
-        ((TransactionAdapter)getListAdapter()).notifyDataSetChanged();
         Log.d(TAG, "onResume()");
     }
 
@@ -217,8 +342,6 @@ public class TransactionFragment extends ListFragment {
         Log.d(TAG, "onDetach()");
     }
 
-
-
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
@@ -235,8 +358,8 @@ public class TransactionFragment extends ListFragment {
                 mDeleteListPosition.add(position);
             }
         } else {
+            startEditTransaction(t);
 
-            mCallbacks.onTransactionSelected(t);
         }
 
 
@@ -244,11 +367,17 @@ public class TransactionFragment extends ListFragment {
     }
 
 
+
     private class TransactionAdapter extends ArrayAdapter<Transaction> {
         public TransactionAdapter(ArrayList<Transaction> transactions) {
             super(getActivity(), 0, transactions);
         }
 
+
+        @Override
+        public void sort(Comparator<? super Transaction> comparator) {
+            super.sort(comparator);
+        }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
@@ -280,8 +409,6 @@ public class TransactionFragment extends ListFragment {
                 //ch.setChecked(false);
                 ch.setVisibility(View.INVISIBLE);
             }
-
-
             return convertView;
         }
     }

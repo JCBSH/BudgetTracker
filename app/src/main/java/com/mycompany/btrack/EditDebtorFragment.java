@@ -11,6 +11,7 @@ import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.widget.EditText;
 
+import com.mycompany.btrack.models.Transaction;
 import com.mycompany.btrack.utils.StringTextWatcher;
 
 /**
@@ -37,7 +38,7 @@ public class EditDebtorFragment extends DialogFragment {
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
         mNameField = (EditText) v.findViewById(R.id.debtor_name_EditText);
-        mNameField.addTextChangedListener(new StringTextWatcher(mNameField, 20));
+        mNameField.addTextChangedListener(new StringTextWatcher(mNameField, Transaction.RECIPIENT_SIZE_LIMIT));
         Resources res = getResources();
         builder.setTitle(String.format(res.getString(R.string.edit_debtor_dialog_title), mOldName));
         builder.setView(v)
