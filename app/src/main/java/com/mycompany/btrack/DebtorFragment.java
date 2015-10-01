@@ -129,6 +129,7 @@ public class DebtorFragment extends ListFragment {
                     UserInfo.get(getActivity().getApplicationContext()).sortDebtors();
                     UserInfo.get(getActivity().getApplicationContext()).saveDebtors();
                     UserInfo.get(getActivity().getApplicationContext()).saveUserInfo();
+                    ((DebtorAdapter) getListAdapter()).notifyDataSetChanged();
 
                 } else {
                     mAddCancelButton.setImageResource(R.drawable.add);
