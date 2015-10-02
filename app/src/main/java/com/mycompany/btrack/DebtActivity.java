@@ -168,6 +168,18 @@ public class DebtActivity extends ListActivity {
 
 
     private void sortAndNotify(DebtAdapter listAdapter) {
+        mBalanceTextView.setText(mDebtor.getFormatBalance());
+
+        double balance = mDebtor.getBalance();
+        String status = "";
+        if (balance > 0) {
+            status = "LENDING";
+            mStatusTextView.setTextColor(Color.parseColor(getString(R.string.positive_green)));
+        } else if (balance < 0) {
+            status = "OWING";
+            mStatusTextView.setTextColor(Color.parseColor(getString(R.string.negative_red)));
+        }
+        mStatusTextView.setText(status);
         listAdapter.sort(new DebtComparator());
         listAdapter.notifyDataSetChanged();
     }
