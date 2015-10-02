@@ -100,7 +100,7 @@ public class Debtor {
     public String getFormatTotalDebtsAmount () {
         double total = getTotalDebtsAmount();
         DecimalFormat df = new DecimalFormat("#.00");
-        if (total == 0) {
+        if (total == 0.00) {
             return "0.00";
         } else {
             String formatted = df.format(total);
@@ -160,5 +160,25 @@ public class Debtor {
             if (debt.getId().equals(uuid)) return debt;
         }
         return null;
+    }
+
+    public String getFormatBalance() {
+        double balance = getBalance();
+        if (balance == 0.00) {
+            return "0.00";
+        }
+        
+        DecimalFormat df = new DecimalFormat("#.00");
+        String formatted = df.format(balance);
+        return formatted;
+    }
+
+    public Double getBalance() {
+        double balance = 0.00;
+        for (Debt debt: mDebts) {
+            balance += debt.getAmount();
+        }
+
+        return balance;
     }
 }

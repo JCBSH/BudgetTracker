@@ -56,7 +56,7 @@ public class DebtActivity extends ListActivity {
         //saving name for when back button is pressed for EditDebtActivity
         DebtActivityState.get(getApplicationContext()).setDebtorName(mName);
 
-        
+
         Log.d(TAG, "name " + mName);
         setTitle("Debts with " + mName);
         mDebtor = UserInfo.get(getApplicationContext()).getDebtor(mName);

@@ -243,10 +243,14 @@ public class DebtorFragment extends ListFragment {
                         .inflate(R.layout.debtor_list_item, null);
             }
             final Debtor c = getItem(position);
+            double balance = c.getBalance();
             TextView recipientTextView =
                     (TextView)convertView.findViewById(R.id.debtor_list_item_name_TextView);
             recipientTextView.setText(c.getName());
 
+            TextView balanceTextView =
+                    (TextView)convertView.findViewById(R.id.debtor_list_item_amount_TextView);
+            balanceTextView.setText(c.getFormatBalance());
 
             ImageButton button = (ImageButton) convertView.findViewById(R.id.debtor_editDeleteButton);
             if (mDeleteStatus == true) {
