@@ -51,4 +51,6 @@
     <string name="title_activity_edit_debt">EditDebtActivity</string>
     <string name="debt_amount_hint">Enter the amount</string>
     <string name="debt_description_hint">Enter brief description</string>
+    <string name="positive_green">#31B404</string>
+    <string name="negative_red">#DF0101</string>
 </resources>

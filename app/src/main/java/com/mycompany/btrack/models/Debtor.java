@@ -167,7 +167,7 @@ public class Debtor {
         if (balance == 0.00) {
             return "0.00";
         }
-        
+
         DecimalFormat df = new DecimalFormat("#.00");
         String formatted = df.format(balance);
         return formatted;

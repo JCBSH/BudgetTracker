@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
@@ -243,7 +244,8 @@ public class DebtorFragment extends ListFragment {
                         .inflate(R.layout.debtor_list_item, null);
             }
             final Debtor c = getItem(position);
-            double balance = c.getBalance();
+
+
             TextView recipientTextView =
                     (TextView)convertView.findViewById(R.id.debtor_list_item_name_TextView);
             recipientTextView.setText(c.getName());
@@ -251,6 +253,19 @@ public class DebtorFragment extends ListFragment {
             TextView balanceTextView =
                     (TextView)convertView.findViewById(R.id.debtor_list_item_amount_TextView);
             balanceTextView.setText(c.getFormatBalance());
+
+            TextView statusTextView =
+                    (TextView)convertView.findViewById(R.id.debtor_list_item_status_TextView);
+            double balance = c.getBalance();
+            String status = "";
+            if (balance > 0) {
+                status = "LENDING";
+                statusTextView.setTextColor(Color.parseColor(getString(R.string.positive_green)));
+            } else if (balance < 0) {
+                status = "OWING";
+                statusTextView.setTextColor(Color.parseColor(getString(R.string.negative_red)));
+            }
+            statusTextView.setText(status);
 
             ImageButton button = (ImageButton) convertView.findViewById(R.id.debtor_editDeleteButton);
             if (mDeleteStatus == true) {
