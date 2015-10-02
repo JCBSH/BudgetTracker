@@ -120,7 +120,6 @@ public class TransactionFragment extends ListFragment {
                     mDeleteTransactionsList.clear();
                     mDeleteListPosition.clear();
 
-                    UserInfo.get(getActivity().getApplicationContext()).saveTransactions();
                     UserInfo.get(getActivity().getApplicationContext()).saveUserInfo();
                     sortAndNotify(((TransactionAdapter) getListAdapter()));
                     //mDeleteStatus = false;
@@ -350,7 +349,7 @@ public class TransactionFragment extends ListFragment {
             CheckedTextView ch = (CheckedTextView) v.findViewById(R.id.delete_check);
             if (ch.isChecked() == true) {
                 ch.setChecked(false);
-                mDeleteTransactionsList.remove(ch);
+                mDeleteTransactionsList.remove(t);
                 mDeleteListPosition.remove(position);
             } else {
                 ch.setChecked(true);

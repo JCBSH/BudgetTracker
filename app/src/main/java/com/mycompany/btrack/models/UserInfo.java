@@ -116,11 +116,11 @@ public class UserInfo {
 
 
 
-    public boolean saveTransactions() {
+    private boolean saveTransactions() {
         try {
             JSONArray transactionsJsonArray = mTransactionSerializer.createJSONTransactions(mTransactions);
             mJsonObject.put(JSON_TRANSACTIONS, transactionsJsonArray);
-            int d = Log.d(TAG, "Transactions saved to JSONObject");
+            Log.d(TAG, "Transactions saved to JSONObject");
             return true;
         } catch (Exception e) {
             Log.e(TAG, "Error saving Transactions: ", e);
@@ -129,14 +129,14 @@ public class UserInfo {
         }
     }
 
-    public boolean saveDebtors() {
+    private boolean saveDebtors() {
         try {
             JSONArray debtorsJsonArray = mDebtorSerializer.createJSONDebtors(mDebtors);
             mJsonObject.put(JSON_DEBTORS, debtorsJsonArray);
 
             mJsonObject.put(JSON_DEBTOR_COUNT, Debtor.getCount());
 
-            int d = Log.d(TAG, "Debtors saved to JSONObject");
+            Log.d(TAG, "Debtors saved to JSONObject");
             return true;
         } catch (Exception e) {
             Log.e(TAG, "Error saving Debtors: ", e);
@@ -146,6 +146,8 @@ public class UserInfo {
     }
 
     public boolean saveUserInfo() {
+        saveDebtors();
+        saveTransactions();
         try {
             Writer writer = null;
             try {

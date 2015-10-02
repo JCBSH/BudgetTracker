@@ -49,7 +49,7 @@ public class Debtor {
 
         if (json.has(JSON_DEBTS)) {
             try {
-                JSONArray debtorsJSONArray = json.getJSONArray(UserInfo.JSON_DEBTORS);
+                JSONArray debtorsJSONArray = json.getJSONArray(JSON_DEBTS);
                 mDebts = mDebtSerializer.loadDebts(debtorsJSONArray);
             } catch (JSONException e) {
                 mDebts = new ArrayList<Debt>();
@@ -68,15 +68,18 @@ public class Debtor {
     }
 
     public JSONObject toJSON() throws JSONException{
+        saveDebts();
         mJsonObject.put(JSON_NAME, mName);
         mJsonObject.put(JSON_DEBTS, mDebtsJSONArray);
+        Log.d(TAG, "Debtor json returned");
+        Log.d(TAG, String.valueOf(mJsonObject));
         return mJsonObject;
     }
 
-    public boolean saveDebts() {
+    private boolean saveDebts() {
         try {
             mDebtsJSONArray = mDebtSerializer.createJSONDebts(mDebts);
-            int d = Log.d(TAG, "Debts saved to JSONObject");
+            Log.d(TAG, "Debts saved to JSONObject");
             return true;
         } catch (Exception e) {
             Log.e(TAG, "Error saving Debts: ", e);
@@ -145,5 +148,9 @@ public class Debtor {
 
     public void sortDebts () {
         Collections.sort(mDebts, new DebtComparator());
+    }
+
+    public void deleteDebt(Debt d) {
+        mDebts.remove(d);
     }
 }

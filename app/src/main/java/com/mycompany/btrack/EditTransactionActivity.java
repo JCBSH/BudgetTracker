@@ -120,7 +120,6 @@ public class EditTransactionActivity extends ActionBarActivity implements DateTi
     @Override
     public void onPause() {
         super.onPause();
-        UserInfo.get(getApplicationContext()).saveTransactions();
         UserInfo.get(getApplicationContext()).saveUserInfo();
         Log.d(TAG, "onPause()");
     }

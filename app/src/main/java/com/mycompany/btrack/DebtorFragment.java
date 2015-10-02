@@ -129,7 +129,6 @@ public class DebtorFragment extends ListFragment {
                     editFragment.show(fm, EDIT_NAME);
                     //Log.d(TAG, "return");
                     UserInfo.get(getActivity().getApplicationContext()).sortDebtors();
-                    UserInfo.get(getActivity().getApplicationContext()).saveDebtors();
                     UserInfo.get(getActivity().getApplicationContext()).saveUserInfo();
                     ((DebtorAdapter) getListAdapter()).notifyDataSetChanged();
 
@@ -207,7 +206,6 @@ public class DebtorFragment extends ListFragment {
                 if(UserInfo.get(getActivity().getApplicationContext()).
                         changeName(mCurrentSelectedDebtor, mCurrentEditName) == true) {
                     UserInfo.get(getActivity().getApplicationContext()).sortDebtors();
-                    UserInfo.get(getActivity().getApplicationContext()).saveDebtors();
                     UserInfo.get(getActivity().getApplicationContext()).saveUserInfo();
                     ((DebtorAdapter) getListAdapter()).notifyDataSetChanged();
                 } else {
@@ -265,7 +263,6 @@ public class DebtorFragment extends ListFragment {
                                         UserInfo.get(getActivity().getApplicationContext()).deleteDebtor(c);
                                         mDebtors.remove(c);
 
-                                        UserInfo.get(getActivity().getApplicationContext()).saveDebtors();
                                         UserInfo.get(getActivity().getApplicationContext()).saveUserInfo();
                                         ((DebtorAdapter) getListAdapter()).notifyDataSetChanged();
                                     }
