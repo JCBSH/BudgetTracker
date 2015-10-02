@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -41,6 +42,8 @@ public class DebtActivity extends ListActivity {
     private ArrayList<Integer> mDeleteListPosition;
     private ImageButton mAddDeleteButton;
     private ImageButton mCancelButton;
+    private TextView mBalanceTextView;
+    private TextView mStatusTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +111,23 @@ public class DebtActivity extends ListActivity {
                 adjustButtonDependencyForCancelDelete();
             }
         });
+
+        mBalanceTextView = (TextView) findViewById(R.id.debt_balance_TextView);
+        mStatusTextView = (TextView) findViewById(R.id.debt_status_TextView);
+
+        mBalanceTextView.setText(mDebtor.getFormatBalance());
+
+        double balance = mDebtor.getBalance();
+        String status = "";
+        if (balance > 0) {
+            status = "LENDING";
+            mStatusTextView.setTextColor(Color.parseColor(getString(R.string.positive_green)));
+        } else if (balance < 0) {
+            status = "OWING";
+            mStatusTextView.setTextColor(Color.parseColor(getString(R.string.negative_red)));
+        }
+        mStatusTextView.setText(status);
+
         Log.d(TAG, "onCreate()");
     }
 

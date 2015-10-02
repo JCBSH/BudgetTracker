@@ -4,14 +4,73 @@
              android:layout_height="match_parent"
              tools:context="com.mycompany.btrack.TransactionFragment">
 
-
-    <ListView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@android:id/list"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
+        android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/summary_bar_color">
+            <TextView
+                android:id="@+id/debt_balance_label_TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:layout_alignParentLeft="true"
+                android:text="@string/debt_balance_label"
+                android:padding="@dimen/TextView_standard_1_padding"
+                android:textSize="@dimen/summary_bar_text_size_1"/>
+            <TextView
+                android:id = "@+id/debt_balance_TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/debt_balance_label_TextView"
+                android:padding="@dimen/TextView_standard_1_padding"
+                android:textSize="@dimen/summary_bar_text_size_1"/>
+            <TextView
+                android:id="@+id/debt_status_TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:layout_centerHorizontal="true"
+                android:padding="@dimen/TextView_standard_1_padding"
+                android:textSize="@dimen/summary_bar_text_size_1"/>
+            <LinearLayout
+                android:focusable="true" android:focusableInTouchMode="true"
+                android:layout_width="0px" android:layout_height="0px"/>
+            <EditText
+                android:id="@+id/debt_deadline_EditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:layout_alignParentRight="true"
+                android:gravity="center"
+                android:minEms = "5"
+                android:padding="@dimen/TextView_standard_1_padding"
+                android:textSize="@dimen/summary_bar_text_size_1"
+                android:maxLength="5"
+                android:nextFocusUp = "@id/debt_deadline_EditText"
+                android:nextFocusLeft = "@id/debt_deadline_EditText"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:layout_toLeftOf="@id/debt_deadline_EditText"
+                android:text="@string/debt_deadline_label"
+                android:padding="@dimen/TextView_standard_1_padding"
+                android:textSize="@dimen/summary_bar_text_size_1"/>
+
+
+        </RelativeLayout>
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@android:id/list"/>
+
+    </LinearLayout>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -53,4 +53,6 @@
     <string name="debt_description_hint">Enter brief description</string>
     <string name="positive_green">#31B404</string>
     <string name="negative_red">#DF0101</string>
+    <string name="debt_balance_label">Balance:</string>
+    <string name="debt_deadline_label">Deadline:</string>
 </resources>

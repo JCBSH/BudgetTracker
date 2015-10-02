@@ -13,4 +13,5 @@
     <dimen name="transaction_edit_left_date_transformX">20dp</dimen>
     <dimen name="transaction_edit_right_time_transformX">180dp</dimen>
     <dimen name="transaction_edit_date_transformY">125dp</dimen>
+    <dimen name="summary_bar_text_size_1">20sp</dimen>
 </resources>
