@@ -48,4 +48,5 @@
     <string name="transaction_amount_hint">Enter the amount of transaction</string>
     <string name="debtor_search_hint">Enter search name</string>
     <string name="empty_debts_message">No Debt Recorded</string>
+    <string name="title_activity_edit_debt">EditDebtActivity</string>
 </resources>
