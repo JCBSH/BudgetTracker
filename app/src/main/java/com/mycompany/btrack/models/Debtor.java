@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.UUID;
 
 /**
  * Created by JCBSH on 30/09/2015.
@@ -152,5 +153,12 @@ public class Debtor {
 
     public void deleteDebt(Debt d) {
         mDebts.remove(d);
+    }
+
+    public Debt getDebt(UUID uuid) {
+        for (Debt debt:mDebts) {
+            if (debt.getId().equals(uuid)) return debt;
+        }
+        return null;
     }
 }

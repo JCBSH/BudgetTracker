@@ -22,7 +22,7 @@ import java.util.UUID;
 
 public class EditTransactionActivity extends ActionBarActivity implements DateTimePickerFragment.Callbacks{
     public static final String TAG = EditTransactionActivity.class.getSimpleName();
-    public static final String EXTRA_TRANSACTION_ID = "com.mycompany.btrack.EditTransactionActivity.transaction_id";
+    public static final String EXTRA_TRANSACTION_ID = "transaction_id";
     private static final String DIALOG_DATE = "date";
     private Transaction mTransaction;
     private EditText mRecipient;

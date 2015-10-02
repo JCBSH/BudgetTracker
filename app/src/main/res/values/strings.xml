@@ -27,8 +27,8 @@
     <string name="transaction_recipient_label">RECIPIENT</string>
     <string name="transaction_recipient_hint">Enter the recipient of transaction</string>
     <string name="transaction_description_label">DESCRIPITION</string>
-    <string name="transaction_description_hint">Enter brief description of tranaction</string>
-    <string name="transaction_update_button_text">Update!</string>
+    <string name="transaction_description_hint">Enter brief description of transaction</string>
+    <string name="transaction_update_button_text">SAVE</string>
     <string name="date_picker_title">Date</string>
     <string name="action_delete">Delete</string>
     <string name="save">Save</string>
@@ -49,4 +49,6 @@
     <string name="debtor_search_hint">Enter search name</string>
     <string name="empty_debts_message">No Debt Recorded</string>
     <string name="title_activity_edit_debt">EditDebtActivity</string>
+    <string name="debt_amount_hint">Enter the amount</string>
+    <string name="debt_description_hint">Enter brief description</string>
 </resources>

@@ -1,9 +1,11 @@
 package com.mycompany.btrack;
 
+import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +19,7 @@ import android.widget.TextView;
 import com.mycompany.btrack.models.Debt;
 import com.mycompany.btrack.models.Debtor;
 import com.mycompany.btrack.models.UserInfo;
+import com.mycompany.btrack.savedStates.DebtActivityState;
 import com.mycompany.btrack.utils.DebtComparator;
 
 import java.util.ArrayList;
@@ -27,6 +30,9 @@ import java.util.ArrayList;
 public class DebtActivity extends ListActivity {
 
     public static final String TAG = DebtActivity.class.getSimpleName();
+
+    private static final int REQUEST_SUCCESSFUL_EDIT = 1;
+
     private String mName;
     private boolean mDeleteStatus;
     private Debtor mDebtor;
@@ -41,13 +47,24 @@ public class DebtActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_debt);
         mName =  (String) getIntent().getStringExtra(DebtorFragment.EXTRA_DEBTOR_NAME);
+
+
+        //recovering name for when back button is pressed for EditDebtActivity
+        if (mName == null) {
+            mName = DebtActivityState.get(getApplicationContext()).getDebtorName();
+        }
+        //saving name for when back button is pressed for EditDebtActivity
+        DebtActivityState.get(getApplicationContext()).setDebtorName(mName);
+
+        
+        Log.d(TAG, "name " + mName);
         setTitle("Debts with " + mName);
         mDebtor = UserInfo.get(getApplicationContext()).getDebtor(mName);
 
         mDeleteStatus = false;
         mDeleteDebtsList = new ArrayList<Debt>();
         mDeleteListPosition = new ArrayList<Integer>();
-                mDebts = mDebtor.getDebts();
+        mDebts = mDebtor.getDebts();
         DebtAdapter adapter =  new DebtAdapter(DebtActivity.this, mDebts);
         setListAdapter(adapter);
 
@@ -60,7 +77,7 @@ public class DebtActivity extends ListActivity {
                     mDebtor.addDebt(d);
                     UserInfo.get(getApplicationContext()).saveUserInfo();
                     sortAndNotify(((DebtAdapter) getListAdapter()));
-                    //startEditTransaction(t);
+                    startEditDebt(d);
                 } else {
                     for (Integer i : mDeleteListPosition) {
                         CheckedTextView ch = (CheckedTextView) getListView().getChildAt(i).findViewById(R.id.delete_check);
@@ -91,6 +108,7 @@ public class DebtActivity extends ListActivity {
                 adjustButtonDependencyForCancelDelete();
             }
         });
+        Log.d(TAG, "onCreate()");
     }
 
     @Override
@@ -108,15 +126,26 @@ public class DebtActivity extends ListActivity {
                 mDeleteDebtsList.add(t);
                 mDeleteListPosition.add(position);
             }
-        }
-//        } else {
-//            startEditTransaction(t);
-//
-//        }
+        } else {
+            startEditDebt(t);
 
+        }
 
 
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != Activity.RESULT_OK) return;
+        switch (requestCode) {
+            case REQUEST_SUCCESSFUL_EDIT:
+                Log.d(TAG, "transaction edit successful");
+                sortAndNotify(((DebtAdapter) getListAdapter()));
+                break;
+        }
+    }
+
 
     private void sortAndNotify(DebtAdapter listAdapter) {
         listAdapter.sort(new DebtComparator());
@@ -130,12 +159,13 @@ public class DebtActivity extends ListActivity {
         mDeleteDebtsList.clear();
         mDeleteListPosition.clear();
     }
-//    private void startEditTransaction(Debt d) {
-//        Intent i = new Intent(getActivity(), EditTransactionActivity.class);
-//        i.putExtra(EditTransactionActivity.EXTRA_TRANSACTION_ID, t.getId());
-//        startActivityForResult(i, REQUEST_SUCCESSFUL_EDIT);
-//        //mCallbacks.onTransactionSelected(t);
-//    }
+    private void startEditDebt(Debt d) {
+        Intent i = new Intent(this, EditDebtActivity.class);
+        i.putExtra(EditDebtActivity.EXTRA_DEBT_ID, d.getId());
+        i.putExtra(EditDebtActivity.EXTRA_DEBTOR_NAME, mDebtor.getName());
+        startActivityForResult(i, REQUEST_SUCCESSFUL_EDIT);
+        //mCallbacks.onTransactionSelected(t);
+    }
 
 
     @Override
@@ -200,6 +230,37 @@ public class DebtActivity extends ListActivity {
 //            clearDeleteList();
 //        }
 //    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume()");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart()");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop()");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause()");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy()");
+    }
+
 
     private class DebtAdapter extends ArrayAdapter<Debt> {
         public DebtAdapter(Context context, ArrayList<Debt> debts) {

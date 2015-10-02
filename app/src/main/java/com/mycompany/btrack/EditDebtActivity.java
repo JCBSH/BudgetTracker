@@ -11,7 +11,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.mycompany.btrack.models.Transaction;
+import com.mycompany.btrack.models.Debt;
+import com.mycompany.btrack.models.Debtor;
 import com.mycompany.btrack.models.UserInfo;
 import com.mycompany.btrack.utils.MoneyTextWatcher;
 import com.mycompany.btrack.utils.StringTextWatcher;
@@ -22,11 +23,12 @@ import java.util.UUID;
 
 
 public class EditDebtActivity extends ActionBarActivity implements DateTimePickerFragment.Callbacks{
-    public static final String TAG = EditTransactionActivity.class.getSimpleName();
-    public static final String EXTRA_TRANSACTION_ID = "com.mycompany.btrack.EditTransactionActivity.transaction_id";
+    public static final String TAG = EditDebtActivity.class.getSimpleName();
+    public static final String EXTRA_DEBT_ID = "debt_id";
+    public static final String EXTRA_DEBTOR_NAME = "debtor_name";
     private static final String DIALOG_DATE = "date";
-    private Transaction mTransaction;
-    private EditText mRecipient;
+    private Debt mDebt;
+    private Debtor mDebtor;
     private Button mDateButton;
     private EditText mAmount;
     private EditText mDescription;
@@ -39,27 +41,28 @@ public class EditDebtActivity extends ActionBarActivity implements DateTimePicke
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_debt);
 
-        UUID id = (UUID)getIntent().getSerializableExtra(EXTRA_TRANSACTION_ID);
-        mTransaction = UserInfo.get(this.getApplicationContext()).getTransaction(id);
-        setTitle(UserInfo.get(this.getApplicationContext()).getTransaction(id).getRecipient());
-        mAmount = (EditText) findViewById(R.id.transaction_amount_EditText);
-        mRecipient = (EditText) findViewById(R.id.transaction_recipient_EditText);
-        mDescription = (EditText) findViewById(R.id.transaction_description_EditText);
-        mDateButton = (Button) findViewById(R.id.transaction_date_button);
-        mUpdate = (Button) findViewById(R.id.transaction_update_button);
-        mAmount.setText(mTransaction.getFormattedAmount());
+        String name = (String)getIntent().getStringExtra(EXTRA_DEBTOR_NAME);
+        mDebtor = UserInfo.get(this.getApplicationContext()).getDebtor(name);
+        UUID id = (UUID)getIntent().getSerializableExtra(EXTRA_DEBT_ID);
+        mDebt = mDebtor.getDebt(id);
+
+        setTitle("Edit Debt");
+        mAmount = (EditText) findViewById(R.id.debt_amount_EditText);
+        mDescription = (EditText) findViewById(R.id.debt_description_EditText);
+        mDateButton = (Button) findViewById(R.id.debt_date_button);
+        mUpdate = (Button) findViewById(R.id.debt_update_button);
+
+        mAmount.setText(mDebt.getFormattedAmount());
         //mAmount.setFilters(new InputFilter[] {new MoneyValueFilter()});
         mAmount.addTextChangedListener(new MoneyTextWatcher(mAmount));
 
 
-        mRecipient.setText(mTransaction.getEditTextRecipient());
-        mRecipient.addTextChangedListener(new StringTextWatcher(mRecipient, Transaction.RECIPIENT_SIZE_LIMIT));
 
-        mDescription.setText(mTransaction.getEditTextDescription());
-        mDescription.addTextChangedListener(new StringTextWatcher(mDescription, Transaction.DESCRIPTION_SIZE_LIMIT));
+        mDescription.setText(mDebt.getEditTextDescription());
+        mDescription.addTextChangedListener(new StringTextWatcher(mDescription, Debt.DESCRIPTION_SIZE_LIMIT));
 
-        mDateButton.setText(mTransaction.getFormattedDate());
-        mDate = mTransaction.getDate();
+        mDateButton.setText(mDebt.getFormattedDate());
+        mDate = mDebt.getDate();
         mDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,15 +79,13 @@ public class EditDebtActivity extends ActionBarActivity implements DateTimePicke
             public void onClick(View view) {
                 String amountString = String.valueOf(mAmount.getText());
                 if (amountString.equals("") || amountString.equals("-") || amountString.equals(".")) {
-                    mTransaction.setAmount(0.00);
+                    mDebt.setAmount(0.00);
                 } else {
-                    mTransaction.setAmount(Double.parseDouble(String.valueOf(mAmount.getText())));
+                    mDebt.setAmount(Double.parseDouble(String.valueOf(mAmount.getText())));
                 }
 
-                mTransaction.setRecipient(String.valueOf(mRecipient.getText()));
-                mTransaction.setDescription(String.valueOf(mDescription.getText()));
-                mTransaction.setDate(mDate);
-                //UserInfo.get(getApplicationContext()).sortTransactions();
+                mDebt.setDescription(String.valueOf(mDescription.getText()));
+                mDebt.setDate(mDate);
                 setResult(Activity.RESULT_OK);
                 finish();
             }
