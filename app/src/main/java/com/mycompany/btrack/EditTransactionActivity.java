@@ -72,10 +72,11 @@ public class EditTransactionActivity extends ActionBarActivity implements DateTi
         mUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!String.valueOf(mAmount.getText()).equalsIgnoreCase("")) {
-                    mTransaction.setAmount(Double.parseDouble(String.valueOf(mAmount.getText())));
-                } else {
+                String amountString = String.valueOf(mAmount.getText());
+                if (amountString.equals("") || amountString.equals("-") || amountString.equals(".")) {
                     mTransaction.setAmount(0.00);
+                } else {
+                    mTransaction.setAmount(Double.parseDouble(String.valueOf(mAmount.getText())));
                 }
 
                 mTransaction.setRecipient(String.valueOf(mRecipient.getText()));

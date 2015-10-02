@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -42,9 +41,7 @@ public class FilterTransactionFragment extends DialogFragment {
     public static final String EXTRA_DESCRIPTION =
             "com.mycompany.btrack.DateTimePickerFragment.description";
 
-    private String mName;
-    private Button mFromDateButton;
-    private Button mToDateButton;
+
     private EditText mRecipientField;
     private EditText mAmountFromField;
     private EditText mAmountToField;
@@ -83,8 +80,8 @@ public class FilterTransactionFragment extends DialogFragment {
 
         Serializable fromDateSerializable = getArguments().getSerializable(TransactionFragment.FILTER_FROM_DATE_BUNDLE_KEY);
         Serializable toDateSerializable = getArguments().getSerializable(TransactionFragment.FILTER_TO_DATE_BUNDLE_KEY);
-        mAmountFrom = getArguments().getDouble(TransactionFragment.FILTER_AMOUNT_FROM_BUNDLE_KEY);
-        mAmountTo = getArguments().getDouble(TransactionFragment.FILTER_AMOUNT_TO_BUNDLE_KEY);
+        mAmountFrom = getArguments().getDouble(TransactionFragment.FILTER_AMOUNT_FROM_BUNDLE_KEY, MoneyTextWatcher.MIN_AMOUNT);
+        mAmountTo = getArguments().getDouble(TransactionFragment.FILTER_AMOUNT_TO_BUNDLE_KEY, MoneyTextWatcher.MAX_AMOUNT);
         mRecipient = getArguments().getString(TransactionFragment.FILTER_RECIPIENT_BUNDLE_KEY);
         mDescription = getArguments().getString(TransactionFragment.FILTER_DESCRIPTION_BUNDLE_KEY);
 
@@ -93,13 +90,13 @@ public class FilterTransactionFragment extends DialogFragment {
         Log.d(TAG,  "recipient " + mRecipient);
         Log.d(TAG,  "description " + mDescription);
 
-        if (mAmountFrom != 0) {
+        if (mAmountFrom != MoneyTextWatcher.MIN_AMOUNT) {
             DecimalFormat df = new DecimalFormat("#.00");
             String formatted = df.format(mAmountFrom);
             mAmountFromField.setText(formatted);
         }
 
-        if (mAmountTo != 0) {
+        if (mAmountTo !=  MoneyTextWatcher.MAX_AMOUNT) {
             DecimalFormat df = new DecimalFormat("#.00");
             String formatted = df.format(mAmountTo);
             mAmountToField.setText(formatted);
@@ -208,22 +205,22 @@ public class FilterTransactionFragment extends DialogFragment {
         if (getTargetFragment() == null)
             return;
         Intent i = new Intent();
-        if (!String.valueOf(mAmountFromField.getText()).equalsIgnoreCase("")) {
-            //i.putExtra(EXTRA_AMOUNT_FROM, Double.parseDouble(String.valueOf(mAmountFromField.getText())));
+        String amountFromString = String.valueOf(mAmountFromField.getText());
+        if (amountFromString.equals("") || amountFromString.equals("-") || amountFromString.equals(".")) {
+            mAmountFrom = MoneyTextWatcher.MIN_AMOUNT;
+        } else {
             mAmountFrom =  Double.parseDouble(String.valueOf(mAmountFromField.getText()));
-        } else {
-            //i.putExtra(EXTRA_AMOUNT_FROM, 0.00);
-            mAmountFrom = 0.00;
         }
 
-        if (!String.valueOf(mAmountToField.getText()).equalsIgnoreCase("")) {
+        String amountToString = String.valueOf(mAmountToField.getText());
+        if (amountToString.equals("") || amountToString.equals("-") || amountToString.equals(".")) {
             //i.putExtra(EXTRA_AMOUNT_TO, Double.parseDouble(String.valueOf(mAmountToField.getText())));
-            mAmountTo = Double.parseDouble(String.valueOf(mAmountToField.getText()));
+            mAmountTo = MoneyTextWatcher.MAX_AMOUNT;
         } else {
-            mAmountTo = 0.00;
+            mAmountTo = Double.parseDouble(String.valueOf(mAmountToField.getText()));
         }
 
-        if (mAmountFrom != 0.00 && mAmountTo != 0.00 && mAmountFrom > mAmountTo) {
+        if (mAmountFrom > mAmountTo) {
             double temp = mAmountFrom;
             mAmountFrom = mAmountTo;
             mAmountTo = temp;

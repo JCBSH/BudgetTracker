@@ -161,9 +161,7 @@ public class Transaction {
     public static ArrayList<Transaction> filterTransactions(
             ArrayList<Transaction> transactions, Date filterFromDate, Date filterToDate,
             double filterAmountFrom, double filterAmountTo, String filterRecipient, String filterDescription) {
-        if (filterAmountTo == 0) {
-            filterAmountTo = Double.MAX_VALUE;
-        }
+
 
         ArrayList<Transaction> filteredList =  new ArrayList<Transaction>();
         for (Transaction t : transactions) {

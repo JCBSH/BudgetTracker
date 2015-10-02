@@ -18,16 +18,16 @@ public class MoneyTextWatcher implements TextWatcher{
     private String mBefore;
     private Toast mToast;
     private static int MAX_DECIMAL_PLACE = 2;
-    private static double MAX_AMOUNT_LIMIT = 10000000000.00;
-    private static double MAX_AMOUNT = 9999999999.99;
-    private final ErrorUtil error;
+    public static double MAX_AMOUNT_LIMIT = 10000000000.00;
+    public static double MAX_AMOUNT = 9999999999.99;
+    public static double MIN_AMOUNT_LIMIT = -10000000000.00;
+    public static double MIN_AMOUNT = -9999999999.99;
 
     public MoneyTextWatcher (EditText amount) {
         mAmount = amount;
         mToast = Toast.makeText(mAmount.getContext(), "blah", Toast.LENGTH_SHORT);
         mToast.setGravity(Gravity.CENTER, 0, 0);
 
-        error = new ErrorUtil();
     }
     @Override
     public void beforeTextChanged(CharSequence charSequence, int indexOfTheChange, int removeCount, int replaceCount) {
@@ -47,18 +47,7 @@ public class MoneyTextWatcher implements TextWatcher{
 //        Log.d(TAG, String.valueOf(replaceCount));
 //        Log.d(TAG, String.valueOf(charSequence.length()));
 //        Log.d(TAG, mBefore);
-        if (!TransactionUtil.isValidAmount(String.valueOf(charSequence), error)) {
-            mAmount.removeTextChangedListener(this);
-            if (error.getCode() == 2 || error.getCode() == 1) {
-                mBefore = "0";
-            }
-            mAmount.setText(mBefore);
-            mAmount.addTextChangedListener(this);
-            mAmount.setSelection(mBefore.length());
-            mToast.setText(error.getMessage());
-            mToast.show();
-        }
-/*
+
         for (int i = 0; i < (indexOfTheChange + replaceCount); ++i) {
             if (charSequence.charAt(i) == '.') {
 //                Log.d(TAG, "!!!!greater");
@@ -78,21 +67,49 @@ public class MoneyTextWatcher implements TextWatcher{
         }
 
         String current = String.valueOf(new StringBuilder(charSequence));
-        double currentAmount = Double.parseDouble(current);
-//        Log.d(TAG, String.valueOf(currentAmount));
-//        Log.d(TAG, String.valueOf(MAX_AMOUNT));
-        if (currentAmount > MAX_AMOUNT_LIMIT) {
-            Log.d(TAG, "greater");
-            mAmount.removeTextChangedListener(this);
-            DecimalFormat df = new DecimalFormat("#.00");
-            String formatted = df.format(MAX_AMOUNT);
-            mAmount.setText(formatted);
-            mAmount.addTextChangedListener(this);
-            mAmount.setSelection(indexOfTheChange);
-            mToast.setText("exceeded maximum limit");
-            mToast.show();
+        Log.d(TAG, current);
+        if(!current.equalsIgnoreCase("")) {
+            if (current.startsWith("-")) {
+                if(current.equalsIgnoreCase(("-."))) {
+                    mAmount.removeTextChangedListener(this);
+                    mAmount.setText("-");
+                    mAmount.addTextChangedListener(this);
+                    mAmount.setSelection(indexOfTheChange - 1);
+                } else if (!current.equalsIgnoreCase("-")) {
+                    Log.d(TAG, "frank 1 ");
+                    double currentAmount = Double.parseDouble(current);
+                    if (currentAmount < MIN_AMOUNT_LIMIT) {
+                        Log.d(TAG, "greater");
+                        mAmount.removeTextChangedListener(this);
+                        DecimalFormat df = new DecimalFormat("#.00");
+                        String formatted = df.format(MIN_AMOUNT);
+                        mAmount.setText(formatted);
+                        mAmount.addTextChangedListener(this);
+                        mAmount.setSelection(indexOfTheChange);
+                        mToast.setText("exceeded maximum limit");
+                        mToast.show();
+                    }
+                }
+            } else if (current.startsWith(".")) {
+
+            } else {
+                double currentAmount = Double.parseDouble(current);
+                //        Log.d(TAG, String.valueOf(currentAmount));
+                //        Log.d(TAG, String.valueOf(MAX_AMOUNT));
+                if (currentAmount > MAX_AMOUNT_LIMIT) {
+                    Log.d(TAG, "greater");
+                    mAmount.removeTextChangedListener(this);
+                    DecimalFormat df = new DecimalFormat("#.00");
+                    String formatted = df.format(MAX_AMOUNT);
+                    mAmount.setText(formatted);
+                    mAmount.addTextChangedListener(this);
+                    mAmount.setSelection(indexOfTheChange);
+                    mToast.setText("exceeded maximum limit");
+                    mToast.show();
+                }
+            }
         }
-*/
+
     }
     @Override
     public void afterTextChanged(Editable editable) {
