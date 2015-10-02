@@ -36,6 +36,8 @@ public class DebtorFragment extends ListFragment {
 
     public static final String TAG = DebtorFragment.class.getSimpleName();
 
+    public static final String EXTRA_DEBTOR_NAME = "debtor name";
+
     private static final String EDIT_NAME = "edit name";
     private static final int REQUEST_NAME = 0;
 

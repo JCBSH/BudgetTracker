@@ -68,7 +68,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_blank, menu);
+        getMenuInflater().inflate(R.menu.menu_home, menu);
         return true;
     }
 
@@ -110,13 +110,6 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
     }
 
     @Override
-    public void onTransactionSelected(Transaction transaction) {
-        Intent i = new Intent(this, EditTransactionActivity.class);
-        i.putExtra(EditTransactionActivity.EXTRA_TRANSACTION_ID, transaction.getId());
-        startActivity(i);
-    }
-
-    @Override
     public void onStart() {
         super.onStart();
         Log.d(TAG, "onStart()");
@@ -148,9 +141,16 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
     }
 
     @Override
+    public void onTransactionSelected(Transaction transaction) {
+//        Intent i = new Intent(this, EditTransactionActivity.class);
+//        i.putExtra(EditTransactionActivity.EXTRA_TRANSACTION_ID, transaction.getId());
+//        startActivity(i);
+    }
+
+    @Override
     public void onDebtorSelected(Debtor debtor) {
-        Intent i = new Intent(this, BlankActivity.class);
-        //i.putExtra(EditTransactionActivity.EXTRA_TRANSACTION_ID, transaction.getId());
+        Intent i = new Intent(this, DebtActivity.class);
+        i.putExtra(DebtorFragment.EXTRA_DEBTOR_NAME, debtor.getName());
         startActivity(i);
     }
 }

@@ -47,10 +47,12 @@ public class Transaction {
         if (json.has(JSON_RECIPIENT)) {
             mRecipient = json.getString(JSON_RECIPIENT);
         }
+
         if (json.has(JSON_AMOUNT)) {
             mAmount = json.getDouble(JSON_AMOUNT);
         }
-        if (json.has(JSON_RECIPIENT)) {
+
+        if (json.has(JSON_DATE)) {
             mDate = new Date(json.getLong(JSON_DATE));
         }
 

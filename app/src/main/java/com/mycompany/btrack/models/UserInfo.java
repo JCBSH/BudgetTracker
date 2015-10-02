@@ -244,4 +244,10 @@ public class UserInfo {
         Collections.sort(mDebtors, new DebtorComparator());
     }
 
+    public Debtor getDebtor(String name) {
+        for (Debtor debtor:mDebtors) {
+            if (debtor.getName().equalsIgnoreCase(name)) return debtor;
+        }
+        return null;
+    }
 }

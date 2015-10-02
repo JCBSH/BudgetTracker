@@ -62,7 +62,16 @@
         </activity>
         <activity
             android:name=".EditTransactionActivity"
-            android:label="@string/title_activity_edit_transaction_actitvity"
+            android:label="@string/title_activity_edit_transaction_activity"
+            android:parentActivityName=".HomeActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mycompany.btrack.HomeActivity" />
+        </activity>
+        <activity
+            android:name=".DebtActivity"
+            android:theme="@android:style/Theme.Holo.Light.DarkActionBar"
+            android:label="@string/title_activity_debt"
             android:parentActivityName=".HomeActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

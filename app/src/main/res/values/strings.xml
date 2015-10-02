@@ -12,7 +12,7 @@
     <string name="action_logout">Logout</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_blank">BlankActivity</string>
-
+    <string name="title_activity_debt">DebtActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_home">HomeActivity</string>
 
@@ -22,7 +22,7 @@
     <string name="Fragment_Title_1">Transactions</string>
     <string name="empty_debtors_message">You Have No Debtors</string>
     <string name="empty_transactions_message">No Transaction Recorded</string>
-    <string name="title_activity_edit_transaction_actitvity">EditTransactionActitvity</string>
+    <string name="title_activity_edit_transaction_activity">EditTransactionActivity</string>
     <string name="transaction_amount_label">AMOUNT</string>
     <string name="transaction_recipient_label">RECIPIENT</string>
     <string name="transaction_recipient_hint">Enter the recipient of transaction</string>
@@ -47,4 +47,5 @@
     <string name="transaction_amount_to_hint">Enter amount to</string>
     <string name="transaction_amount_hint">Enter the amount of transaction</string>
     <string name="debtor_search_hint">Enter search name</string>
+    <string name="empty_debts_message">No Debt Recorded</string>
 </resources>

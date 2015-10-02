@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selected_background">
+    <CheckedTextView android:id="@+id/delete_check"
+                     android:layout_width="wrap_content"
+                     android:layout_height="?android:attr/listPreferredItemHeightSmall"
+                     android:gravity="center_vertical"
+                     android:checkMark="?android:attr/textCheckMark"
+                     android:layout_alignParentRight="true"/>
+    <TextView android:id="@+id/debt_list_item_amount_TextView"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_toLeftOf="@id/delete_check"
+              android:padding="@dimen/TextView_standard_1_padding"
+              android:text="Crime date" />
+    <TextView android:id="@+id/debt_list_item_date_TextView"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_toLeftOf="@id/debt_list_item_amount_TextView"
+              android:padding="@dimen/TextView_standard_1_padding" />
+    <TextView android:id="@+id/debt_list_item_description_TextView"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_below="@id/debt_list_item_date_TextView"
+              android:layout_toLeftOf="@id/debt_list_item_amount_TextView"
+              android:padding="@dimen/TextView_standard_1_padding"/>
+
+
+</RelativeLayout>
