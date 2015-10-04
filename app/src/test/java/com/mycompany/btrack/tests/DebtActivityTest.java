@@ -23,7 +23,6 @@ public class DebtActivityTest
         extends ActivityInstrumentationTestCase2<DebtActivity> {
 
     private DebtActivity debtActivity;
-    private ;
 
     public DebtActivityTest(Class<DebtActivity> activityClass) {    super(activityClass);   }
 
