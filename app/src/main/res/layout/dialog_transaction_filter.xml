@@ -38,6 +38,22 @@
                     android:id="@+id/transaction_filter_picker_container">
 
     </RelativeLayout>
+    <?xml version="1.0" encoding="utf-8"?>
+    <LinearLayout android:orientation="horizontal"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content">
+        <Spinner
+            android:id="@+id/transaction_filter_category_spinner"
+            android:layout_width="0dp"
+            android:layout_weight="50"
+            android:layout_height="wrap_content"/>
+        <Spinner
+            android:id="@+id/transaction_filter_priority_spinner"
+            android:layout_width="0dp"
+            android:layout_weight="50"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
     <EditText
         android:id="@+id/transaction_filter_recipient_EditText"
         android:layout_width="match_parent"

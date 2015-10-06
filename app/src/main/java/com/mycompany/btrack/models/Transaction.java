@@ -45,6 +45,9 @@ public class Transaction {
     private static final String MEDIUM_ICON = "mipmap/medium_icon";
     private static final String HIGH_PRIORITY = "High";
     private static final String HIGH_ICON = "mipmap/high_icon";
+    private static final String CLEAR_ICON = "mipmap/clear_icon";
+    private static final String NO_CATEGORY = "<Category>";
+    private static final String NO_PRIORITY = "<Priority>";
     private static final String TAG = Transaction.class.getSimpleName();
 
     private UUID mId;
@@ -104,11 +107,25 @@ public class Transaction {
         return choice;
     }
 
+    public static ArrayList<String> getCategoryChoicesForFilter() {
+        ArrayList<String> choice =  new ArrayList<String>();
+        choice.add(NO_CATEGORY);
+        choice.addAll(getCategoryChoices());
+        return choice;
+    }
+
     public static ArrayList<String> getPriorityChoices() {
         ArrayList<String> choice =  new ArrayList<String>();
         choice.add(LOW_PRIORITY);
         choice.add(MEDIUM_PRIORITY);
         choice.add(HIGH_PRIORITY);
+        return choice;
+    }
+
+    public static ArrayList<String> getPriorityChoicesForFilter() {
+        ArrayList<String> choice =  new ArrayList<String>();
+        choice.add(NO_PRIORITY);
+        choice.addAll(getPriorityChoices());
         return choice;
     }
 
@@ -277,7 +294,7 @@ public class Transaction {
             case OTHER:
                 return OTHER_ICON;
             default:
-                return OTHER_ICON;
+                return CLEAR_ICON;
         }
     }
 
@@ -302,7 +319,7 @@ public class Transaction {
             case HIGH_PRIORITY:
                 return HIGH_ICON;
             default:
-                return LOW_ICON;
+                return CLEAR_ICON;
         }
     }
 

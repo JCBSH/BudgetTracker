@@ -9,16 +9,21 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 
 import com.mycompany.btrack.models.Transaction;
+import com.mycompany.btrack.utils.CategoryArrayAdaptor;
 import com.mycompany.btrack.utils.MoneyTextWatcher;
+import com.mycompany.btrack.utils.PriorityArrayAdaptor;
 import com.mycompany.btrack.utils.StringTextWatcher;
 
 import java.io.Serializable;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -52,6 +57,8 @@ public class FilterTransactionFragment extends DialogFragment {
     private double mAmountTo;
     private String mRecipient;
     private String mDescription;
+    private Spinner mCategorySpinner;
+    private Spinner mPrioritySpinner;
 
     public FilterTransactionFragment() {
         super();
@@ -197,6 +204,20 @@ public class FilterTransactionFragment extends DialogFragment {
                         FilterTransactionFragment.this.getDialog().cancel();
                     }
                 });
+
+        mCategorySpinner = (Spinner) v.findViewById(R.id.transaction_category_spinner);
+        mPrioritySpinner = (Spinner) v.findViewById(R.id.transaction_priority_spinner);
+        ArrayList<String> categoryChoices = Transaction.getCategoryChoicesForFilter();
+        ArrayAdapter<String> cAdapter = new CategoryArrayAdaptor(categoryChoices, getActivity());
+        // Apply the adapter to the spinner
+        mCategorySpinner.setAdapter(cAdapter);
+       // mCategorySpinner.setSelection(categoryChoices.indexOf(mTransaction.getCategory()));
+
+        ArrayList<String> priorityChoices = Transaction.getPriorityChoicesForFilter();
+        ArrayAdapter<String> pAdapter = new PriorityArrayAdaptor(priorityChoices, getActivity());
+        // Apply the adapter to the spinner
+        mPrioritySpinner.setAdapter(pAdapter);
+       // mPrioritySpinner.setSelection(priorityChoices.indexOf(mTransaction.getPriority()));
         return builder.create();
     }
 
