@@ -93,6 +93,26 @@ public class Transaction {
         }
     }
 
+    public static ArrayList<String> getCategoryChoices() {
+        ArrayList<String> choice =  new ArrayList<String>();
+        choice.add(FOOD);
+        choice.add(UTILITY);
+        choice.add(TRANSPORT);
+        choice.add(ENTERTAINMENT);
+        choice.add(GROCERY);
+        choice.add(OTHER);
+        return choice;
+    }
+
+    public static ArrayList<String> getPriorityChoices() {
+        ArrayList<String> choice =  new ArrayList<String>();
+        choice.add(LOW_PRIORITY);
+        choice.add(MEDIUM_PRIORITY);
+        choice.add(HIGH_PRIORITY);
+        return choice;
+    }
+
+
     public String getRecipient() {
         return mRecipient;
     }
@@ -242,8 +262,8 @@ public class Transaction {
         return mCategory;
     }
 
-    public String getCategoryIconResource() {
-        switch (mCategory) {
+    public static String findCategoryIconResource(String c) {
+        switch (c) {
             case FOOD:
                 return FOOD_ICON;
             case UTILITY:
@@ -261,6 +281,10 @@ public class Transaction {
         }
     }
 
+    public String getCategoryIconResource() {
+        return findCategoryIconResource(mCategory);
+    }
+
     public void setCategory(String category) {
         mCategory = category;
     }
@@ -269,8 +293,8 @@ public class Transaction {
         return mPriority;
     }
 
-    public String getPriorityIconResource() {
-        switch (mPriority) {
+    public static String findPriorityIconResource(String c) {
+        switch (c) {
             case LOW_PRIORITY:
                 return LOW_ICON;
             case MEDIUM_PRIORITY:
@@ -282,7 +306,14 @@ public class Transaction {
         }
     }
 
+    public String getPriorityIconResource() {
+        return findPriorityIconResource(mPriority);
+    }
+
     public void setPriority(String priority) {
         mPriority = priority;
     }
+
+
+
 }

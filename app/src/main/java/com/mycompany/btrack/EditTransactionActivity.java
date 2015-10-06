@@ -8,14 +8,19 @@ import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.mycompany.btrack.models.Transaction;
 import com.mycompany.btrack.models.UserInfo;
+import com.mycompany.btrack.utils.CategoryArrayAdaptor;
 import com.mycompany.btrack.utils.MoneyTextWatcher;
+import com.mycompany.btrack.utils.PriorityArrayAdaptor;
 import com.mycompany.btrack.utils.StringTextWatcher;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
 
@@ -32,6 +37,8 @@ public class EditTransactionActivity extends ActionBarActivity implements DateTi
     private Button mUpdate;
     private Date mDate;
     private TextWatcher mT;
+    private Spinner mCategorySpinner;
+    private Spinner mPrioritySpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +62,21 @@ public class EditTransactionActivity extends ActionBarActivity implements DateTi
 
         mDescription.setText(mTransaction.getEditTextDescription());
         mDescription.addTextChangedListener(new StringTextWatcher(mDescription, Transaction.DESCRIPTION_SIZE_LIMIT));
+
+        mCategorySpinner = (Spinner) findViewById(R.id.transaction_category_spinner);
+        mPrioritySpinner = (Spinner) findViewById(R.id.transaction_priority_spinner);
+        ArrayList<String> categoryChoices = Transaction.getCategoryChoices();
+        ArrayAdapter<String> cAdapter = new CategoryArrayAdaptor(categoryChoices, this);
+        // Apply the adapter to the spinner
+        mCategorySpinner.setAdapter(cAdapter);
+        mCategorySpinner.setSelection(categoryChoices.indexOf(mTransaction.getCategory()));
+
+        ArrayList<String> priorityChoices = Transaction.getPriorityChoices();
+        ArrayAdapter<String> pAdapter = new PriorityArrayAdaptor(priorityChoices, this);
+        // Apply the adapter to the spinner
+        mPrioritySpinner.setAdapter(pAdapter);
+        mPrioritySpinner.setSelection(priorityChoices.indexOf(mTransaction.getPriority()));
+
 
         mDateButton.setText(mTransaction.getFormattedDate());
         mDate = mTransaction.getDate();
@@ -82,6 +104,8 @@ public class EditTransactionActivity extends ActionBarActivity implements DateTi
                 mTransaction.setRecipient(String.valueOf(mRecipient.getText()));
                 mTransaction.setDescription(String.valueOf(mDescription.getText()));
                 mTransaction.setDate(mDate);
+                mTransaction.setCategory((String) mCategorySpinner.getSelectedItem());
+                mTransaction.setPriority((String) mPrioritySpinner.getSelectedItem());
                 //UserInfo.get(getApplicationContext()).sortTransactions();
                 setResult(Activity.RESULT_OK);
                 finish();

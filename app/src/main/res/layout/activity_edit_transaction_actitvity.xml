@@ -68,7 +68,46 @@
                 />
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_standard_1_margin"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="50"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/transaction_category_label"/>
+                <Spinner
+                    android:id="@+id/transaction_category_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
+                    </Spinner>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="50"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/transaction_priority_label"/>
+                <Spinner
+                    android:id="@+id/transaction_priority_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                </Spinner>
+            </LinearLayout>
+
+        </LinearLayout>
         <Button android:id="@+id/transaction_date_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
