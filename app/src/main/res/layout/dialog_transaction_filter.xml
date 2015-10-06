@@ -42,19 +42,20 @@
         android:id="@+id/transaction_filter_recipient_EditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/activity_standard_1_margin"
+        android:layout_marginLeft="@dimen/activity_standard_3_margin"
+        android:layout_marginRight="@dimen/activity_standard_3_margin"
         android:hint="@string/transaction_recipient_hint" />
     <LinearLayout android:orientation="horizontal"
                   android:layout_width="match_parent"
-                  android:layout_height="wrap_content">
+                  android:layout_height="wrap_content"
+                  android:layout_marginLeft="@dimen/activity_standard_3_margin"
+                  android:layout_marginRight="@dimen/activity_standard_3_margin">
         <EditText
             android:id="@+id/transaction_filter_amount_from_EditText"
             android:inputType="numberSigned|numberDecimal"
             android:layout_width="0dp"
             android:layout_weight="50"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/activity_standard_1_margin"
-            android:layout_marginLeft="@dimen/activity_standard_2_margin"
             android:hint="@string/transaction_amount_from_hint" />
         <EditText
             android:id="@+id/transaction_filter_amount_to_EditText"
@@ -62,14 +63,13 @@
             android:layout_width="0dp"
             android:layout_weight="50"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/activity_standard_1_margin"
-            android:layout_marginRight="@dimen/activity_standard_2_margin"
             android:hint="@string/transaction_amount_to_hint" />
     </LinearLayout>
     <EditText
         android:id="@+id/transaction_filter_description_EditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/activity_standard_1_margin"
+        android:layout_marginLeft="@dimen/activity_standard_3_margin"
+        android:layout_marginRight="@dimen/activity_standard_3_margin"
         android:hint="@string/transaction_description_keywords_hint" />
 </LinearLayout>
