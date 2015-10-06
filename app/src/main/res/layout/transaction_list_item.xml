@@ -1,38 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:stretchColumns="*"
                 android:background="@drawable/selected_background">
-    <CheckedTextView android:id="@+id/delete_check"
-                     android:layout_width="wrap_content"
-                     android:layout_height="?android:attr/listPreferredItemHeightSmall"
-                     android:gravity="center_vertical"
-                     android:checkMark="?android:attr/textCheckMark"
-                     android:layout_alignParentRight="true"/>
-    <TextView android:id="@+id/transaction_list_item_amount_TextView"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_toLeftOf="@id/delete_check"
-              android:padding="@dimen/TextView_standard_1_padding"
-              android:text="Crime date" />
-    <TextView android:id="@+id/transaction_list_item_recipient_TextView"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_toLeftOf="@id/transaction_list_item_amount_TextView"
-              android:textStyle="bold"
-              android:padding="@dimen/TextView_standard_1_padding" />
-    <TextView android:id="@+id/transaction_list_item_date_TextView"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_below="@id/transaction_list_item_amount_TextView"
-              android:layout_toLeftOf="@id/transaction_list_item_amount_TextView"
-              android:padding="@dimen/TextView_standard_1_padding" />
-    <TextView android:id="@+id/transaction_list_item_description_TextView"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_below="@id/transaction_list_item_date_TextView"
-              android:layout_toLeftOf="@id/transaction_list_item_amount_TextView"
-              android:padding="@dimen/TextView_standard_1_padding"/>
+    <TableRow>
+        <LinearLayout android:id="@+id/right_container"
+                      android:orientation="vertical"
+                      android:layout_width="0dp"
+                      android:layout_span="3"
+                      android:layout_height="wrap_content">
+            <TextView android:id="@+id/transaction_list_item_recipient_TextView"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:textStyle="bold"
+                      android:padding="@dimen/TextView_standard_1_padding" />
+            <TextView android:id="@+id/transaction_list_item_date_TextView"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:padding="@dimen/TextView_standard_1_padding" />
+            <TextView android:id="@+id/transaction_list_item_description_TextView"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:padding="@dimen/TextView_standard_1_padding"/>
+        </LinearLayout>
+        <LinearLayout android:id="@+id/left_container"
+                      android:orientation="vertical"
+                      android:layout_width="0dp"
+                      android:layout_span="2"
+                      android:layout_height="wrap_content">
+            <RelativeLayout android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                <CheckedTextView android:id="@+id/delete_check"
+                                 android:layout_width="wrap_content"
+                                 android:layout_height="?android:attr/listPreferredItemHeightSmall"
+                                 android:gravity="center_vertical"
+                                 android:checkMark="?android:attr/textCheckMark"
+                                 android:layout_alignParentRight="true"/>
+                <TextView android:id="@+id/transaction_list_item_amount_TextView"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_toLeftOf="@id/delete_check"
+                          android:padding="@dimen/TextView_standard_1_padding"/>
+            </RelativeLayout>
+            <RelativeLayout android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
 
+                <ImageView  android:id="@+id/transaction_list_item_category_icon_ImageView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"/>
 
-</RelativeLayout>
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_toLeftOf="@id/transaction_list_item_category_icon_ImageView"
+                          android:padding="@dimen/TextView_standard_1_padding"
+                          android:text="@string/transaction_category_label"/>
+            </RelativeLayout>
+            <RelativeLayout android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                <ImageView  android:id="@+id/transaction_list_item_priority_icon_ImageView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"/>
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_toLeftOf="@id/transaction_list_item_priority_icon_ImageView"
+                          android:padding="@dimen/TextView_standard_1_padding"
+                          android:text="@string/transaction_priority_label"/>
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </TableRow>
+
+</TableLayout>

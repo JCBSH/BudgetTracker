@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckedTextView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -350,7 +351,7 @@ public class TransactionFragment extends ListFragment {
             if (ch.isChecked() == true) {
                 ch.setChecked(false);
                 mDeleteTransactionsList.remove(t);
-                mDeleteListPosition.remove(position);
+                mDeleteListPosition.remove(new Integer(position));
             } else {
                 ch.setChecked(true);
                 mDeleteTransactionsList.add(t);
@@ -400,6 +401,16 @@ public class TransactionFragment extends ListFragment {
             TextView descriptionTextView =
                     (TextView)convertView.findViewById(R.id.transaction_list_item_description_TextView);
             descriptionTextView.setText(c.getDescription());
+
+            ImageView categoryImageView =
+                    (ImageView)convertView.findViewById(R.id.transaction_list_item_category_icon_ImageView);
+            categoryImageView.setImageResource
+                    (getResources().getIdentifier(c.getCategoryIconResource(), null, getActivity().getPackageName()));
+
+            ImageView priorityImageView =
+                    (ImageView)convertView.findViewById(R.id.transaction_list_item_priority_icon_ImageView);
+            priorityImageView.setImageResource
+                    (getResources().getIdentifier(c.getPriorityIconResource(), null, getActivity().getPackageName()));
 
             CheckedTextView ch = (CheckedTextView) convertView.findViewById(R.id.delete_check);
             if (mDeleteStatus == true) {

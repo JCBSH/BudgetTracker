@@ -24,7 +24,27 @@ public class Transaction {
     private static final String JSON_AMOUNT = "amount";
     private static final String JSON_DATE = "date";
     private static final String JSON_DESCRIPTION = "description";
+    private static final String JSON_CATEGORY = "category";
+    private static final String JSON_PRIORITY = "priority";
 
+    private static final String FOOD = "Food";
+    private static final String FOOD_ICON = "mipmap/food_icon";
+    private static final String GROCERY = "Grocery";
+    private static final String GROCERY_ICON = "mipmap/grocery_icon";
+    private static final String UTILITY = "Utility";
+    private static final String UTILITY_ICON = "mipmap/utility_icon";
+    private static final String ENTERTAINMENT = "Entertainment";
+    private static final String ENTERTAINMENT_ICON = "mipmap/entertainment_icon";
+    private static final String TRANSPORT = "Transport";
+    private static final String TRANSPORT_ICON = "mipmap/transport_icon";
+    private static final String OTHER = "Other";
+    private static final String OTHER_ICON = "mipmap/other_icon";
+    private static final String LOW_PRIORITY = "Low";
+    private static final String LOW_ICON = "mipmap/low_icon";
+    private static final String MEDIUM_PRIORITY = "Medium";
+    private static final String MEDIUM_ICON = "mipmap/medium_icon";
+    private static final String HIGH_PRIORITY = "High";
+    private static final String HIGH_ICON = "mipmap/high_icon";
     private static final String TAG = Transaction.class.getSimpleName();
 
     private UUID mId;
@@ -32,6 +52,8 @@ public class Transaction {
     private double mAmount;
     private Date mDate;
     private String mDescription;
+    private String mCategory;
+    private String mPriority;
 
 
     public Transaction() {
@@ -40,6 +62,8 @@ public class Transaction {
         mAmount = AMOUNT_DEFAULT;
         mRecipient = RECIPIENT_DEFAULT;
         mDescription = DESCRIPTION_DEFAULT;
+        mCategory =  OTHER;
+        mPriority = LOW_PRIORITY;
     }
 
     public Transaction(JSONObject json) throws JSONException {
@@ -58,6 +82,14 @@ public class Transaction {
 
         if (json.has(JSON_DESCRIPTION)) {
             mDescription = json.getString(JSON_DESCRIPTION);
+        }
+
+        if (json.has(JSON_CATEGORY)) {
+            mCategory = json.getString(JSON_CATEGORY);
+        }
+
+        if (json.has(JSON_PRIORITY)) {
+            mPriority = json.getString(JSON_PRIORITY);
         }
     }
 
@@ -156,6 +188,8 @@ public class Transaction {
         json.put(JSON_AMOUNT, mAmount);
         json.put(JSON_DATE, mDate.getTime());
         json.put(JSON_DESCRIPTION, mDescription);
+        json.put(JSON_CATEGORY, mCategory);
+        json.put(JSON_PRIORITY, mPriority);
         return json;
     }
 
@@ -204,4 +238,51 @@ public class Transaction {
         return filteredList;
     }
 
+    public String getCategory() {
+        return mCategory;
+    }
+
+    public String getCategoryIconResource() {
+        switch (mCategory) {
+            case FOOD:
+                return FOOD_ICON;
+            case UTILITY:
+                return UTILITY_ICON;
+            case ENTERTAINMENT:
+                return ENTERTAINMENT_ICON;
+            case GROCERY:
+                return GROCERY_ICON;
+            case TRANSPORT:
+                return TRANSPORT_ICON;
+            case OTHER:
+                return OTHER_ICON;
+            default:
+                return OTHER_ICON;
+        }
+    }
+
+    public void setCategory(String category) {
+        mCategory = category;
+    }
+
+    public String getPriority() {
+        return mPriority;
+    }
+
+    public String getPriorityIconResource() {
+        switch (mPriority) {
+            case LOW_PRIORITY:
+                return LOW_ICON;
+            case MEDIUM_PRIORITY:
+                return MEDIUM_ICON;
+            case HIGH_PRIORITY:
+                return HIGH_ICON;
+            default:
+                return LOW_ICON;
+        }
+    }
+
+    public void setPriority(String priority) {
+        mPriority = priority;
+    }
 }

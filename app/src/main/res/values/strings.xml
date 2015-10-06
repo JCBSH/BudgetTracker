@@ -55,4 +55,6 @@
     <string name="negative_red">#DF0101</string>
     <string name="debt_balance_label">Balance:</string>
     <string name="debt_deadline_label">Deadline:</string>
+    <string name="transaction_category_label">Category</string>
+    <string name="transaction_priority_label">Priority</string>
 </resources>

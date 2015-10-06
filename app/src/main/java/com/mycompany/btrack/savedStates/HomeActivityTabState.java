@@ -1,4 +1,4 @@
-package com.mycompany.btrack.models;
+package com.mycompany.btrack.savedStates;
 
 import android.content.Context;
 
