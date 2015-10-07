@@ -33,34 +33,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
-                android:layout_centerHorizontal="true"
-                android:padding="@dimen/TextView_standard_1_padding"
-                android:textSize="@dimen/summary_bar_text_size_1"/>
-            <LinearLayout
-                android:focusable="true" android:focusableInTouchMode="true"
-                android:layout_width="0px" android:layout_height="0px"/>
-            <EditText
-                android:id="@+id/debt_deadline_EditText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="number"
                 android:layout_alignParentRight="true"
-                android:gravity="center"
-                android:minEms = "5"
-                android:padding="@dimen/TextView_standard_1_padding"
-                android:textSize="@dimen/summary_bar_text_size_1"
-                android:maxLength="5"
-                android:nextFocusUp = "@id/debt_deadline_EditText"
-                android:nextFocusLeft = "@id/debt_deadline_EditText"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:layout_toLeftOf="@id/debt_deadline_EditText"
-                android:text="@string/debt_deadline_label"
                 android:padding="@dimen/TextView_standard_1_padding"
                 android:textSize="@dimen/summary_bar_text_size_1"/>
-
 
         </RelativeLayout>
 
