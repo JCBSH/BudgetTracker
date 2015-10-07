@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import com.mycompany.btrack.models.Transaction;
 import com.mycompany.btrack.models.UserInfo;
+import com.mycompany.btrack.savedStates.TransactionFragmentState;
 import com.mycompany.btrack.utils.TransactionComparator;
 
 import java.io.Serializable;
@@ -55,15 +56,10 @@ public class TransactionFragment extends ListFragment {
     private ImageButton mCancelButton;
     private ImageButton mFilterButton;
     private ImageButton mCancelFilterButton;
-    private boolean mFilterStatus;
-    private Date mFilterFromDate;
-    private Date mFilterToDate;
-    private double mFilterAmountFrom;
-    private double mFilterAmountTo;
-    private String mFilterRecipient;
-    private String mFilterDescription;
-    private String mFilterCategory;
-    private String mFilterPriority;
+    private TransactionFragmentState saveState;
+
+
+
 
     /**
      * Required interface for hosting activities.
@@ -149,15 +145,16 @@ public class TransactionFragment extends ListFragment {
                 FragmentManager fm = getActivity().getSupportFragmentManager();
                 FilterTransactionFragment filterTransactionFragment = new FilterTransactionFragment();
                 Bundle bundle = new Bundle();
-                if (mFilterStatus == true) {
-                    bundle.putSerializable(FILTER_FROM_DATE_BUNDLE_KEY, (Serializable) mFilterFromDate);
-                    bundle.putSerializable(FILTER_TO_DATE_BUNDLE_KEY, (Serializable) mFilterToDate);
-                    bundle.putDouble(FILTER_AMOUNT_FROM_BUNDLE_KEY,  mFilterAmountFrom);
-                    bundle.putDouble(FILTER_AMOUNT_TO_BUNDLE_KEY,  mFilterAmountTo);
-                    bundle.putString(FILTER_RECIPIENT_BUNDLE_KEY,  mFilterRecipient);
-                    bundle.putString(FILTER_DESCRIPTION_BUNDLE_KEY,  mFilterDescription);
-                    bundle.putString(FILTER_CATEGORY_BUNDLE_KEY,  mFilterCategory);
-                    bundle.putString(FILTER_PRIORITY_BUNDLE_KEY,  mFilterPriority);
+                if (saveState.isFilterStatus() == true) {
+
+                    bundle.putSerializable(FILTER_FROM_DATE_BUNDLE_KEY, (Serializable) saveState.getFilterFromDate());
+                    bundle.putSerializable(FILTER_TO_DATE_BUNDLE_KEY, (Serializable) saveState.getFilterToDate());
+                    bundle.putDouble(FILTER_AMOUNT_FROM_BUNDLE_KEY,  saveState.getFilterAmountFrom());
+                    bundle.putDouble(FILTER_AMOUNT_TO_BUNDLE_KEY,  saveState.getFilterAmountTo());
+                    bundle.putString(FILTER_RECIPIENT_BUNDLE_KEY,  saveState.getFilterRecipient());
+                    bundle.putString(FILTER_DESCRIPTION_BUNDLE_KEY,  saveState.getFilterDescription());
+                    bundle.putString(FILTER_CATEGORY_BUNDLE_KEY,  saveState.getFilterCategory());
+                    bundle.putString(FILTER_PRIORITY_BUNDLE_KEY,  saveState.getFilterPriority());
 
                 }
                 filterTransactionFragment.setArguments(bundle);
@@ -171,15 +168,14 @@ public class TransactionFragment extends ListFragment {
         mCancelFilterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mFilterStatus = false;
-                adjustButtonDependencyForCancelFilter();
-                mTransactions = UserInfo.get(getActivity().getApplicationContext()).getTransactions();
+                saveState.setFilterStatus(false);
+                adjustButtonDependencyForFilterStatus();
+                mTransactions = getTransactionList();
                 setAdapterFromTransactions();
             }
         });
 
-
-
+        adjustButtonDependencyForFilterStatus();
         return rootView;
     }
 
@@ -189,27 +185,25 @@ public class TransactionFragment extends ListFragment {
         if (resultCode != Activity.RESULT_OK) return;
         switch (requestCode) {
             case REQUEST_FILTER_INFO:
-                mFilterStatus = true;
-                adjustButtonDependencyForApplyFilter();
-                mFilterFromDate = (Date) data
-                        .getSerializableExtra(FilterTransactionFragment.EXTRA_FROM_DATE);
+                saveState.setFilterStatus(true);
+                adjustButtonDependencyForFilterStatus();
+                TransactionFragmentState saveState = TransactionFragmentState.get(getActivity().getApplicationContext());
+                saveState.setFilterFromDate((Date) data
+                        .getSerializableExtra(FilterTransactionFragment.EXTRA_FROM_DATE));
 
-                mFilterToDate = (Date) data
-                        .getSerializableExtra(FilterTransactionFragment.EXTRA_TO_DATE);
+                saveState.setFilterToDate((Date) data
+                        .getSerializableExtra(FilterTransactionFragment.EXTRA_TO_DATE));
 
-                mFilterAmountFrom = data.getDoubleExtra(FilterTransactionFragment.EXTRA_AMOUNT_FROM, 0);
-                mFilterAmountTo =  data.getDoubleExtra(FilterTransactionFragment.EXTRA_AMOUNT_TO, 0);
-                mFilterRecipient = data.getStringExtra(FilterTransactionFragment.EXTRA_RECIPIENT);
-                mFilterDescription = data.getStringExtra(FilterTransactionFragment.EXTRA_DESCRIPTION);
-                mFilterCategory = data.getStringExtra(FilterTransactionFragment.EXTRA_CATEGORY);
-                mFilterPriority = data.getStringExtra(FilterTransactionFragment.EXTRA_PRIORITY);
-                mCancelFilterButton.setVisibility(View.VISIBLE);
-                mTransactions = UserInfo.get(getActivity().getApplicationContext()).getTransactions();
+                saveState.setFilterAmountFrom(data.getDoubleExtra(FilterTransactionFragment.EXTRA_AMOUNT_FROM, 0));
+                saveState.setFilterAmountTo(data.getDoubleExtra(FilterTransactionFragment.EXTRA_AMOUNT_TO, 0));
+                saveState.setFilterRecipient(data.getStringExtra(FilterTransactionFragment.EXTRA_RECIPIENT));
+                saveState.setFilterDescription(data.getStringExtra(FilterTransactionFragment.EXTRA_DESCRIPTION));
+                saveState.setFilterCategory(data.getStringExtra(FilterTransactionFragment.EXTRA_CATEGORY));
+                saveState.setFilterPriority(data.getStringExtra(FilterTransactionFragment.EXTRA_PRIORITY));
+
                 Log.d(TAG, String.format("unfiltered size: %d", mTransactions.size()));
-                mTransactions = Transaction.filterTransactions(mTransactions, mFilterFromDate, mFilterToDate,
-                        mFilterAmountFrom, mFilterAmountTo,
-                        mFilterRecipient, mFilterDescription,
-                        mFilterCategory, mFilterPriority);
+                mTransactions = getTransactionList();
+
 
                 Log.d(TAG, String.format("filtered size: %d", mTransactions.size()));
                 setAdapterFromTransactions();
@@ -221,6 +215,23 @@ public class TransactionFragment extends ListFragment {
                 break;
         }
     }
+
+    public ArrayList<Transaction> getTransactionList() {
+        if (saveState.isFilterStatus() == true) {
+            return getFilteredList();
+        } else {
+            return UserInfo.get(getActivity().getApplicationContext()).getTransactions();
+        }
+    }
+
+    public ArrayList<Transaction> getFilteredList() {
+        return Transaction.filterTransactions(UserInfo.get(getActivity().getApplicationContext()).getTransactions(),
+                saveState.getFilterFromDate(), saveState.getFilterToDate(),
+                saveState.getFilterAmountFrom(), saveState.getFilterAmountTo(),
+                saveState.getFilterRecipient(), saveState.getFilterDescription(),
+                saveState.getFilterCategory(), saveState.getFilterPriority());
+    }
+
 
     private void sortAndNotify(TransactionAdapter listAdapter) {
         listAdapter.sort(new TransactionComparator());
@@ -246,26 +257,30 @@ public class TransactionFragment extends ListFragment {
         mAddDeleteButton.setVisibility(View.VISIBLE);
         ((TransactionAdapter)getListAdapter()).notifyDataSetChanged();
     }
-    private void adjustButtonDependencyForCancelFilter() {
-        mAddDeleteButton.setVisibility(View.VISIBLE);
-        mCancelFilterButton.setVisibility(View.INVISIBLE);
-    }
+
     private void adjustButtonDependencyForCancelDelete() {
         mAddDeleteButton.setImageResource(R.drawable.add);
         mCancelButton.setVisibility(View.INVISIBLE);
-        if (mFilterStatus == true) {
+        if (saveState.isFilterStatus() == true) {
             mAddDeleteButton.setVisibility(View.INVISIBLE);
         } else {
             mAddDeleteButton.setVisibility(View.VISIBLE);
         }
         ((TransactionAdapter) getListAdapter()).notifyDataSetChanged();
     }
-    private void adjustButtonDependencyForApplyFilter() {
-        if (mDeleteStatus == false) {
-            mAddDeleteButton.setVisibility(View.INVISIBLE);
+    private void adjustButtonDependencyForFilterStatus() {
+        if (saveState.isFilterStatus() == true) {
+            if (mDeleteStatus == false) {
+                mAddDeleteButton.setVisibility(View.INVISIBLE);
+            } else {
+                mAddDeleteButton.setVisibility(View.VISIBLE);
+                clearDeleteList();
+            }
+            mCancelFilterButton.setVisibility(View.VISIBLE);
         } else {
-            mAddDeleteButton.setVisibility(View.VISIBLE);
             clearDeleteList();
+            mAddDeleteButton.setVisibility(View.VISIBLE);
+            mCancelFilterButton.setVisibility(View.INVISIBLE);
         }
     }
     private void setAdapterFromTransactions() {
@@ -280,23 +295,14 @@ public class TransactionFragment extends ListFragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         setRetainInstance(true);
-
+        saveState = TransactionFragmentState.get(getActivity().getApplicationContext());
         //mDeleteStatus = false;
         mDeleteStatus = false;
-        mFilterStatus = false;
-
-        mFilterFromDate = new Date();
-        mFilterToDate = new Date();
-        mFilterAmountFrom = 0;
-        mFilterAmountTo = 0;
-        mFilterRecipient = "";
-        mFilterDescription = "";
-        mFilterCategory = Transaction.ALL_CATEGORY;
-        mFilterPriority = Transaction.ALL_PRIORITY;
 
         mDeleteTransactionsList = new ArrayList<Transaction>();
         mDeleteListPosition =  new ArrayList<Integer>();
-        mTransactions = UserInfo.get(getActivity().getApplicationContext()).getTransactions();
+
+        mTransactions = getTransactionList();
         setAdapterFromTransactions();
         Log.d(TAG, "onCreate()");
     }
