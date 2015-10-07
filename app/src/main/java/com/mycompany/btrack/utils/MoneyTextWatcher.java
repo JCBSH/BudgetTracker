@@ -23,6 +23,9 @@ public class MoneyTextWatcher implements TextWatcher{
     public static double MIN_AMOUNT_LIMIT = -100000000.00;
     public static double MIN_AMOUNT = -99999999.99;
 
+    public static double MAX_DISPLAY_AMOUNT_LIMIT = 10000000000.00;
+    public static double MIN__DISPLAY_AMOUNT_LIMIT = -10000000000.00;
+
     public MoneyTextWatcher (EditText amount) {
         mAmount = amount;
         mToast = Toast.makeText(mAmount.getContext(), "blah", Toast.LENGTH_SHORT);
