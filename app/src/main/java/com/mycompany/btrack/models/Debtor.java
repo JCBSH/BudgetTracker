@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.mycompany.btrack.models.JSONParsers.DebtJSONSerializer;
 import com.mycompany.btrack.utils.DebtComparator;
+import com.mycompany.btrack.utils.MoneyTextWatcher;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -164,12 +165,23 @@ public class Debtor {
 
     public String getFormatBalance() {
         double balance = getBalance();
-        if (balance == 0.00) {
-            return "0.00";
-        }
+
 
         DecimalFormat df = new DecimalFormat("#.00");
-        String formatted = df.format(balance);
+        String formatted = "";
+        if (balance > MoneyTextWatcher.MAX_DISPLAY_AMOUNT_LIMIT) {
+            formatted = df.format(MoneyTextWatcher.MAX_DISPLAY_AMOUNT_LIMIT);
+            formatted = "> " + formatted;
+        } else if (balance < MoneyTextWatcher.MIN__DISPLAY_AMOUNT_LIMIT) {
+            formatted = df.format(MoneyTextWatcher.MIN__DISPLAY_AMOUNT_LIMIT);
+            formatted = "< " + formatted;
+
+        } else if (balance == 0.0){
+            formatted = "0.00";
+        } else {
+            formatted = df.format(balance);
+        }
+
         return formatted;
     }
 

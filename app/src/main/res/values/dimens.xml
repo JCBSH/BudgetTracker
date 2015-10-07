@@ -9,8 +9,8 @@
     <dimen name="activity_standard_2_margin">5dp</dimen>
     <dimen name="activity_standard_3_margin">8dp</dimen>
     <dimen name="list_item_standard_1_margin">5dp</dimen>
-    <dimen name="TextView_standard_1_padding">5dp</dimen>
     <dimen name="list_item_standard_2_margin">16dp</dimen>
+    <dimen name="TextView_standard_1_padding">5dp</dimen>
     <dimen name="bottom_button_margin_1">6dp</dimen>
     <dimen name="empty_list_text_size_1">20sp</dimen>
     <dimen name="transaction_edit_left_date_transformX">20dp</dimen>
