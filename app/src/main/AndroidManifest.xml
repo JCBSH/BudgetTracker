@@ -82,6 +82,22 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mycompany.btrack.DebtActivity" />
         </activity>
+        <activity
+            android:name=".SummaryCategoryActivity"
+            android:label="@string/title_activity_summary_category"
+            android:parentActivityName=".HomeActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mycompany.btrack.HomeActivity" />
+        </activity>
+        <activity
+            android:name=".SummaryPriorityActivity"
+            android:label="@string/title_activity_summary_priority"
+            android:parentActivityName=".HomeActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mycompany.btrack.HomeActivity" />
+        </activity>
     </application>
 
 </manifest>

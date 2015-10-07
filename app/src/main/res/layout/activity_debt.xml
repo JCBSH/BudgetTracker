@@ -64,19 +64,22 @@
 
         </RelativeLayout>
 
-        <ListView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@android:id/list"/>
-
+        <FrameLayout android:layout_width="match_parent"
+                     android:layout_height="wrap_content">
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@android:id/list"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@android:id/empty"
+                android:text="@string/empty_debts_message"
+                android:textSize="@dimen/empty_list_text_size_1"/>
+        </FrameLayout>
     </LinearLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@android:id/empty"
-        android:text="@string/empty_debts_message"
-        android:textSize="@dimen/empty_list_text_size_1"/>
+
 
 
 

@@ -13,10 +13,9 @@ import android.view.Window;
 
 import com.mycompany.btrack.models.Debtor;
 import com.mycompany.btrack.savedStates.HomeActivityTabState;
-import com.mycompany.btrack.models.Transaction;
 
 
-public class HomeActivity extends ActionBarActivity implements ActionBar.TabListener, TransactionFragment.Callbacks, DebtorFragment.Callbacks{
+public class HomeActivity extends ActionBarActivity implements ActionBar.TabListener, DebtorFragment.Callbacks{
 
     public static final String TAG = HomeActivity.class.getSimpleName();
     private TabsAdapter mTabsAdapter;
@@ -140,12 +139,6 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
         Log.d(TAG, "onDestroy()");
     }
 
-    @Override
-    public void onTransactionSelected(Transaction transaction) {
-//        Intent i = new Intent(this, EditTransactionActivity.class);
-//        i.putExtra(EditTransactionActivity.EXTRA_TRANSACTION_ID, transaction.getId());
-//        startActivity(i);
-    }
 
     @Override
     public void onDebtorSelected(Debtor debtor) {

@@ -16,7 +16,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_home">HomeActivity</string>
 
-<!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="Fragment_Title_2">debtors</string>
     <string name="Fragment_Title_1">Transactions</string>
@@ -40,6 +39,7 @@
     <string name="transaction_filter_apply_button_text">Apply</string>
     <string name="transaction_filter_date_hint">DD/MM/YYYY</string>
     <string name="transaction_filter_dialog_title">Transaction Filter</string>
+    <string name="transaction_summary_dialog_title">Spending Summary</string>
     <string name="apply">Apply</string>
     <string name="transaction_filter_from_date_label">FROM</string>
     <string name="transaction_filter_to_date_label">TO</string>
@@ -57,4 +57,8 @@
     <string name="debt_deadline_label">Deadline:</string>
     <string name="transaction_category_label">Category</string>
     <string name="transaction_priority_label">Priority</string>
+    <string name="title_activity_summary_category">SummaryCategoryActivity</string>
+    <string name="title_activity_summary_priority">SummaryPriorityActivity</string>
+    <string name="transaction_summary_category_view_label">Category View</string>
+    <string name="transaction_summary_priority_view_label">Priority View</string>
 </resources>

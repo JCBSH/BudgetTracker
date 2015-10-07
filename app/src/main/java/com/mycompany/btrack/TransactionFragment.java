@@ -51,22 +51,12 @@ public class TransactionFragment extends ListFragment {
     private ArrayList<Transaction> mDeleteTransactionsList;
     private ArrayList<Integer> mDeleteListPosition;
     private ImageButton mAddDeleteButton;
-    private Callbacks mCallbacks;
     private boolean mDeleteStatus;
     private ImageButton mCancelButton;
     private ImageButton mFilterButton;
     private ImageButton mCancelFilterButton;
+    private ImageButton mSummaryButton;
     private TransactionFragmentState saveState;
-
-
-
-
-    /**
-     * Required interface for hosting activities.
-     */
-    public interface Callbacks {
-        void onTransactionSelected(Transaction transaction);
-    }
 
 
     public TransactionFragment() {
@@ -174,6 +164,17 @@ public class TransactionFragment extends ListFragment {
                 setAdapterFromTransactions();
             }
         });
+
+        mSummaryButton = (ImageButton) rootView.findViewById(R.id.transaction_SummaryButton);
+        mSummaryButton.setOnClickListener(new View.OnClickListener() {
+         @Override
+         public void onClick(View view) {
+             FragmentManager fm = getActivity().getSupportFragmentManager();
+             SummarySelectionFragment fragment = new SummarySelectionFragment();
+             fragment.setTargetFragment(TransactionFragment.this, REQUEST_FILTER_INFO);
+             fragment.show(fm, EDIT_FILTER_INFO);
+         }
+     });
 
         adjustButtonDependencyForFilterStatus();
         return rootView;
@@ -317,7 +318,6 @@ public class TransactionFragment extends ListFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mCallbacks = (Callbacks)activity;
         Log.d(TAG, "onAttach()");
     }
 
@@ -354,7 +354,6 @@ public class TransactionFragment extends ListFragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mCallbacks = null;
         Log.d(TAG, "onDetach()");
     }
 

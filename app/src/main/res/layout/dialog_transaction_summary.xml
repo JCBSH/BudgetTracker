@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/summary_Category_TextView_clicker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_margin="@dimen/activity_standard_1_margin"
+        android:text="@string/transaction_summary_category_view_label"/>
+    <TextView
+        android:id="@+id/summary_priority_TextView_clicker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_margin="@dimen/activity_standard_1_margin"
+        android:text="@string/transaction_summary_priority_view_label"/>
+
+</LinearLayout>
