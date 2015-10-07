@@ -12,12 +12,14 @@
                 android:transformPivotX = "@dimen/transaction_edit_left_date_transformX"
                 android:transformPivotY = "@dimen/transaction_edit_date_transformY"
                 android:calendarViewShown="false"
+                android:datePickerMode="spinner"
                 android:spinnersShown="true"
                 android:layout_alignParentLeft="true">
     </DatePicker>
     <TimePicker
                 android:id="@+id/dialog_date_timePicker"
                 android:spinnersShown="true"
+                android:timePickerMode="spinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:scaleX="0.55"
