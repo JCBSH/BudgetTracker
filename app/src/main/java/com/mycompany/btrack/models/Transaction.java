@@ -354,4 +354,14 @@ public class Transaction {
         }
         return total;
     }
+
+    public static double TotalSumOfListByCategory(ArrayList<Transaction> transactions, String category) {
+        double total = 0.00;
+        for (Transaction t: transactions) {
+            if (t.getCategory().equals(category)) {
+                total += t.getAmount();
+            }
+        }
+        return total;
+    }
 }

@@ -45,8 +45,8 @@ public class SummaryPriorityActivity extends ListActivity implements MonthPicker
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_summary_priority);
-
-        mMonthButton = (Button) findViewById(R.id.summary_Category_Activity_month_Button);
+        setTitle(getString(R.string.SummaryPriorityActivity_title));
+        mMonthButton = (Button) findViewById(R.id.summary_priority_activity_month_Button);
         mDate = new Date();
         mCalendar = Calendar.getInstance();
         //initializing
