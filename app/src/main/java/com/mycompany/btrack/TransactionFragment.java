@@ -39,7 +39,8 @@ public class TransactionFragment extends ListFragment {
     public static final String  FILTER_AMOUNT_FROM_BUNDLE_KEY = "amount from";
     public static final String  FILTER_AMOUNT_TO_BUNDLE_KEY = "amount to";
     public static final String  FILTER_DESCRIPTION_BUNDLE_KEY = "description";
-
+    public static final String  FILTER_CATEGORY_BUNDLE_KEY = "category";
+    public static final String  FILTER_PRIORITY_BUNDLE_KEY = "priority";
     private static final int REQUEST_FILTER_INFO = 0;
     private static final int REQUEST_SUCCESSFUL_EDIT = 1;
     private static final String EDIT_FILTER_INFO = "edit filter info";
@@ -61,6 +62,8 @@ public class TransactionFragment extends ListFragment {
     private double mFilterAmountTo;
     private String mFilterRecipient;
     private String mFilterDescription;
+    private String mFilterCategory;
+    private String mFilterPriority;
 
     /**
      * Required interface for hosting activities.
@@ -153,6 +156,8 @@ public class TransactionFragment extends ListFragment {
                     bundle.putDouble(FILTER_AMOUNT_TO_BUNDLE_KEY,  mFilterAmountTo);
                     bundle.putString(FILTER_RECIPIENT_BUNDLE_KEY,  mFilterRecipient);
                     bundle.putString(FILTER_DESCRIPTION_BUNDLE_KEY,  mFilterDescription);
+                    bundle.putString(FILTER_CATEGORY_BUNDLE_KEY,  mFilterCategory);
+                    bundle.putString(FILTER_PRIORITY_BUNDLE_KEY,  mFilterPriority);
 
                 }
                 filterTransactionFragment.setArguments(bundle);
@@ -196,12 +201,15 @@ public class TransactionFragment extends ListFragment {
                 mFilterAmountTo =  data.getDoubleExtra(FilterTransactionFragment.EXTRA_AMOUNT_TO, 0);
                 mFilterRecipient = data.getStringExtra(FilterTransactionFragment.EXTRA_RECIPIENT);
                 mFilterDescription = data.getStringExtra(FilterTransactionFragment.EXTRA_DESCRIPTION);
+                mFilterCategory = data.getStringExtra(FilterTransactionFragment.EXTRA_CATEGORY);
+                mFilterPriority = data.getStringExtra(FilterTransactionFragment.EXTRA_PRIORITY);
                 mCancelFilterButton.setVisibility(View.VISIBLE);
                 mTransactions = UserInfo.get(getActivity().getApplicationContext()).getTransactions();
                 Log.d(TAG, String.format("unfiltered size: %d", mTransactions.size()));
                 mTransactions = Transaction.filterTransactions(mTransactions, mFilterFromDate, mFilterToDate,
                         mFilterAmountFrom, mFilterAmountTo,
-                        mFilterRecipient, mFilterDescription);
+                        mFilterRecipient, mFilterDescription,
+                        mFilterCategory, mFilterPriority);
 
                 Log.d(TAG, String.format("filtered size: %d", mTransactions.size()));
                 setAdapterFromTransactions();
@@ -283,6 +291,8 @@ public class TransactionFragment extends ListFragment {
         mFilterAmountTo = 0;
         mFilterRecipient = "";
         mFilterDescription = "";
+        mFilterCategory = Transaction.ALL_CATEGORY;
+        mFilterPriority = Transaction.ALL_PRIORITY;
 
         mDeleteTransactionsList = new ArrayList<Transaction>();
         mDeleteListPosition =  new ArrayList<Integer>();

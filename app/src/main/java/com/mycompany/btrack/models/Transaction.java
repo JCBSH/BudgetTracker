@@ -27,27 +27,27 @@ public class Transaction {
     private static final String JSON_CATEGORY = "category";
     private static final String JSON_PRIORITY = "priority";
 
-    private static final String FOOD = "Food";
+    public static final String FOOD = "Food";
     private static final String FOOD_ICON = "mipmap/food_icon";
-    private static final String GROCERY = "Grocery";
+    public static final String GROCERY = "Grocery";
     private static final String GROCERY_ICON = "mipmap/grocery_icon";
-    private static final String UTILITY = "Utility";
+    public static final String UTILITY = "Utility";
     private static final String UTILITY_ICON = "mipmap/utility_icon";
-    private static final String ENTERTAINMENT = "Entertainment";
+    public static final String ENTERTAINMENT = "Entertainment";
     private static final String ENTERTAINMENT_ICON = "mipmap/entertainment_icon";
-    private static final String TRANSPORT = "Transport";
+    public static final String TRANSPORT = "Transport";
     private static final String TRANSPORT_ICON = "mipmap/transport_icon";
-    private static final String OTHER = "Other";
+    public static final String OTHER = "Other";
     private static final String OTHER_ICON = "mipmap/other_icon";
-    private static final String LOW_PRIORITY = "Low";
+    public static final String LOW_PRIORITY = "Low";
     private static final String LOW_ICON = "mipmap/low_icon";
-    private static final String MEDIUM_PRIORITY = "Medium";
+    public static final String MEDIUM_PRIORITY = "Medium";
     private static final String MEDIUM_ICON = "mipmap/medium_icon";
-    private static final String HIGH_PRIORITY = "High";
+    public static final String HIGH_PRIORITY = "High";
     private static final String HIGH_ICON = "mipmap/high_icon";
     private static final String CLEAR_ICON = "mipmap/clear_icon";
-    private static final String NO_CATEGORY = "<Category>";
-    private static final String NO_PRIORITY = "<Priority>";
+    public static final String ALL_CATEGORY = "<All Category>";
+    public static final String ALL_PRIORITY = "<All Priority>";
     private static final String TAG = Transaction.class.getSimpleName();
 
     private UUID mId;
@@ -109,7 +109,7 @@ public class Transaction {
 
     public static ArrayList<String> getCategoryChoicesForFilter() {
         ArrayList<String> choice =  new ArrayList<String>();
-        choice.add(NO_CATEGORY);
+        choice.add(ALL_CATEGORY);
         choice.addAll(getCategoryChoices());
         return choice;
     }
@@ -124,7 +124,7 @@ public class Transaction {
 
     public static ArrayList<String> getPriorityChoicesForFilter() {
         ArrayList<String> choice =  new ArrayList<String>();
-        choice.add(NO_PRIORITY);
+        choice.add(ALL_PRIORITY);
         choice.addAll(getPriorityChoices());
         return choice;
     }
@@ -233,7 +233,8 @@ public class Transaction {
 
     public static ArrayList<Transaction> filterTransactions(
             ArrayList<Transaction> transactions, Date filterFromDate, Date filterToDate,
-            double filterAmountFrom, double filterAmountTo, String filterRecipient, String filterDescription) {
+            double filterAmountFrom, double filterAmountTo, String filterRecipient, String filterDescription,
+            String filterCategory, String filterPriority) {
 
 
         ArrayList<Transaction> filteredList =  new ArrayList<Transaction>();
@@ -264,6 +265,18 @@ public class Transaction {
             if (!filterDescription.equalsIgnoreCase("")) {
                 if (!(t.getDescription().toLowerCase().contains(filterDescription.toLowerCase()))) {
 //                    Log.d("TransactionFragment", "testing by Description failed");
+                    testResult = false;
+                }
+            }
+
+            if (!filterCategory.equals(ALL_CATEGORY)) {
+                if(!filterCategory.equals(t.getCategory())) {
+                    testResult = false;
+                }
+            }
+
+            if (!filterPriority.equals(ALL_PRIORITY)) {
+                if(!filterPriority.equals(t.getPriority())) {
                     testResult = false;
                 }
             }

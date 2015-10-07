@@ -38,7 +38,6 @@
                     android:id="@+id/transaction_filter_picker_container">
 
     </RelativeLayout>
-    <?xml version="1.0" encoding="utf-8"?>
     <LinearLayout android:orientation="horizontal"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content">

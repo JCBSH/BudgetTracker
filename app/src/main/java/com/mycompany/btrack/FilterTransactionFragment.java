@@ -45,6 +45,10 @@ public class FilterTransactionFragment extends DialogFragment {
             "com.mycompany.btrack.DateTimePickerFragment.amountTo";
     public static final String EXTRA_DESCRIPTION =
             "com.mycompany.btrack.DateTimePickerFragment.description";
+    public static final String EXTRA_CATEGORY =
+            "com.mycompany.btrack.DateTimePickerFragment.category";
+    public static final String EXTRA_PRIORITY =
+            "com.mycompany.btrack.DateTimePickerFragment.priority";
 
 
     private EditText mRecipientField;
@@ -205,18 +209,22 @@ public class FilterTransactionFragment extends DialogFragment {
                     }
                 });
 
-        mCategorySpinner = (Spinner) v.findViewById(R.id.transaction_category_spinner);
-        mPrioritySpinner = (Spinner) v.findViewById(R.id.transaction_priority_spinner);
+        mCategorySpinner = (Spinner) v.findViewById(R.id.transaction_filter_category_spinner);
+        mPrioritySpinner = (Spinner) v.findViewById(R.id.transaction_filter_priority_spinner);
         ArrayList<String> categoryChoices = Transaction.getCategoryChoicesForFilter();
         ArrayAdapter<String> cAdapter = new CategoryArrayAdaptor(categoryChoices, getActivity());
         // Apply the adapter to the spinner
         mCategorySpinner.setAdapter(cAdapter);
+        mCategorySpinner.setSelection(categoryChoices.indexOf(getArguments().
+                getString(TransactionFragment.FILTER_CATEGORY_BUNDLE_KEY)));
        // mCategorySpinner.setSelection(categoryChoices.indexOf(mTransaction.getCategory()));
 
         ArrayList<String> priorityChoices = Transaction.getPriorityChoicesForFilter();
         ArrayAdapter<String> pAdapter = new PriorityArrayAdaptor(priorityChoices, getActivity());
         // Apply the adapter to the spinner
         mPrioritySpinner.setAdapter(pAdapter);
+        mPrioritySpinner.setSelection(priorityChoices.indexOf(getArguments().
+                getString(TransactionFragment.FILTER_PRIORITY_BUNDLE_KEY)));
        // mPrioritySpinner.setSelection(priorityChoices.indexOf(mTransaction.getPriority()));
         return builder.create();
     }
@@ -273,6 +281,9 @@ public class FilterTransactionFragment extends DialogFragment {
             i.putExtra(EXTRA_TO_DATE, mToDate);
 
         }
+
+        i.putExtra(EXTRA_CATEGORY, (String) mCategorySpinner.getSelectedItem());
+        i.putExtra(EXTRA_PRIORITY, (String) mPrioritySpinner.getSelectedItem());
         getTargetFragment()
                 .onActivityResult(getTargetRequestCode(), resultCode, i);
     }
