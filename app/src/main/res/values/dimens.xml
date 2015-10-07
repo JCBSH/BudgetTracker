@@ -3,7 +3,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="transaction_filter_left_date_transformX">20dp</dimen>
-    <dimen name="transaction_filter_date_transformY">125dp</dimen>
+    <dimen name="transaction_filter_date_transformY">20dp</dimen>
     <dimen name="transaction_filter_right_date_transformX">220dp</dimen>
     <dimen name="activity_standard_1_margin">16dp</dimen>
     <dimen name="activity_standard_2_margin">5dp</dimen>
@@ -17,4 +17,5 @@
     <dimen name="transaction_edit_right_time_transformX">180dp</dimen>
     <dimen name="transaction_edit_date_transformY">125dp</dimen>
     <dimen name="summary_bar_text_size_1">20sp</dimen>
+    <dimen name="transaction_filter_date_container_height">150dp</dimen>
 </resources>
