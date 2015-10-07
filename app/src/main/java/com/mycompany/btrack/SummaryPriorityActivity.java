@@ -1,5 +1,8 @@
 package com.mycompany.btrack;
 
+
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -26,9 +29,10 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 
-public class SummaryPriorityActivity extends ListActivity {
+public class SummaryPriorityActivity extends ListActivity implements MonthPickerFragment.Callbacks{
 
     public static final String TAG = SummaryPriorityActivity.class.getSimpleName();
+    private static final String DIALOG_DATE = "date";
     private Date mDate;
     private Button mMonthButton;
     private ArrayList<String> mPriority;
@@ -48,10 +52,32 @@ public class SummaryPriorityActivity extends ListActivity {
         //initializing
         setupMonthAndYearAndList();
 
-        updateDate(mDate);
+        setDateButtonText();
         mPriority = Transaction.getPriorityChoices();
         PriorityAdapter adapter =  new PriorityAdapter(SummaryPriorityActivity.this, mPriority);
         setListAdapter(adapter);
+
+        mMonthButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //DatePickerFragment dialog = DatePickerFragment.newInstance(mCrime.getDate());
+                //TimePickerFragment dialog = TimePickerFragment.newInstance(mCrime.getDate());
+
+
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                Fragment prev = getFragmentManager().findFragmentByTag(DIALOG_DATE);
+                if (prev != null) {
+                    Log.d(TAG, "MonthPickerFragment removed");
+                    ft.remove(prev);
+                }
+                ft.addToBackStack(null);
+
+                // Create and show the dialog.
+                MonthPickerFragment dialog = MonthPickerFragment.newInstance(mDate);
+                Log.d(TAG, "MonthPickerFragment added");
+                dialog.show(ft, DIALOG_DATE);
+            }
+        });
 
         Log.d(TAG, "onCreate()");
     }
@@ -68,7 +94,7 @@ public class SummaryPriorityActivity extends ListActivity {
         Calendar calendar = new GregorianCalendar(mYear, mMonth, 1);
         int daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 
-        Date fromDate = new GregorianCalendar(mYear, mMonth, 0, 0, 0, 0).getTime();
+        Date fromDate = new GregorianCalendar(mYear, mMonth, 1, 0, 0, 0).getTime();
         Date toDate = new GregorianCalendar(mYear, mMonth, daysInMonth, 23,59, 59).getTime();
 
         return Transaction.filterTransactions(UserInfo.get(getApplicationContext()).getTransactions(),
@@ -78,10 +104,17 @@ public class SummaryPriorityActivity extends ListActivity {
                 Transaction.ALL_CATEGORY, Transaction.ALL_PRIORITY);
     }
 
-    public void updateDate(Date date) {
-        mDate = date;
+
+    public void setDateButtonText() {
         String dateString = (String) DateFormat.format("yyyy MMM", mDate);
         mMonthButton.setText(dateString);
+    }
+    @Override
+    public void updateDate(Date date) {
+        mDate = date;
+        setDateButtonText();
+        setupMonthAndYearAndList();
+        ((PriorityAdapter)getListAdapter()).notifyDataSetChanged();
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
