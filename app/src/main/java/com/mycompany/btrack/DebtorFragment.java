@@ -252,20 +252,19 @@ public class DebtorFragment extends ListFragment {
 
             TextView balanceTextView =
                     (TextView)convertView.findViewById(R.id.debtor_list_item_amount_TextView);
+
+            double balance = c.getBalance();
+            if (balance > 0) {
+                balanceTextView.setTextColor(Color.parseColor(getString(R.string.positive_green)));
+            } else if (balance < 0) {
+                balanceTextView.setTextColor(Color.parseColor(getString(R.string.negative_red)));
+            } else {
+                balanceTextView.setTextColor(Color.BLACK);
+            }
+
             balanceTextView.setText(c.getFormatBalance());
 
-            TextView statusTextView =
-                    (TextView)convertView.findViewById(R.id.debtor_list_item_status_TextView);
-            double balance = c.getBalance();
-            String status = "";
-            if (balance > 0) {
-                status = "LENDING";
-                statusTextView.setTextColor(Color.parseColor(getString(R.string.positive_green)));
-            } else if (balance < 0) {
-                status = "OWING";
-                statusTextView.setTextColor(Color.parseColor(getString(R.string.negative_red)));
-            }
-            statusTextView.setText(status);
+
 
             ImageButton button = (ImageButton) convertView.findViewById(R.id.debtor_editDeleteButton);
             if (mDeleteStatus == true) {

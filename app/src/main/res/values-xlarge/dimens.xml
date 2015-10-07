@@ -15,4 +15,5 @@
     <dimen name="transaction_edit_date_transformY">125dp</dimen>
     <dimen name="summary_bar_text_size_1">28sp</dimen>
     <dimen name="transaction_filter_date_container_height">250dp</dimen>
+    <dimen name="list_item_standard_3_margin">8dp</dimen>
 </resources>
