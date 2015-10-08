@@ -61,4 +61,8 @@
     <string name="title_activity_summary_priority">SummaryPriorityActivity</string>
     <string name="transaction_summary_category_view_label">Category View</string>
     <string name="transaction_summary_priority_view_label">Priority View</string>
+    <string name="action_change_password">Change Password</string>
+    <string name="title_activity_change_password">Change Password</string>
+    <string name="hint_new_password">New Password</string>
+    <string name="hint_new_password_conf">Re-enter New Password</string>
 </resources>

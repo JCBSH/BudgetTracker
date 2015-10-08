@@ -26,7 +26,7 @@ public class LoginActivity extends ActionBarActivity {
     // result codes
     protected static final int INTENT_SIGN_UP = 1;
 
-    private static EditText emailET, passwordET;
+    private EditText emailET, passwordET;
     private final ErrorUtil error;
 
     public LoginActivity() {

@@ -24,7 +24,7 @@ public class SignUpActivity extends ActionBarActivity {
 
     private static final String TAG = "SignUpActivity";
 
-    private static EditText emailET, passwordET, passwordConfET;
+    private EditText emailET, passwordET, passwordConfET;
     private final ErrorUtil error;
 
     public SignUpActivity() {
