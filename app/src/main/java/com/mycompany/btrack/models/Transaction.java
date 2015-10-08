@@ -345,5 +345,23 @@ public class Transaction {
     }
 
 
+    public static double TotalSumOfListByPriority(ArrayList<Transaction> transactions, String priority) {
+        double total = 0.00;
+        for (Transaction t: transactions) {
+            if (t.getPriority().equals(priority)) {
+                total += t.getAmount();
+            }
+        }
+        return total;
+    }
 
+    public static double TotalSumOfListByCategory(ArrayList<Transaction> transactions, String category) {
+        double total = 0.00;
+        for (Transaction t: transactions) {
+            if (t.getCategory().equals(category)) {
+                total += t.getAmount();
+            }
+        }
+        return total;
+    }
 }

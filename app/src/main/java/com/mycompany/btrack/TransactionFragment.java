@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import com.mycompany.btrack.models.Transaction;
 import com.mycompany.btrack.models.UserInfo;
+import com.mycompany.btrack.savedStates.HomeActivityTabState;
 import com.mycompany.btrack.savedStates.TransactionFragmentState;
 import com.mycompany.btrack.utils.TransactionComparator;
 
@@ -162,19 +163,25 @@ public class TransactionFragment extends ListFragment {
                 adjustButtonDependencyForFilterStatus();
                 mTransactions = getTransactionList();
                 setAdapterFromTransactions();
+
+                HomeActivityTabState homeActivityTabState = HomeActivityTabState.get(getActivity().getApplicationContext());
+                String newTitle = getActivity().getString(R.string.TransactionFragment_all_transaction_title);
+                homeActivityTabState.setTransactionFragmentTitle(newTitle);
+                getActivity().setTitle(newTitle);
+
             }
         });
 
         mSummaryButton = (ImageButton) rootView.findViewById(R.id.transaction_SummaryButton);
         mSummaryButton.setOnClickListener(new View.OnClickListener() {
-         @Override
-         public void onClick(View view) {
-             FragmentManager fm = getActivity().getSupportFragmentManager();
-             SummarySelectionFragment fragment = new SummarySelectionFragment();
-             fragment.setTargetFragment(TransactionFragment.this, REQUEST_FILTER_INFO);
-             fragment.show(fm, EDIT_FILTER_INFO);
-         }
-     });
+             @Override
+             public void onClick(View view) {
+                 FragmentManager fm = getActivity().getSupportFragmentManager();
+                 SummarySelectionFragment fragment = new SummarySelectionFragment();
+                 fragment.setTargetFragment(TransactionFragment.this, REQUEST_FILTER_INFO);
+                 fragment.show(fm, EDIT_FILTER_INFO);
+             }
+        });
 
         adjustButtonDependencyForFilterStatus();
         return rootView;
@@ -209,6 +216,11 @@ public class TransactionFragment extends ListFragment {
                 Log.d(TAG, String.format("filtered size: %d", mTransactions.size()));
                 setAdapterFromTransactions();
 
+
+                HomeActivityTabState homeActivityTabState = HomeActivityTabState.get(getActivity().getApplicationContext());
+                String newTitle = newTitle = getActivity().getString(R.string.TransactionFragment_filtered_transaction_title);
+                homeActivityTabState.setTransactionFragmentTitle(newTitle);
+                getActivity().setTitle(newTitle);
                 break;
             case REQUEST_SUCCESSFUL_EDIT:
                 Log.d(TAG, "transaction edit successful");

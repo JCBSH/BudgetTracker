@@ -11,25 +11,19 @@
         android:layout_alignParentRight="true"
         android:id="@+id/debtor_editDeleteButton"
         android:background="@null"
-        android:layout_margin="@dimen/list_item_standard_1_margin"/>
+        android:paddingRight="@dimen/list_item_standard_3_margin"/>
 
     <TextView android:id="@+id/debtor_list_item_amount_TextView"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_toLeftOf="@id/debtor_editDeleteButton"
               android:padding="@dimen/TextView_standard_1_padding"
-              android:layout_marginRight="@dimen/list_item_standard_2_margin"
+              android:layout_marginRight="@dimen/list_item_standard_1_margin"
               android:text="800.00" />
     <TextView android:id="@+id/debtor_list_item_name_TextView"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_alignParentLeft="true"
-              android:textStyle="bold"
-              android:padding="@dimen/TextView_standard_1_padding"/>
-    <TextView android:id="@+id/debtor_list_item_status_TextView"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_centerHorizontal="true"
               android:textStyle="bold"
               android:padding="@dimen/TextView_standard_1_padding"/>
 

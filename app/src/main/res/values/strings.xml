@@ -19,13 +19,13 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="Fragment_Title_2">debtors</string>
     <string name="Fragment_Title_1">Transactions</string>
-    <string name="empty_debtors_message">You Have No Debtors</string>
-    <string name="empty_transactions_message">No Transaction Recorded</string>
+    <string name="empty_debtors_message">Empty Debtors List</string>
+    <string name="empty_transactions_message">Empty Transaction List</string>
     <string name="title_activity_edit_transaction_activity">EditTransactionActivity</string>
     <string name="transaction_amount_label">AMOUNT</string>
     <string name="transaction_recipient_label">RECIPIENT</string>
     <string name="transaction_recipient_hint">Enter the recipient of transaction</string>
-    <string name="transaction_description_label">DESCRIPITION</string>
+    <string name="transaction_description_label">DESCRIPTION</string>
     <string name="transaction_description_hint">Enter brief description of transaction</string>
     <string name="transaction_update_button_text">SAVE</string>
     <string name="date_picker_title">Date</string>
@@ -39,7 +39,7 @@
     <string name="transaction_filter_apply_button_text">Apply</string>
     <string name="transaction_filter_date_hint">DD/MM/YYYY</string>
     <string name="transaction_filter_dialog_title">Transaction Filter</string>
-    <string name="transaction_summary_dialog_title">Spending Summary</string>
+    <string name="transaction_summary_dialog_title">Monthly Summary</string>
     <string name="apply">Apply</string>
     <string name="transaction_filter_from_date_label">FROM</string>
     <string name="transaction_filter_to_date_label">TO</string>
@@ -47,7 +47,7 @@
     <string name="transaction_amount_to_hint">Enter amount to</string>
     <string name="transaction_amount_hint">Enter the amount of transaction</string>
     <string name="debtor_search_hint">Enter search name</string>
-    <string name="empty_debts_message">No Debt Recorded</string>
+    <string name="empty_debts_message">Empty Debt List</string>
     <string name="title_activity_edit_debt">EditDebtActivity</string>
     <string name="debt_amount_hint">Enter the amount</string>
     <string name="debt_description_hint">Enter brief description</string>
@@ -65,4 +65,9 @@
     <string name="title_activity_change_password">Change Password</string>
     <string name="hint_new_password">New Password</string>
     <string name="hint_new_password_conf">Re-enter New Password</string>
+    <string name="SummaryCategoryActivity_title">Category Spending Summary</string>
+    <string name="SummaryPriorityActivity_title">Priority Spending Summary</string>
+    <string name="TransactionFragment_all_transaction_title">All Transactions</string>
+    <string name="DebtorFragment_all_debtor_title">All Debtors</string>
+    <string name="TransactionFragment_filtered_transaction_title">Filtered Transactions</string>
 </resources>

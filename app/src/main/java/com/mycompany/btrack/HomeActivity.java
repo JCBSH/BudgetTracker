@@ -59,8 +59,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
         int position = HomeActivityTabState.get(getApplicationContext()).getTabPosition();
         Log.d(TAG, String.format("Restore position %d", position));
         getSupportActionBar().setSelectedNavigationItem(position);
-        mViewPager.setCurrentItem( getSupportActionBar().getSelectedTab().getPosition());
-
+        mViewPager.setCurrentItem(getSupportActionBar().getSelectedTab().getPosition());
         Log.d(TAG, "onCreate()");
     }
 
@@ -99,7 +98,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
         mViewPager.setCurrentItem(tab.getPosition());
-
+        setTitle(HomeActivityTabState.get(getApplicationContext()).getTabTitle(tab.getPosition()));
     }
 
     @Override
