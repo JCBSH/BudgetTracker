@@ -27,11 +27,7 @@ public class LoginActivity extends ActionBarActivity {
     protected static final int INTENT_SIGN_UP = 1;
 
     private EditText emailET, passwordET;
-    private final ErrorUtil error;
-
-    public LoginActivity() {
-        error = new ErrorUtil();
-    }
+    private ErrorUtil error;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +36,7 @@ public class LoginActivity extends ActionBarActivity {
 
         emailET = (EditText) findViewById(R.id.email);
         passwordET = (EditText) findViewById(R.id.password);
+        error = new ErrorUtil();
     }
 
 
@@ -158,7 +155,9 @@ public class LoginActivity extends ActionBarActivity {
 
     public void recover(View view) {
         Log.i(TAG, "recover()");
+        final String email = String.valueOf(emailET.getText());
         Intent intent = new Intent(this, RecoverActivity.class);
+        intent.putExtra(EXTRA_EMAIL, email);
         startActivity(intent);
     }
 }

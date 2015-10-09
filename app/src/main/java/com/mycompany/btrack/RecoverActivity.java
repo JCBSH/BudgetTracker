@@ -1,21 +1,39 @@
 package com.mycompany.btrack;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.mycompany.btrack.utils.ErrorUtil;
+import com.mycompany.btrack.utils.UserUtil;
 
 
 public class RecoverActivity extends ActionBarActivity {
 
     private static final String TAG = "RecoverActivity";
+    private EditText emailET;
+    private ErrorUtil error;
+    private Toast toast;
+    private App app;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recover);
+        emailET = (EditText) findViewById(R.id.email);
+        Intent intent = getIntent();
+        emailET.setText(intent.getExtras().getString(LoginActivity.EXTRA_EMAIL));
+        error = new ErrorUtil();
+        toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_SHORT);
+        app = (App) getApplicationContext();
     }
 
 
@@ -43,5 +61,28 @@ public class RecoverActivity extends ActionBarActivity {
 
     public void recover(View view) {
         Log.i(TAG, "recover()");
+        final String email = String.valueOf(emailET.getText());
+        if (!UserUtil.isValidEmail(email, error)) {
+            toast.setText(error.getMessage());
+            toast.show();
+        } else {
+            app.getFirebase().resetPassword(email,
+                    new Firebase.ResultHandler() {
+                        @Override
+                        public void onSuccess() {
+                            toast.setText("email has been sent to " + email);
+                            toast.show();
+                            Intent intent = new Intent(RecoverActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+
+                        @Override
+                        public void onError(FirebaseError firebaseError) {
+                            toast.setText(firebaseError.getMessage());
+                            toast.show();
+                        }
+                    });
+        }
     }
 }

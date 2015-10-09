@@ -25,11 +25,7 @@ public class SignUpActivity extends ActionBarActivity {
     private static final String TAG = "SignUpActivity";
 
     private EditText emailET, passwordET, passwordConfET;
-    private final ErrorUtil error;
-
-    public SignUpActivity() {
-        error = new ErrorUtil();
-    }
+    private ErrorUtil error;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +40,7 @@ public class SignUpActivity extends ActionBarActivity {
         // fill email and password fields with values from login activity
         emailET.setText(intent.getExtras().getString(LoginActivity.EXTRA_EMAIL));
         passwordET.setText(intent.getExtras().getString(LoginActivity.EXTRA_PASSWORD));
+        error = new ErrorUtil();
     }
 
 
