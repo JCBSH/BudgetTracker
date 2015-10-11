@@ -20,15 +20,15 @@ public class App extends Application {
         firebase = new Firebase("https://burning-torch-5586.firebaseio.com/");
     }
 
-    protected final Firebase getFirebase() {
+    public final Firebase getFirebase() {
         return firebase;
     }
 
-    protected final User getUser() {
+    public final User getUser() {
         return user;
     }
 
-    protected final void setUser(User user) {
+    public final void setUser(User user) {
         this.user = user;
     }
 }

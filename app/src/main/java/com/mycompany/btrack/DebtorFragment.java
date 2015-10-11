@@ -24,6 +24,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mycompany.btrack.models.Debt;
 import com.mycompany.btrack.models.Debtor;
 import com.mycompany.btrack.models.UserInfo;
 
@@ -100,8 +101,12 @@ public class DebtorFragment extends ListFragment {
         setListAdapter(adapter);
 
         Log.d(TAG, "onCreate()");
+        debtorFragment = this;
     }
-
+    static DebtorFragment debtorFragment;
+    public static void refresh() {
+        ((DebtorAdapter) debtorFragment.getListAdapter()).notifyDataSetChanged();
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView()");

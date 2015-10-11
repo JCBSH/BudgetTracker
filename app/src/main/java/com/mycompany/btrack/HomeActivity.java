@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.Window;
 
 import com.mycompany.btrack.models.Debtor;
+import com.mycompany.btrack.models.UserInfo;
 import com.mycompany.btrack.savedStates.HomeActivityTabState;
 
 
@@ -81,6 +82,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
         if (id == R.id.action_logout) {
             App app = (App) getApplicationContext();
             app.getFirebase().unauth();
+            UserInfo.get(getApplicationContext()).destroyUser();
             Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -94,6 +96,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
 
         return super.onOptionsItemSelected(item);
     }
+
 
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {

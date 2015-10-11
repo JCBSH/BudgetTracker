@@ -37,6 +37,12 @@ public class Debt {
         mDescription = DESCRIPTION_DEFAULT;
     }
 
+    public Debt(DebtDB d) {
+        mId = d.getId();
+        mDate = d.getDate();
+        mAmount = d.getAmount();
+        mDescription = d.getDescription();
+    }
     public Debt(JSONObject json) throws JSONException {
         mId = UUID.fromString(json.getString(JSON_ID));
 

@@ -41,6 +41,17 @@ public class Debtor {
         count++;
     }
 
+    public Debtor(DebtorDB d) {
+        mName = d.getName();
+        mDebts = new ArrayList<Debt>();
+        for (DebtDB debt : d.getDebts()) {
+            mDebts.add(new Debt(debt));
+        }
+        mDebtSerializer = new DebtJSONSerializer();
+        mJsonObject = new JSONObject();
+        mDebtsJSONArray = new JSONArray();
+        count++;
+    }
     public Debtor(JSONObject json) throws JSONException {
         mDebtSerializer = new DebtJSONSerializer();
         mJsonObject = json;
@@ -187,6 +198,9 @@ public class Debtor {
 
     public Double getBalance() {
         double balance = 0.00;
+        if (mDebts == null) {
+            return balance;
+        }
         for (Debt debt: mDebts) {
             balance += debt.getAmount();
         }

@@ -78,7 +78,6 @@ public class TransactionFragment extends ListFragment {
         return super.onOptionsItemSelected(item);
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView()");
@@ -184,9 +183,14 @@ public class TransactionFragment extends ListFragment {
         });
 
         adjustButtonDependencyForFilterStatus();
+        transactionFragment = this;
         return rootView;
     }
+    static TransactionFragment transactionFragment;
+    public static void refresh() {
+        ((TransactionAdapter) transactionFragment.getListAdapter()).notifyDataSetChanged();
 
+    }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

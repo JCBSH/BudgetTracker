@@ -3,6 +3,13 @@ package com.mycompany.btrack.models;
 import android.content.Context;
 import android.util.Log;
 
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
+import com.mycompany.btrack.App;
+import com.mycompany.btrack.DebtorFragment;
+import com.mycompany.btrack.TransactionFragment;
 import com.mycompany.btrack.models.JSONParsers.DebtorJSONSerializer;
 import com.mycompany.btrack.models.JSONParsers.TransactionJSONSerializer;
 import com.mycompany.btrack.utils.DebtorComparator;
@@ -49,6 +56,51 @@ public class UserInfo {
         mTransactionSerializer = new TransactionJSONSerializer();
         mDebtorSerializer = new DebtorJSONSerializer();
         mJsonObject = new JSONObject();
+        App app = (App) mAppContext.getApplicationContext();
+        Firebase userRef = app.getFirebase().child("users").child(app.getUser().getUid()).child("transactions");
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mTransactions.clear();
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot transaction : dataSnapshot.getChildren()) {
+                        TransactionDB t = transaction.getValue(TransactionDB.class);
+                        mTransactions.add(new Transaction(t));
+                    }
+                    sortTransactions();
+                    TransactionFragment.refresh();
+                } else {
+                    Log.i(TAG, "transactions does not exist########");
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                Log.i(TAG + "onCancelled()#########", firebaseError.getMessage());
+            }
+        });
+        Firebase debtorRef = app.getFirebase().child("users").child(app.getUser().getUid()).child("debtors");
+        debtorRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mDebtors.clear();
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot debtor : dataSnapshot.getChildren()) {
+                        DebtorDB d = debtor.getValue(DebtorDB.class);
+                        mDebtors.add(new Debtor(d));
+                    }
+                    sortDebtors();
+                    DebtorFragment.refresh();
+                } else {
+                    Log.i(TAG, "debtors does not exist########");
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                Log.i(TAG + "onCancelled()#########", firebaseError.getMessage());
+            }
+        });
         try {
             BufferedReader reader = null;
             try {
@@ -60,6 +112,7 @@ public class UserInfo {
                     // Line breaks are omitted and irrelevant
                     jsonString.append(line);
                 }
+                Log.i(TAG + "json string**********", jsonString.toString());
 
                 mJsonObject = new JSONObject(jsonString.toString());
                 Log.d(TAG, mJsonObject.toString());
@@ -114,7 +167,9 @@ public class UserInfo {
         return sUserInfo;
     }
 
-
+    public void destroyUser() {
+        sUserInfo = null;
+    }
 
     private boolean saveTransactions() {
         try {
@@ -145,9 +200,47 @@ public class UserInfo {
         }
     }
 
+    private void saveTransactionsToDB(Firebase userRef) {
+        Log.d(TAG, "SAVE TRANSACTIONS TO DB ######################################");
+        Firebase transactionRef = userRef.child("transactions");
+        transactionRef.setValue(null);
+        for (Transaction transaction : mTransactions) {
+            transactionRef.push().setValue(new TransactionDB(transaction), new Firebase.CompletionListener() {
+                @Override
+                public void onComplete(FirebaseError firebaseError, Firebase firebase) {
+                    if (firebaseError != null) {
+                        Log.d(TAG, "DB ERROR " + firebaseError.getMessage());
+                    } else {
+                        Log.d(TAG, "DB SAVED");
+                    }
+                }
+            });
+        }
+    }
+    private void saveDebtorsToDB(Firebase userRef) {
+        Log.d(TAG, "SAVE DEBTORS TO DB !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        Firebase debtorsRef = userRef.child("debtors");
+        debtorsRef.setValue(null);
+        for (Debtor debtor : mDebtors) {
+            debtorsRef.push().setValue(new DebtorDB(debtor), new Firebase.CompletionListener() {
+                @Override
+                public void onComplete(FirebaseError firebaseError, Firebase firebase) {
+                    if (firebaseError != null) {
+                        Log.d(TAG, "DB ERROR " + firebaseError.getMessage());
+                    } else {
+                        Log.d(TAG, "DB SAVED");
+                    }
+                }
+            });
+        }
+    }
     public boolean saveUserInfo() {
         saveDebtors();
         saveTransactions();
+        App app = (App) mAppContext.getApplicationContext();
+        Firebase userRef = app.getFirebase().child("users").child(app.getUser().getUid());
+        saveTransactionsToDB(userRef);
+        saveDebtorsToDB(userRef);
         try {
             Writer writer = null;
             try {

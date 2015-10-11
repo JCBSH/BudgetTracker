@@ -68,7 +68,15 @@ public class Transaction {
         mCategory =  OTHER;
         mPriority = LOW_PRIORITY;
     }
-
+    public Transaction(TransactionDB t) {
+        mId = t.getId();
+        mDate = t.getDate();
+        mAmount = t.getAmount();
+        mRecipient = t.getRecipient();
+        mDescription = t.getDescription();
+        mCategory = t.getCategory();
+        mPriority = t.getPriority();
+    }
     public Transaction(JSONObject json) throws JSONException {
         mId = UUID.fromString(json.getString(JSON_ID));
         if (json.has(JSON_RECIPIENT)) {
