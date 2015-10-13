@@ -44,8 +44,10 @@ public class Debtor {
     public Debtor(DebtorDB d) {
         mName = d.getName();
         mDebts = new ArrayList<Debt>();
-        for (DebtDB debt : d.getDebts()) {
-            mDebts.add(new Debt(debt));
+        if (d.getDebts() != null) {
+            for (DebtDB debt : d.getDebts()) {
+                mDebts.add(new Debt(debt));
+            }
         }
         mDebtSerializer = new DebtJSONSerializer();
         mJsonObject = new JSONObject();
