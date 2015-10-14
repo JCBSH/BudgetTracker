@@ -5,22 +5,22 @@
              tools:context="com.mycompany.btrack.TransactionFragment">
 
     <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <RelativeLayout
-            android:layout_width="match_parent"
+        android:background="@color/summary_bar_color">
+        <TextView
+            android:id="@+id/debt_balance_label_TextView"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/summary_bar_color">
-            <TextView
-                android:id="@+id/debt_balance_label_TextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:layout_alignParentLeft="true"
-                android:text="@string/debt_balance_label"
-                android:padding="@dimen/TextView_standard_1_padding"
-                android:textSize="@dimen/summary_bar_text_size_1"/>
+            android:textStyle="bold"
+            android:layout_alignParentLeft="true"
+            android:text="@string/debt_balance_label"
+            android:padding="@dimen/TextView_standard_1_padding"
+            android:textSize="@dimen/summary_bar_text_size_1"/>
             <TextView
                 android:id = "@+id/debt_balance_TextView"
                 android:layout_width="wrap_content"

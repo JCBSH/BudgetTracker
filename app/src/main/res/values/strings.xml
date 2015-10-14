@@ -70,4 +70,7 @@
     <string name="TransactionFragment_all_transaction_title">All Transactions</string>
     <string name="DebtorFragment_all_debtor_title">All Debtors</string>
     <string name="TransactionFragment_filtered_transaction_title">Filtered Transactions</string>
+    <string name="title_activity_set_up_limit">Set Up Spending Limit</string>
+    <string name="hint_spending_limit">Limit Amount</string>
+    <string name="back_button">BACK</string>
 </resources>

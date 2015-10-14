@@ -14,11 +14,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mycompany.btrack.models.Transaction;
 import com.mycompany.btrack.models.UserInfo;
@@ -58,7 +60,6 @@ public class TransactionFragment extends ListFragment {
     private ImageButton mCancelFilterButton;
     private ImageButton mSummaryButton;
     private TransactionFragmentState saveState;
-
 
     public TransactionFragment() {
 
@@ -127,6 +128,7 @@ public class TransactionFragment extends ListFragment {
                 adjustButtonDependencyForCancelDelete();
             }
         });
+
 
         mFilterButton = (ImageButton) rootView.findViewById(R.id.transaction_FilterButton);
         mFilterButton.setOnClickListener(new View.OnClickListener() {
@@ -392,8 +394,6 @@ public class TransactionFragment extends ListFragment {
             startEditTransaction(t);
 
         }
-
-
 
     }
 

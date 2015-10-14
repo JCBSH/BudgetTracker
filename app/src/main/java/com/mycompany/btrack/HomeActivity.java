@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 
 import com.mycompany.btrack.models.Debtor;
@@ -151,5 +152,11 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
         Intent i = new Intent(this, DebtActivity.class);
         i.putExtra(DebtorFragment.EXTRA_DEBTOR_NAME, debtor.getName());
         startActivity(i);
+    }
+
+    /** called when the user click on Set Limit button */
+    public void setSpendingLimit(View view) {
+        Intent intent = new Intent(this, SetUpLimitActivity.class);
+        startActivity(intent);
     }
 }

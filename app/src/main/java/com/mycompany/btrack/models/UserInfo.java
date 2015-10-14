@@ -50,6 +50,7 @@ public class UserInfo {
     private TransactionJSONSerializer mTransactionSerializer;
     private DebtorJSONSerializer mDebtorSerializer;
 
+    private double mSpendingLimit;
 
     private UserInfo(Context appContext) {
         mAppContext = appContext;
@@ -344,5 +345,17 @@ public class UserInfo {
             if (debtor.getName().equalsIgnoreCase(name)) return debtor;
         }
         return null;
+    }
+
+    public double getSpendingLimit() {
+
+        return mSpendingLimit;
+
+    }
+
+    public void setSpendingLimit(double spendingLimit) {
+
+        this.mSpendingLimit = spendingLimit;
+
     }
 }

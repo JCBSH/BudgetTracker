@@ -87,7 +87,7 @@
             android:name=".SummaryCategoryActivity"
             android:label="@string/title_activity_summary_category"
             android:parentActivityName=".HomeActivity"
-            android:theme="@android:style/Theme.Holo.Light.DarkActionBar">
+            android:theme="@android:style/Theme.Holo.Light.DarkActionBar" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mycompany.btrack.HomeActivity" />
@@ -96,7 +96,7 @@
             android:name=".SummaryPriorityActivity"
             android:label="@string/title_activity_summary_priority"
             android:parentActivityName=".HomeActivity"
-            android:theme="@android:style/Theme.Holo.Light.DarkActionBar">
+            android:theme="@android:style/Theme.Holo.Light.DarkActionBar" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mycompany.btrack.HomeActivity" />
@@ -104,10 +104,14 @@
         <activity
             android:name=".ChangePasswordActivity"
             android:label="@string/title_activity_change_password"
-            android:parentActivityName=".HomeActivity">
+            android:parentActivityName=".HomeActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".HomeActivity"/>
+                android:value=".HomeActivity" />
+        </activity>
+        <activity
+            android:name=".SetUpLimitActivity"
+            android:label="@string/title_activity_set_up_limit" >
         </activity>
     </application>
 

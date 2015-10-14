@@ -1,0 +1,30 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp"
+    tools:context="com.mycompany.btrack.SetUpLimitActivity"
+    android:clickable="false"
+    android:weightSum="1">
+
+
+    <EditText
+        android:id="@+id/limit_amount_EditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="numberSigned|numberDecimal"
+        android:hint="@string/hint_spending_limit"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.02"
+        android:text="@string/save"
+        android:id="@+id/set_up_limit_button"
+        android:onClick="setSpendingLimit" />
+
+</LinearLayout>
