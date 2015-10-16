@@ -66,8 +66,10 @@ public class LoginActivity extends ActionBarActivity {
 
         Log.i(TAG, "login()");
 
-        final String email = String.valueOf(emailET.getText());
+        final String email = String.valueOf(emailET.getText()).trim();
         final String password = String.valueOf(passwordET.getText());
+
+
 
         Log.i(TAG, "email:" + email);
         Log.i(TAG, "password:" + password);
