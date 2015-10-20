@@ -1,7 +1,10 @@
 package com.mycompany.btrack.models;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -242,6 +245,17 @@ public class UserInfo {
         Firebase userRef = app.getFirebase().child("users").child(app.getUser().getUid());
         saveTransactionsToDB(userRef);
         saveDebtorsToDB(userRef);
+
+        double totalTransactionsAmount = 0;
+        for (int i = 0; i < mTransactions.size(); i++) {
+            totalTransactionsAmount += mTransactions.get(i).getAmount();
+        }
+        if (totalTransactionsAmount >= mSpendingLimit) {
+            Toast.makeText(this.mAppContext, "Spending limit has been reached!!!", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this.mAppContext, "far from spending limit", Toast.LENGTH_SHORT).show();
+        }
+
         try {
             Writer writer = null;
             try {
@@ -347,11 +361,13 @@ public class UserInfo {
         return null;
     }
 
+
     public double getSpendingLimit() {
 
         return mSpendingLimit;
 
     }
+
 
     public void setSpendingLimit(double spendingLimit) {
 

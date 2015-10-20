@@ -1,10 +1,11 @@
 package com.mycompany.btrack;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,9 +34,10 @@ public class SetUpLimitActivity extends AppCompatActivity {
         mSetLimit = (Button) findViewById(R.id.set_up_limit_button);
 
         error = new ErrorUtil();
+        user.get(getApplicationContext());
 
     }
-/*
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -57,7 +59,7 @@ public class SetUpLimitActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-*/
+
 
     public void setSpendingLimit(View view) {
         Log.i(TAG, "signUp()");
@@ -68,9 +70,9 @@ public class SetUpLimitActivity extends AppCompatActivity {
 
         if (limitAmount.matches("[0-9]+") || limitAmount.matches("[0-9]+.[0-9][0-9]")) {
             Double d = Double.parseDouble(limitAmount);
-            //Log.d(TAG, "the double value is now : " + d);
+
             user.get(getApplicationContext()).setSpendingLimit(d);
-            mSetLimit.append(" = " + d);
+            //mSetLimit.append(" = " + d);
 
             Toast.makeText(getApplicationContext(), "Limit has been set to " + d, Toast.LENGTH_SHORT).show();
 

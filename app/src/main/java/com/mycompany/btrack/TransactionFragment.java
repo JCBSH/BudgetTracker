@@ -2,6 +2,8 @@ package com.mycompany.btrack;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -14,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -112,6 +113,7 @@ public class TransactionFragment extends ListFragment {
                     mDeleteListPosition.clear();
 
                     UserInfo.get(getActivity().getApplicationContext()).saveUserInfo();
+
                     sortAndNotify(((TransactionAdapter) getListAdapter()));
                     //mDeleteStatus = false;
                 }
@@ -331,6 +333,37 @@ public class TransactionFragment extends ListFragment {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.fragment_transaction_menu, menu);
 
+/*
+        double totalTransactionsAmount = 0;
+        for (int i = 0; i < mTransactions.size(); i++) {
+            totalTransactionsAmount += mTransactions.get(i).getAmount();
+        }
+        if (totalTransactionsAmount >= UserInfo.get(getActivity().getApplicationContext()).getSpendingLimit()) {
+
+            AlertDialog.Builder popUpAlert = new AlertDialog.Builder(getActivity());
+
+            // here is the title for the dialog box
+            popUpAlert.setTitle("Your Title");
+
+            popUpAlert
+                    .setMessage("Spending Limit has been Reached!")
+                    .setCancelable(false)
+                    .setPositiveButton("OK",new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // if this button is clicked, just close
+                            // the dialog box and do nothing
+                            dialog.cancel();
+                        }
+                    });
+
+            AlertDialog alertDialog = popUpAlert.create();
+
+            alertDialog.show();
+
+        } else {
+            Toast.makeText(getActivity(), "far from spending limit", Toast.LENGTH_SHORT).show();
+        }
+*/
     }
 
     @Override

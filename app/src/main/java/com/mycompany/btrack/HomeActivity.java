@@ -63,6 +63,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
         getSupportActionBar().setSelectedNavigationItem(position);
         mViewPager.setCurrentItem(getSupportActionBar().getSelectedTab().getPosition());
         Log.d(TAG, "onCreate()");
+
     }
 
     @Override
