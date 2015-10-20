@@ -2,8 +2,6 @@ package com.mycompany.btrack;
 
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -21,7 +19,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mycompany.btrack.models.Transaction;
 import com.mycompany.btrack.models.UserInfo;
@@ -100,7 +97,9 @@ public class TransactionFragment extends ListFragment {
                     sortAndNotify(((TransactionAdapter) getListAdapter()));
                     startEditTransaction(t);
                 } else {
-                    for (Integer i : mDeleteListPosition) {
+                    Log.d(TAG, mDeleteListPosition.size() + "  " + mDeleteTransactionsList.size());
+                    Log.d(TAG, mDeleteListPosition.get(0).toString() + "  " + mDeleteTransactionsList.get(0).getAmount());
+                    for (Integer i = 0; i < getListView().getChildCount(); i++) {
                         CheckedTextView ch = (CheckedTextView) getListView().getChildAt(i).findViewById(R.id.delete_check);
                         ch.setChecked(false);
                     }
@@ -259,10 +258,11 @@ public class TransactionFragment extends ListFragment {
         listAdapter.notifyDataSetChanged();
     }
     private void clearDeleteList() {
-        for (Integer i : mDeleteListPosition) {
-            CheckedTextView ch = (CheckedTextView) getListView().getChildAt(i).findViewById(R.id.delete_check);
-            ch.setChecked(false);
-        }
+//        for (Integer i = 0; i < getListView().getChildCount(); i++) {
+//
+//            CheckedTextView ch = (CheckedTextView) getListView().getChildAt(i).findViewById(R.id.delete_check);
+//            ch.setChecked(false);
+//        }
         mDeleteTransactionsList.clear();
         mDeleteListPosition.clear();
     }
@@ -411,9 +411,11 @@ public class TransactionFragment extends ListFragment {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
+        Log.d(TAG, "selected: " + position + "  : " +((TextView) v.findViewById(R.id.transaction_list_item_amount_TextView)).getText());
         Transaction t = ((TransactionAdapter)getListAdapter()).getItem(position);
         if (mDeleteStatus == true) {
             CheckedTextView ch = (CheckedTextView) v.findViewById(R.id.delete_check);
+
             if (ch.isChecked() == true) {
                 ch.setChecked(false);
                 mDeleteTransactionsList.remove(t);
@@ -449,6 +451,8 @@ public class TransactionFragment extends ListFragment {
                 convertView = getActivity().getLayoutInflater()
                         .inflate(R.layout.transaction_list_item, null);
             }
+            Log.d(TAG, "total positions: " + UserInfo.get(getActivity().getApplicationContext()).getTransactions().size());
+            Log.d(TAG, "display position: " + position);
             Transaction c = getItem(position);
             TextView recipientTextView =
                     (TextView)convertView.findViewById(R.id.transaction_list_item_recipient_TextView);
@@ -479,6 +483,11 @@ public class TransactionFragment extends ListFragment {
             CheckedTextView ch = (CheckedTextView) convertView.findViewById(R.id.delete_check);
             if (mDeleteStatus == true) {
                 ch.setVisibility(View.VISIBLE);
+                if (mDeleteListPosition.contains(position)) {
+                    ch.setChecked(true);
+                } else {
+                    ch.setChecked(false);
+                }
             } else {
                 //ch.setChecked(false);
                 ch.setVisibility(View.INVISIBLE);
