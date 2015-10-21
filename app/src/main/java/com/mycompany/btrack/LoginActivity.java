@@ -37,6 +37,7 @@ public class LoginActivity extends ActionBarActivity {
         emailET = (EditText) findViewById(R.id.email);
         passwordET = (EditText) findViewById(R.id.password);
         error = new ErrorUtil();
+        findViewById(R.id.loadingPanel).setVisibility(View.GONE);
     }
 
 
@@ -87,6 +88,7 @@ public class LoginActivity extends ActionBarActivity {
             toast.show();
         // email and passwords valid, attempt to login user
         } else {
+
             authUser(email, password);
         }
 
@@ -99,6 +101,7 @@ public class LoginActivity extends ActionBarActivity {
      * @param password
      */
     private final void authUser(final String email, String password) {
+        findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
         final App app = (App) getApplicationContext();
         app.getFirebase().authWithPassword(email, password,
                 new Firebase.AuthResultHandler() {
@@ -112,6 +115,7 @@ public class LoginActivity extends ActionBarActivity {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
+                findViewById(R.id.loadingPanel).setVisibility(View.GONE);
             }
 
             @Override
@@ -122,6 +126,7 @@ public class LoginActivity extends ActionBarActivity {
                         firebaseError.getMessage(),
                         Toast.LENGTH_SHORT);
                 toast.show();
+                findViewById(R.id.loadingPanel).setVisibility(View.GONE);
             }
         });
     }
