@@ -64,23 +64,24 @@ public class SetUpLimitActivity extends AppCompatActivity {
     public void setSpendingLimit(View view) {
         Log.i(TAG, "signUp()");
 
-        final String limitAmount = mAmount.getText().toString();
+        String limitAmount = String.valueOf(mAmount.getText());
 
-        Log.i(TAG, "limit:" + limitAmount);
+        //Log.i(TAG, "limit:" + limitAmount);
 
-        if (limitAmount.matches("[0-9]+") || limitAmount.matches("[0-9]+.[0-9][0-9]")) {
+        if (limitAmount.equals("") || limitAmount.equals("-") || limitAmount.equals(".")) {
+            user.get(getApplicationContext()).setSpendingLimit(0.00);
+            Log.e(TAG, "onError():"+ "invalid amount" + "!!");
+            Toast.makeText(getApplicationContext(), "Invalid amount", Toast.LENGTH_LONG).show();
+        } else {
             Double d = Double.parseDouble(limitAmount);
 
             user.get(getApplicationContext()).setSpendingLimit(d);
             //mSetLimit.append(" = " + d);
 
+            user.get(getApplicationContext()).saveUserInfo();
             Toast.makeText(getApplicationContext(), "Limit has been set to " + d, Toast.LENGTH_SHORT).show();
-
-
-        } else {
-            Log.e(TAG, "onError():"+ "invalid amount" + "!!");
-            Toast.makeText(getApplicationContext(), "Invalid amount", Toast.LENGTH_LONG).show();
         }
+
         setResult(Activity.RESULT_OK);
         finish();
     }

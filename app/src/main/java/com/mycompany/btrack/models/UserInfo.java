@@ -53,6 +53,7 @@ public class UserInfo {
     private TransactionJSONSerializer mTransactionSerializer;
     private DebtorJSONSerializer mDebtorSerializer;
 
+
     private double mSpendingLimit;
 
     private UserInfo(Context appContext) {
@@ -238,6 +239,23 @@ public class UserInfo {
             });
         }
     }
+
+    private void saveSpendingLimitToDB(Firebase userRef) {
+        Log.d(TAG, "SAVE spending limit TO DB");
+        Firebase limitRef = userRef.child("spendingLimit");
+        limitRef.setValue(null);
+        limitRef.push().setValue(mSpendingLimit, new Firebase.CompletionListener() {
+            @Override
+            public void onComplete(FirebaseError firebaseError, Firebase firebase) {
+                if (firebaseError != null) {
+                    Log.d(TAG, "DB ERROR " + firebaseError.getMessage());
+                } else {
+                    Log.d(TAG, "DB SAVED (Spending Limit)");
+                }
+            }
+        });
+    }
+
     public boolean saveUserInfo() {
         saveDebtors();
         saveTransactions();
@@ -245,17 +263,16 @@ public class UserInfo {
         Firebase userRef = app.getFirebase().child("users").child(app.getUser().getUid());
         saveTransactionsToDB(userRef);
         saveDebtorsToDB(userRef);
-
+        saveSpendingLimitToDB(userRef);
+/*
         double totalTransactionsAmount = 0;
         for (int i = 0; i < mTransactions.size(); i++) {
             totalTransactionsAmount += mTransactions.get(i).getAmount();
         }
         if (totalTransactionsAmount >= mSpendingLimit) {
             Toast.makeText(this.mAppContext, "Spending limit has been reached!!!", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this.mAppContext, "far from spending limit", Toast.LENGTH_SHORT).show();
         }
-
+*/
         try {
             Writer writer = null;
             try {
