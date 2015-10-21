@@ -1,10 +1,7 @@
 package com.mycompany.btrack.models;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -47,14 +44,15 @@ public class UserInfo {
     public static final String JSON_TRANSACTIONS = "transactions";
     public static final String JSON_DEBTORS = "debtors";
     public static final String JSON_DEBTOR_COUNT = "debtor_count";
+    public static final String JSON_SPENDING_LIMIT = "spending_limit";
 
     private static final String TAG = UserInfo.class.getSimpleName();
     private static final String FILENAME = "crimes.json";
     private TransactionJSONSerializer mTransactionSerializer;
     private DebtorJSONSerializer mDebtorSerializer;
 
-
-    private double mSpendingLimit;
+    private SpendingLimit mSpendingLimit;
+    //private double mSpendingLimit;
 
     private UserInfo(Context appContext) {
         mAppContext = appContext;
@@ -144,6 +142,14 @@ public class UserInfo {
                 } catch (JSONException e) {
                     Debtor.setCount(0);
                     Log.d(TAG, "Error loading Debtor count, possibly that it doesn't exist");
+                }
+                
+                try {
+                    double limit = mJsonObject.getDouble(UserInfo.JSON_SPENDING_LIMIT);
+                    UserInfo.get(this.mAppContext).setSpendingLimit(limit);
+                } catch (JSONException e) {
+                    mSpendingLimit = new SpendingLimit();
+                    Log.e(TAG, "Limit hasn't been set");
                 }
 
                 Log.d(TAG, "successfully load transaction");
@@ -243,17 +249,9 @@ public class UserInfo {
     private void saveSpendingLimitToDB(Firebase userRef) {
         Log.d(TAG, "SAVE spending limit TO DB");
         Firebase limitRef = userRef.child("spendingLimit");
-        limitRef.setValue(null);
-        limitRef.push().setValue(mSpendingLimit, new Firebase.CompletionListener() {
-            @Override
-            public void onComplete(FirebaseError firebaseError, Firebase firebase) {
-                if (firebaseError != null) {
-                    Log.d(TAG, "DB ERROR " + firebaseError.getMessage());
-                } else {
-                    Log.d(TAG, "DB SAVED (Spending Limit)");
-                }
-            }
-        });
+        SpendingLimit spendingLimit = new SpendingLimit(new SpendingLimitDB(mSpendingLimit));
+        limitRef.setValue(spendingLimit);
+
     }
 
     public boolean saveUserInfo() {
@@ -264,15 +262,7 @@ public class UserInfo {
         saveTransactionsToDB(userRef);
         saveDebtorsToDB(userRef);
         saveSpendingLimitToDB(userRef);
-/*
-        double totalTransactionsAmount = 0;
-        for (int i = 0; i < mTransactions.size(); i++) {
-            totalTransactionsAmount += mTransactions.get(i).getAmount();
-        }
-        if (totalTransactionsAmount >= mSpendingLimit) {
-            Toast.makeText(this.mAppContext, "Spending limit has been reached!!!", Toast.LENGTH_SHORT).show();
-        }
-*/
+
         try {
             Writer writer = null;
             try {
@@ -379,16 +369,14 @@ public class UserInfo {
     }
 
 
-    public double getSpendingLimit() {
+    public SpendingLimit getSpendingLimit() {
 
         return mSpendingLimit;
 
     }
 
 
-    public void setSpendingLimit(double spendingLimit) {
-
-        this.mSpendingLimit = spendingLimit;
-
+    public void setSpendingLimit(double limit) {
+            this.mSpendingLimit.setAmount(limit);
     }
 }

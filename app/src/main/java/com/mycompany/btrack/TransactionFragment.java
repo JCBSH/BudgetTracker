@@ -22,6 +22,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mycompany.btrack.models.SpendingLimit;
 import com.mycompany.btrack.models.Transaction;
 import com.mycompany.btrack.models.UserInfo;
 import com.mycompany.btrack.savedStates.HomeActivityTabState;
@@ -354,21 +355,23 @@ public class TransactionFragment extends ListFragment {
         super.onResume();
         Log.d(TAG, "onResume()");
 
-        double limit = UserInfo.get(getActivity().getApplicationContext()).getSpendingLimit();
-        // Log.e("limit value: ", "limitvalue: " + limit);
+        SpendingLimit limit = UserInfo.get(getActivity().getApplicationContext()).getSpendingLimit();
+        //Log.e("limit value: ", "limitvalue: " + limit);
 
-        if (limit > 0) {
-            mSpendingLimitButton.setText("Spending Limit: $" + limit);
-        }
+        if (limit != null) {
+            double amount = limit.getAmount();
+            mSpendingLimitButton.setText("Spending Limit: $" + amount);
 
-        double totalTransactionsAmount = 0;
-        for (int i = 0; i < mTransactions.size(); i++) {
-            totalTransactionsAmount += mTransactions.get(i).getAmount();
-        }
-        if (totalTransactionsAmount >= limit) {
-            Toast.makeText(this.getActivity(), "Spending limit has been reached!!!", Toast.LENGTH_SHORT).show();
-        }
+            double totalTransactionsAmount = 0;
+            for (int i = 0; i < mTransactions.size(); i++) {
+                totalTransactionsAmount += mTransactions.get(i).getAmount();
+            }
+            if (totalTransactionsAmount >= amount) {
+                Toast.makeText(this.getActivity(), "Spending limit has been reached!!!", Toast.LENGTH_SHORT).show();
+            }
+        } else {
 
+        }
     }
 
     @Override
