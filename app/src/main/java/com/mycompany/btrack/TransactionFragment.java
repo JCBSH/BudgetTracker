@@ -370,7 +370,7 @@ public class TransactionFragment extends ListFragment {
                 Toast.makeText(this.getActivity(), "Spending limit has been reached!!!", Toast.LENGTH_SHORT).show();
             }
         } else {
-
+            Log.e(TAG, "limit ----------------> 0.00");
         }
     }
 

@@ -47,7 +47,9 @@
             android:layout_height="wrap_content"
             android:id="@+id/debtor_AddCancelButton"
             android:background="@null"
-            android:layout_margin="@dimen/bottom_button_margin_1"/>
+            android:layout_margin="@dimen/bottom_button_margin_1"
+            android:paddingBottom="17dp"
+            android:paddingRight="20dp" />
 
 
     </LinearLayout>

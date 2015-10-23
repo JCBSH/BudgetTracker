@@ -44,7 +44,6 @@ public class UserInfo {
     public static final String JSON_TRANSACTIONS = "transactions";
     public static final String JSON_DEBTORS = "debtors";
     public static final String JSON_DEBTOR_COUNT = "debtor_count";
-    public static final String JSON_SPENDING_LIMIT = "spending_limit";
 
     private static final String TAG = UserInfo.class.getSimpleName();
     private static final String FILENAME = "crimes.json";
@@ -52,14 +51,15 @@ public class UserInfo {
     private DebtorJSONSerializer mDebtorSerializer;
 
     private SpendingLimit mSpendingLimit;
-    //private double mSpendingLimit;
 
     private UserInfo(Context appContext) {
         mAppContext = appContext;
         mTransactionSerializer = new TransactionJSONSerializer();
         mDebtorSerializer = new DebtorJSONSerializer();
         mJsonObject = new JSONObject();
+
         App app = (App) mAppContext.getApplicationContext();
+
         Firebase userRef = app.getFirebase().child("users").child(app.getUser().getUid()).child("transactions");
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -82,6 +82,7 @@ public class UserInfo {
                 Log.i(TAG + "onCancelled()#########", firebaseError.getMessage());
             }
         });
+
         Firebase debtorRef = app.getFirebase().child("users").child(app.getUser().getUid()).child("debtors");
         debtorRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -104,6 +105,28 @@ public class UserInfo {
                 Log.i(TAG + "onCancelled()#########", firebaseError.getMessage());
             }
         });
+
+        Firebase limitRef = app.getFirebase().child("users").child(app.getUser().getUid()).child("spending_limit");
+
+        limitRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    SpendingLimitDB limit = dataSnapshot.getValue(SpendingLimitDB.class);
+                    mSpendingLimit = new SpendingLimit(limit.getAmount());
+
+                    //Log.e(TAG, "limit ----------------> " + mSpendingLimit.getAmount());
+                } else {
+                    Log.e(TAG, "LIMIT does not exist########");
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                Log.i(TAG + "onCancelled()#########", firebaseError.getMessage());
+            }
+        });
+
         try {
             BufferedReader reader = null;
             try {
@@ -143,14 +166,6 @@ public class UserInfo {
                     Debtor.setCount(0);
                     Log.d(TAG, "Error loading Debtor count, possibly that it doesn't exist");
                 }
-                
-                try {
-                    double limit = mJsonObject.getDouble(UserInfo.JSON_SPENDING_LIMIT);
-                    UserInfo.get(this.mAppContext).setSpendingLimit(limit);
-                } catch (JSONException e) {
-                    mSpendingLimit = new SpendingLimit();
-                    Log.e(TAG, "Limit hasn't been set");
-                }
 
                 Log.d(TAG, "successfully load transaction");
                 sortTransactions();
@@ -159,6 +174,7 @@ public class UserInfo {
             } catch (Exception e) {
                 mTransactions = new ArrayList<Transaction>();
                 mDebtors = new ArrayList<Debtor>();
+
                 Log.e(TAG, "Error loading UserInfo: ", e);
                 e.printStackTrace();
             } finally {
@@ -247,11 +263,10 @@ public class UserInfo {
     }
 
     private void saveSpendingLimitToDB(Firebase userRef) {
-        Log.d(TAG, "SAVE spending limit TO DB");
-        Firebase limitRef = userRef.child("spendingLimit");
-        SpendingLimit spendingLimit = new SpendingLimit(new SpendingLimitDB(mSpendingLimit));
+        Firebase limitRef = userRef.child("spending_limit");
+        SpendingLimit spendingLimit = new SpendingLimit(mSpendingLimit.getAmount());
         limitRef.setValue(spendingLimit);
-
+        Log.d(TAG, "SAVE spending limit TO DB");
     }
 
     public boolean saveUserInfo() {

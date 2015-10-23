@@ -17,9 +17,7 @@
         android:hint="@string/hint_email"/>
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        style="@style/Button"
         android:text="@string/recover_account"
         android:onClick="recover"/>
 

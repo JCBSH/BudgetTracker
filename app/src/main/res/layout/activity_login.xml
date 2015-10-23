@@ -24,16 +24,12 @@
         android:hint="@string/hint_password"/>
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        style="@style/Button"
         android:text="@string/login"
         android:onClick="login"/>
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        style="@style/Button"
         android:text="@string/sign_up"
         android:onClick="signUp"/>
 

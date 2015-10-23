@@ -7,28 +7,14 @@ import java.util.UUID;
  */
 public class SpendingLimitDB {
 
-    private UUID id;
     private double amount;
 
-    public SpendingLimitDB(SpendingLimit limit) {
-        this.id = limit.getId();
-        this.amount = limit.getAmount();
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
+    public SpendingLimitDB() {
+        // empty default constructor, necessary for Firebase to be able to deserialize the class
     }
 
     public double getAmount() {
         return amount;
-    }
-
-    public void setAmount(double amount) {
-        this.amount = amount;
     }
 
 }
