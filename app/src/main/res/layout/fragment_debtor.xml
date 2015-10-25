@@ -15,11 +15,6 @@
             android:background="@color/summary_bar_color"
             android:gravity="center"
             android:textStyle="bold"/>
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/debtor_search_EditText"
-            android:hint="@string/debtor_search_hint"/>
         <FrameLayout android:layout_width="match_parent"
                      android:layout_height="wrap_content">
 
