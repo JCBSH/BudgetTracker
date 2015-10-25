@@ -1,6 +1,14 @@
 package com.mycompany.btrack.models;
 
+import android.content.Context;
+import android.graphics.Color;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.format.DateFormat;
+import android.text.style.ForegroundColorSpan;
+
+import com.mycompany.btrack.R;
+import com.mycompany.btrack.utils.MoneyTextWatcher;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -333,4 +341,49 @@ public class Transaction {
         }
         return total;
     }
+
+    public static Spannable totalAmountSpanForTextView(ArrayList<Transaction> transactions, Context c) {
+        double balance = getTotalAmount(transactions);
+        boolean positiveColorFlag = true;
+
+
+        DecimalFormat df = new DecimalFormat("#.00");
+        String formatted = "";
+        if (balance > MoneyTextWatcher.MAX_DISPLAY_AMOUNT_LIMIT) {
+            formatted = df.format(MoneyTextWatcher.MAX_DISPLAY_AMOUNT_LIMIT);
+            formatted = "> " + formatted;
+            positiveColorFlag = true;
+        } else if (balance < MoneyTextWatcher.MIN__DISPLAY_AMOUNT_LIMIT) {
+            formatted = df.format(MoneyTextWatcher.MIN__DISPLAY_AMOUNT_LIMIT);
+            formatted = "< " + formatted;
+            positiveColorFlag = false;
+        } else if (balance == 0.0){
+            formatted = "0.00";
+            positiveColorFlag = true;
+        } else {
+            formatted = df.format(balance);
+            if (balance > 0.00) {
+                positiveColorFlag = true;
+            } else {
+                positiveColorFlag = false;
+            }
+        }
+
+        String labelString = "Total Transaction Balance: ";
+
+        Spannable resultSpan = new SpannableString(labelString + formatted);
+
+        int color = Color.parseColor(c.getString(R.string.negative_red));
+        if (positiveColorFlag) {
+            color = Color.parseColor(c.getString(R.string.positive_green));
+        }
+
+        resultSpan.setSpan(new ForegroundColorSpan(color),
+                labelString.length(), labelString.length() + formatted.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return resultSpan;
+    }
+
+
+
 }

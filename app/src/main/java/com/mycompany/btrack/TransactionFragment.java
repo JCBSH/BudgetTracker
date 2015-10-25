@@ -62,8 +62,10 @@ public class TransactionFragment extends ListFragment {
     private ImageButton mFilterButton;
     private ImageButton mCancelFilterButton;
     private ImageButton mSummaryButton;
+
     private TransactionFragmentState saveState;
 
+    public static TextView mTransactionSummaryTextView;
     public static Button mSpendingLimitButton;
 
     public TransactionFragment() {
@@ -93,8 +95,12 @@ public class TransactionFragment extends ListFragment {
 //
         //ListView listView = (ListView) rootView.findViewById(android.R.id.list);
         //listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-        
-        mAddDeleteButton = (ImageButton) rootView.findViewById(R.id.transaction_AddDeleteButton);
+
+        mTransactionSummaryTextView = (TextView) rootView.findViewById(R.id.all_transaction_summary_text);
+        mTransactionSummaryTextView.setText(Transaction.totalAmountSpanForTextView(
+                (UserInfo.get(getActivity().getApplicationContext())).getTransactions(), getActivity()));
+
+
         mSpendingLimitButton = (Button) rootView.findViewById(R.id.set_up_limit_button);
 
         updateSpendingLimit();
@@ -108,6 +114,7 @@ public class TransactionFragment extends ListFragment {
             }
         });
 
+        mAddDeleteButton = (ImageButton) rootView.findViewById(R.id.transaction_AddDeleteButton);
         mAddDeleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -129,6 +136,8 @@ public class TransactionFragment extends ListFragment {
 
                     sortAndNotify(((TransactionAdapter) getListAdapter()));
                     updateSpendingLimit();
+                    mTransactionSummaryTextView.setText(Transaction.totalAmountSpanForTextView(
+                            (UserInfo.get(getActivity().getApplicationContext())).getTransactions(), getActivity()));
                     //mDeleteStatus = false;
                 }
             }
@@ -207,6 +216,7 @@ public class TransactionFragment extends ListFragment {
     static TransactionFragment transactionFragment;
     public static void refresh() {
         ((TransactionAdapter) transactionFragment.getListAdapter()).notifyDataSetChanged();
+
 //        mSpendingLimitButton = (Button) rootView.findViewById(R.id.set_up_limit_button);
 //
 //        SpendingLimit limit = UserInfo.get(getActivity().getApplicationContext()).getSpendingLimit();
@@ -252,6 +262,8 @@ public class TransactionFragment extends ListFragment {
                 Log.d(TAG, "transaction edit successful");
                 sortAndNotify(((TransactionAdapter) getListAdapter()));
                 updateSpendingLimit();
+                mTransactionSummaryTextView.setText(Transaction.totalAmountSpanForTextView(
+                        (UserInfo.get(getActivity().getApplicationContext())).getTransactions(), getActivity()));
                 break;
             case REQUEST_NEW_SPENDING:
                 double newLimit = data.getDoubleExtra(SetUpLimitActivity.EXTRA_NEW_LIMIT, 0.00);
@@ -349,6 +361,8 @@ public class TransactionFragment extends ListFragment {
         setListAdapter(adapter);
         //((TransactionAdapter)getListAdapter()).notifyDataSetChanged();
     }
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

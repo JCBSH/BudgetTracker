@@ -44,6 +44,7 @@ public class UserInfo {
 
         Firebase userRef = app.getFirebase().child("users").child(app.getUser().getUid()).child("transactions");
         //userRef.da
+        final Context c = appContext;
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -55,6 +56,8 @@ public class UserInfo {
                     }
                     sortTransactions();
                     TransactionFragment.refresh();
+                    TransactionFragment.mTransactionSummaryTextView.setText(
+                            Transaction.totalAmountSpanForTextView(mTransactions, c));
                 } else {
                     Log.i(TAG, "transactions does not exist########");
                 }
@@ -91,7 +94,7 @@ public class UserInfo {
 
         Firebase limitRef = app.getFirebase().child("users").child(app.getUser().getUid()).child("spending_limit");
 
-        final Context c = appContext;
+
         limitRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
