@@ -1,11 +1,10 @@
 package com.mycompany.btrack;
 
 import android.app.Activity;
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,9 +14,12 @@ import com.mycompany.btrack.models.UserInfo;
 import com.mycompany.btrack.utils.ErrorUtil;
 
 
-public class SetUpLimitActivity extends AppCompatActivity {
+public class SetUpLimitActivity extends ActionBarActivity {
 
     public static final String TAG = SetUpLimitActivity.class.getSimpleName();
+
+    public static final String EXTRA_NEW_LIMIT =
+            "com.mycompany.btrack.SetUpLimitActivity.limit";
 
     private EditText mAmount;
     private Button mSetLimit;
@@ -33,31 +35,20 @@ public class SetUpLimitActivity extends AppCompatActivity {
         mAmount = (EditText) findViewById(R.id.limit_amount_EditText);
         mSetLimit = (Button) findViewById(R.id.set_up_limit_button);
 
+        mSetLimit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                double result =  Double.parseDouble(mAmount.getText().toString());
+                Intent i = new Intent();
+                i.putExtra(EXTRA_NEW_LIMIT, result);
+                setResult(Activity.RESULT_OK, i);
+                finish();
+            }
+        });
+
         error = new ErrorUtil();
         user.get(getApplicationContext());
 
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_set_up_limit, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
 

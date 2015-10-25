@@ -36,7 +36,7 @@ public class UserInfo {
 
         mTransactions = new ArrayList<Transaction>();
         mDebtors = new ArrayList<Debtor>();
-        mSpendingLimit = new SpendingLimit(0.00);
+        mSpendingLimit = new SpendingLimit(0.00, mTransactions);
 
         App app = (App) mAppContext.getApplicationContext();
 
@@ -94,7 +94,7 @@ public class UserInfo {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     SpendingLimitDB limit = dataSnapshot.getValue(SpendingLimitDB.class);
-                    mSpendingLimit = new SpendingLimit(limit.getAmount());
+                    mSpendingLimit = new SpendingLimit(limit.getAmount(), mTransactions);
                     TransactionFragment.mSpendingLimitButton.setText("Spending Limit: $" + limit.getAmount());
 //                    TransactionFragment.refresh();
                     //Log.e(TAG, "limit ----------------> " + mSpendingLimit.getAmount());
@@ -163,7 +163,7 @@ public class UserInfo {
 
     private void saveSpendingLimitToDB(Firebase userRef) {
         Firebase limitRef = userRef.child("spending_limit");
-        SpendingLimit spendingLimit = new SpendingLimit(mSpendingLimit.getAmount());
+        SpendingLimit spendingLimit = new SpendingLimit(mSpendingLimit.getLimit(), mTransactions);
         limitRef.setValue(spendingLimit);
         Log.d(TAG, "SAVE spending limit TO DB");
     }
@@ -268,6 +268,6 @@ public class UserInfo {
 
 
     public void setSpendingLimit(double limit) {
-            this.mSpendingLimit.setAmount(limit);
+            this.mSpendingLimit.setLimit(limit);
     }
 }

@@ -48,6 +48,7 @@ public class TransactionFragment extends ListFragment {
     public static final String  FILTER_PRIORITY_BUNDLE_KEY = "priority";
     private static final int REQUEST_FILTER_INFO = 0;
     private static final int REQUEST_SUCCESSFUL_EDIT = 1;
+    private static final int REQUEST_NEW_SPENDING = 2;
     private static final String EDIT_FILTER_INFO = "edit filter info";
 
 
@@ -95,16 +96,12 @@ public class TransactionFragment extends ListFragment {
         mAddDeleteButton = (ImageButton) rootView.findViewById(R.id.transaction_AddDeleteButton);
         mSpendingLimitButton = (Button) rootView.findViewById(R.id.set_up_limit_button);
 
-        SpendingLimit limit = UserInfo.get(getActivity().getApplicationContext()).getSpendingLimit();
-        double amount = limit.getAmount();
-        mSpendingLimitButton.setText("Spending Limit: $" + amount);
-        //Log.e("limit value: ", "limitvalue: " + limit);
-
+        mSpendingLimitButton.setText(UserInfo.get(getActivity().getApplicationContext()).getSpendingLimit().toString());
         mSpendingLimitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getActivity(), SetUpLimitActivity.class);
-                startActivity(i);
+                startActivityForResult(i, REQUEST_NEW_SPENDING);
 
             }
         });
@@ -252,6 +249,17 @@ public class TransactionFragment extends ListFragment {
                 Log.d(TAG, "transaction edit successful");
                 sortAndNotify(((TransactionAdapter) getListAdapter()));
                 break;
+            case REQUEST_NEW_SPENDING:
+                double newLimit = data.getDoubleExtra(SetUpLimitActivity.EXTRA_NEW_LIMIT, 0.00);
+                SpendingLimit limit = UserInfo.get(getActivity().getApplicationContext()).getSpendingLimit();
+                limit.setLimit(newLimit);
+
+                //double amount = limit.getAmount();
+                mSpendingLimitButton.setText(limit.toString());
+
+                if (limit.overStatus()) {
+                    Toast.makeText(this.getActivity(), "Spending limit has been reached!!!", Toast.LENGTH_SHORT).show();
+                }
         }
     }
 
@@ -365,23 +373,6 @@ public class TransactionFragment extends ListFragment {
         super.onResume();
         Log.d(TAG, "onResume()");
 
-        SpendingLimit limit = UserInfo.get(getActivity().getApplicationContext()).getSpendingLimit();
-        //Log.e("limit value: ", "limitvalue: " + limit);
-
-        if (limit != null) {
-            double amount = limit.getAmount();
-            mSpendingLimitButton.setText("Spending Limit: $" + amount);
-
-            double totalTransactionsAmount = 0;
-            for (int i = 0; i < mTransactions.size(); i++) {
-                totalTransactionsAmount += mTransactions.get(i).getAmount();
-            }
-            if (totalTransactionsAmount >= amount) {
-                Toast.makeText(this.getActivity(), "Spending limit has been reached!!!", Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            Log.e(TAG, "limit ----------------> 0.00");
-        }
     }
 
     @Override

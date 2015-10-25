@@ -325,4 +325,12 @@ public class Transaction {
         }
         return total;
     }
+
+    public static double getTotalAmount(ArrayList<Transaction> transactions) {
+        double total = 0.00;
+        for (Transaction t: transactions) {
+            total += t.getAmount();
+        }
+        return total;
+    }
 }

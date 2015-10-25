@@ -29,8 +29,7 @@
         <Button
             style="@style/Button"
             android:text="@string/save"
-            android:id="@+id/set_up_limit_button"
-            android:onClick="setSpendingLimit" />
+            android:id="@+id/set_up_limit_button" />
 
     </LinearLayout>
 </ScrollView>

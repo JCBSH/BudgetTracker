@@ -110,7 +110,8 @@
         </activity>
         <activity
             android:name=".SetUpLimitActivity"
-            android:label="@string/title_activity_set_up_limit" >
+            android:label="@string/title_activity_set_up_limit"
+            android:parentActivityName=".HomeActivity">
         </activity>
     </application>
 
