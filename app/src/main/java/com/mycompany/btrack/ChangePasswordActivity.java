@@ -36,6 +36,7 @@ public class ChangePasswordActivity extends ActionBarActivity {
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_SHORT);
         app = (App) getApplicationContext();
         error = new ErrorUtil();
+        findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 
     }
 
@@ -73,6 +74,8 @@ public class ChangePasswordActivity extends ActionBarActivity {
             toast.setText("new " + error.getMessage());
             toast.show();
         } else {
+            findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
+
             app.getFirebase().changePassword(app.getUser().getEmail(),
                     password,
                     newPassword,
@@ -85,12 +88,16 @@ public class ChangePasswordActivity extends ActionBarActivity {
                             Intent intent = new Intent(ChangePasswordActivity.this, HomeActivity.class);
                             startActivity(intent);
                             finish();
+                            findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+
                         }
 
                         @Override
                         public void onError(FirebaseError firebaseError) {
                             toast.setText(firebaseError.getMessage());
                             toast.show();
+                            findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+
                         }
                     });
         }
