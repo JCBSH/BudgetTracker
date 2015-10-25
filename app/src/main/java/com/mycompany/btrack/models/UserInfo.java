@@ -117,6 +117,7 @@ public class UserInfo {
 
                     //Log.e(TAG, "limit ----------------> " + mSpendingLimit.getAmount());
                 } else {
+                    mSpendingLimit = new SpendingLimit(0.00);
                     Log.e(TAG, "LIMIT does not exist########");
                 }
             }
