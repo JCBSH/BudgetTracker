@@ -34,6 +34,8 @@ public class RecoverActivity extends ActionBarActivity {
         error = new ErrorUtil();
         toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_SHORT);
         app = (App) getApplicationContext();
+        findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+
     }
 
 
@@ -66,6 +68,8 @@ public class RecoverActivity extends ActionBarActivity {
             toast.setText(error.getMessage());
             toast.show();
         } else {
+            findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
+
             app.getFirebase().resetPassword(email,
                     new Firebase.ResultHandler() {
                         @Override
@@ -75,12 +79,16 @@ public class RecoverActivity extends ActionBarActivity {
                             Intent intent = new Intent(RecoverActivity.this, LoginActivity.class);
                             startActivity(intent);
                             finish();
+                            findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+
                         }
 
                         @Override
                         public void onError(FirebaseError firebaseError) {
                             toast.setText(firebaseError.getMessage());
                             toast.show();
+                            findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+
                         }
                     });
         }
