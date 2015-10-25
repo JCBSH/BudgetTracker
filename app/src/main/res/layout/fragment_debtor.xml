@@ -8,6 +8,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/all_debt_summary_text"
+            android:background="@color/summary_bar_color"
+            android:gravity="center"
+            android:textStyle="bold"/>
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

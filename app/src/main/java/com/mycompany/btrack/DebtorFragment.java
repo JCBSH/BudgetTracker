@@ -24,7 +24,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mycompany.btrack.models.Debt;
 import com.mycompany.btrack.models.Debtor;
 import com.mycompany.btrack.models.UserInfo;
 
@@ -51,6 +50,7 @@ public class DebtorFragment extends ListFragment {
     private boolean mDeleteStatus;
     private String mCurrentEditName;
     private Debtor mCurrentSelectedDebtor;
+    public static TextView mDebtSummaryTextView;
 
     /**
      * Required interface for hosting activities.
@@ -116,6 +116,10 @@ public class DebtorFragment extends ListFragment {
 //
         //ListView listView = (ListView) rootView.findViewById(android.R.id.list);
         //listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+
+        mDebtSummaryTextView = (TextView) rootView.findViewById(R.id.all_debt_summary_text);
+        mDebtSummaryTextView.setText(Debtor.totalAmountSpanForTextView(
+                (UserInfo.get(getActivity().getApplicationContext())).getDebtors(), getActivity()));
 
         mAddCancelButton = (ImageButton) rootView.findViewById(R.id.debtor_AddCancelButton);
         mAddCancelButton.setOnClickListener(new View.OnClickListener() {
@@ -288,6 +292,8 @@ public class DebtorFragment extends ListFragment {
 
                                         UserInfo.get(getActivity().getApplicationContext()).saveUserInfo();
                                         ((DebtorAdapter) getListAdapter()).notifyDataSetChanged();
+                                        mDebtSummaryTextView.setText(Debtor.totalAmountSpanForTextView(
+                                                (UserInfo.get(getActivity().getApplicationContext())).getDebtors(), getActivity()));
                                     }
                                 })
                                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {

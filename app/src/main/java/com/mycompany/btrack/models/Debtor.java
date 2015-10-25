@@ -1,5 +1,12 @@
 package com.mycompany.btrack.models;
 
+import android.content.Context;
+import android.graphics.Color;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+
+import com.mycompany.btrack.R;
 import com.mycompany.btrack.utils.DebtComparator;
 import com.mycompany.btrack.utils.MoneyTextWatcher;
 
@@ -151,4 +158,57 @@ public class Debtor {
 
         return balance;
     }
+
+
+
+
+    public static Spannable totalAmountSpanForTextView(ArrayList<Debtor> debtors, Context c) {
+        double balance = 0.00;
+        for (Debtor d: debtors) {
+            balance += d.getBalance();
+        }
+
+        boolean positiveColorFlag = true;
+
+
+        DecimalFormat df = new DecimalFormat("#.00");
+        String formatted = "";
+        if (balance > MoneyTextWatcher.MAX_DISPLAY_AMOUNT_LIMIT) {
+            formatted = df.format(MoneyTextWatcher.MAX_DISPLAY_AMOUNT_LIMIT);
+            formatted = "> " + formatted;
+            positiveColorFlag = true;
+        } else if (balance < MoneyTextWatcher.MIN__DISPLAY_AMOUNT_LIMIT) {
+            formatted = df.format(MoneyTextWatcher.MIN__DISPLAY_AMOUNT_LIMIT);
+            formatted = "< " + formatted;
+            positiveColorFlag = false;
+        } else if (balance == 0.0){
+            formatted = "0.00";
+            positiveColorFlag = true;
+        } else {
+            formatted = df.format(balance);
+            if (balance > 0.00) {
+                positiveColorFlag = true;
+            } else {
+                positiveColorFlag = false;
+            }
+        }
+
+        String labelString = "Total Debt ";
+        int color = Color.parseColor(c.getString(R.string.negative_red));
+        String statusString = " OWNING: ";
+        if (positiveColorFlag) {
+            color = Color.parseColor(c.getString(R.string.positive_green));
+            statusString = " LENDING: ";
+        }
+
+        Spannable resultSpan = new SpannableString(labelString + statusString + formatted);
+
+        resultSpan.setSpan(new ForegroundColorSpan(color),
+                labelString.length(), labelString.length() + statusString.length() + formatted.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return resultSpan;
+    }
+
+
+
 }

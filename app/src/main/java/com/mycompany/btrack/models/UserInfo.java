@@ -81,6 +81,8 @@ public class UserInfo {
                     }
                     sortDebtors();
                     DebtorFragment.refresh();
+                    DebtorFragment.mDebtSummaryTextView.setText(
+                            Debtor.totalAmountSpanForTextView(mDebtors, c));
                 } else {
                     Log.i(TAG, "debtors does not exist########");
                 }
