@@ -296,13 +296,17 @@ public class DebtorFragment extends ListFragment {
                                 .setMessage("Are you sure you want to delete " + c.getName() + "?")
                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
-                                        UserInfo.get(getActivity().getApplicationContext()).deleteDebtor(c);
-                                        mDebtors.remove(c);
+                                        if (InternetUtil.isNetworkConnected(getActivity())) {
+                                            UserInfo.get(getActivity().getApplicationContext()).deleteDebtor(c);
+                                            mDebtors.remove(c);
 
-                                        UserInfo.get(getActivity().getApplicationContext()).saveUserInfo();
-                                        ((DebtorAdapter) getListAdapter()).notifyDataSetChanged();
-                                        mDebtSummaryTextView.setText(Debtor.totalAmountSpanForTextView(
-                                                (UserInfo.get(getActivity().getApplicationContext())).getDebtors(), getActivity()));
+                                            UserInfo.get(getActivity().getApplicationContext()).saveUserInfo();
+                                            ((DebtorAdapter) getListAdapter()).notifyDataSetChanged();
+                                            mDebtSummaryTextView.setText(Debtor.totalAmountSpanForTextView(
+                                                    (UserInfo.get(getActivity().getApplicationContext())).getDebtors(), getActivity()));
+                                        } else {
+                                            InternetUtil.alertUserNetwork(getActivity());
+                                        }
                                     }
                                 })
                                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
