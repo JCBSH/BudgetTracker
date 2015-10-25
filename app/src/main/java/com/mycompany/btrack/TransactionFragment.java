@@ -97,19 +97,13 @@ public class TransactionFragment extends ListFragment {
                     sortAndNotify(((TransactionAdapter) getListAdapter()));
                     startEditTransaction(t);
                 } else {
-                    Log.d(TAG, mDeleteListPosition.size() + "  " + mDeleteTransactionsList.size());
-                    Log.d(TAG, mDeleteListPosition.get(0).toString() + "  " + mDeleteTransactionsList.get(0).getAmount());
-                    for (Integer i = 0; i < getListView().getChildCount(); i++) {
-                        CheckedTextView ch = (CheckedTextView) getListView().getChildAt(i).findViewById(R.id.delete_check);
-                        ch.setChecked(false);
-                    }
+
                     for (Transaction t : mDeleteTransactionsList) {
                         UserInfo.get(getActivity().getApplicationContext()).deleteTransaction(t);
                         mTransactions.remove(t);
                     }
 
-                    mDeleteTransactionsList.clear();
-                    mDeleteListPosition.clear();
+                    clearDeleteList();
 
                     UserInfo.get(getActivity().getApplicationContext()).saveUserInfo();
 
@@ -258,11 +252,6 @@ public class TransactionFragment extends ListFragment {
         listAdapter.notifyDataSetChanged();
     }
     private void clearDeleteList() {
-//        for (Integer i = 0; i < getListView().getChildCount(); i++) {
-//
-//            CheckedTextView ch = (CheckedTextView) getListView().getChildAt(i).findViewById(R.id.delete_check);
-//            ch.setChecked(false);
-//        }
         mDeleteTransactionsList.clear();
         mDeleteListPosition.clear();
     }
@@ -451,8 +440,8 @@ public class TransactionFragment extends ListFragment {
                 convertView = getActivity().getLayoutInflater()
                         .inflate(R.layout.transaction_list_item, null);
             }
-            Log.d(TAG, "total positions: " + UserInfo.get(getActivity().getApplicationContext()).getTransactions().size());
-            Log.d(TAG, "display position: " + position);
+//            Log.d(TAG, "total positions: " + UserInfo.get(getActivity().getApplicationContext()).getTransactions().size());
+//            Log.d(TAG, "display position: " + position);
             Transaction c = getItem(position);
             TextView recipientTextView =
                     (TextView)convertView.findViewById(R.id.transaction_list_item_recipient_TextView);
