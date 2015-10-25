@@ -31,9 +31,7 @@
         android:hint="@string/hint_password_conf"/>
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        style="@style/Button"
         android:text="@string/sign_up"
         android:onClick="signUp"/>
 

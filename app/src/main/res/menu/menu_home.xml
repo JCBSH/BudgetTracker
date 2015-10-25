@@ -6,6 +6,6 @@
           android:orderInCategory="100" app:showAsAction="never" />
     <item android:id="@+id/action_change_password"
         android:title="@string/action_change_password"
-        android:orderInCategory="10"
-        app:showAsAction="never" />
+        android:orderInCategory="10"/>
+
 </menu>

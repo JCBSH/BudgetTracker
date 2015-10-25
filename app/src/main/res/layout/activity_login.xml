@@ -24,16 +24,12 @@
         android:hint="@string/hint_password"/>
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        style="@style/Button"
         android:text="@string/login"
         android:onClick="login"/>
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        style="@style/Button"
         android:text="@string/sign_up"
         android:onClick="signUp"/>
 
@@ -44,5 +40,15 @@
         android:text="@string/forgot_password"
         android:clickable="true"
         android:onClick="recover"/>
+    <RelativeLayout
+        android:id="@+id/loadingPanel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center" >
 
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true" />
+    </RelativeLayout>
 </LinearLayout>

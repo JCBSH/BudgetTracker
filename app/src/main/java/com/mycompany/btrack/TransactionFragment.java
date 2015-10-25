@@ -14,12 +14,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.mycompany.btrack.models.SpendingLimit;
 import com.mycompany.btrack.models.Transaction;
 import com.mycompany.btrack.models.UserInfo;
 import com.mycompany.btrack.savedStates.HomeActivityTabState;
@@ -59,6 +61,8 @@ public class TransactionFragment extends ListFragment {
     private ImageButton mSummaryButton;
     private TransactionFragmentState saveState;
 
+    private Button mSpendingLimitButton;
+
     public TransactionFragment() {
 
     }
@@ -88,6 +92,8 @@ public class TransactionFragment extends ListFragment {
         //listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
         
         mAddDeleteButton = (ImageButton) rootView.findViewById(R.id.transaction_AddDeleteButton);
+        mSpendingLimitButton = (Button) rootView.findViewById(R.id.set_up_limit_button);
+
         mAddDeleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -321,38 +327,6 @@ public class TransactionFragment extends ListFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.fragment_transaction_menu, menu);
-
-/*
-        double totalTransactionsAmount = 0;
-        for (int i = 0; i < mTransactions.size(); i++) {
-            totalTransactionsAmount += mTransactions.get(i).getAmount();
-        }
-        if (totalTransactionsAmount >= UserInfo.get(getActivity().getApplicationContext()).getSpendingLimit()) {
-
-            AlertDialog.Builder popUpAlert = new AlertDialog.Builder(getActivity());
-
-            // here is the title for the dialog box
-            popUpAlert.setTitle("Your Title");
-
-            popUpAlert
-                    .setMessage("Spending Limit has been Reached!")
-                    .setCancelable(false)
-                    .setPositiveButton("OK",new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            // if this button is clicked, just close
-                            // the dialog box and do nothing
-                            dialog.cancel();
-                        }
-                    });
-
-            AlertDialog alertDialog = popUpAlert.create();
-
-            alertDialog.show();
-
-        } else {
-            Toast.makeText(getActivity(), "far from spending limit", Toast.LENGTH_SHORT).show();
-        }
-*/
     }
 
     @Override
@@ -371,6 +345,24 @@ public class TransactionFragment extends ListFragment {
     public void onResume() {
         super.onResume();
         Log.d(TAG, "onResume()");
+
+        SpendingLimit limit = UserInfo.get(getActivity().getApplicationContext()).getSpendingLimit();
+        //Log.e("limit value: ", "limitvalue: " + limit);
+
+        if (limit != null) {
+            double amount = limit.getAmount();
+            mSpendingLimitButton.setText("Spending Limit: $" + amount);
+
+            double totalTransactionsAmount = 0;
+            for (int i = 0; i < mTransactions.size(); i++) {
+                totalTransactionsAmount += mTransactions.get(i).getAmount();
+            }
+            if (totalTransactionsAmount >= amount) {
+                Toast.makeText(this.getActivity(), "Spending limit has been reached!!!", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Log.e(TAG, "limit ----------------> 0.00");
+        }
     }
 
     @Override

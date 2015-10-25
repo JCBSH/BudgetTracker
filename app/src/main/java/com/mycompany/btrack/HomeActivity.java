@@ -126,6 +126,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
     public void onResume() {
         super.onResume();
         Log.d(TAG, "onResume()");
+
     }
 
     @Override

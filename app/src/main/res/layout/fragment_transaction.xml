@@ -1,3 +1,5 @@
+
+
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
@@ -10,11 +12,10 @@
         android:orientation="vertical">
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/summary_bar_color">
+            android:layout_height="wrap_content">
             <Button
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="55dp"
                 android:text="@string/title_activity_set_up_limit"
                 android:onClick="setSpendingLimit"
                 android:id="@+id/set_up_limit_button" />
@@ -56,7 +57,9 @@
             android:layout_height="wrap_content"
             android:id="@+id/transaction_AddDeleteButton"
             android:background="@null"
-            android:layout_margin="@dimen/bottom_button_margin_1"/>
+            android:layout_margin="@dimen/bottom_button_margin_1"
+            android:paddingRight="20dp"
+            android:paddingBottom="17dp" />
 
 
         </LinearLayout>
@@ -65,13 +68,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="left|bottom"
         android:orientation="horizontal">
-        <ImageButton
-            android:src = "@drawable/close"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/transaction_cancelFilterButton"
-            android:background="@null"
-            android:layout_margin="@dimen/bottom_button_margin_1"/>
 
         <ImageButton
             android:src = "@drawable/filter"
@@ -79,8 +75,17 @@
             android:layout_height="wrap_content"
             android:id="@+id/transaction_FilterButton"
             android:background="@null"
-            android:layout_margin="@dimen/bottom_button_margin_1"/>
+            android:layout_margin="@dimen/bottom_button_margin_1"
+            android:paddingLeft="20dp"
+            android:paddingBottom="17dp" />
 
+        <ImageButton
+            android:src = "@drawable/close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/transaction_cancelFilterButton"
+            android:background="@null"
+            android:layout_margin="@dimen/bottom_button_margin_1"/>
 
     </LinearLayout>
 
@@ -91,6 +96,7 @@
         android:id="@+id/transaction_SummaryButton"
         android:background="@null"
         android:layout_gravity="center|bottom"
-        android:layout_margin="@dimen/bottom_button_margin_1"/>
+        android:layout_margin="@dimen/bottom_button_margin_1"
+        android:paddingBottom="17dp" />
 
 </FrameLayout>
