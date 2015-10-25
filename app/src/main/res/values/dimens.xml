@@ -22,5 +22,7 @@
     <dimen name="transaction_edit_date_transformY">125dp</dimen>
     <dimen name="summary_bar_text_size_1">18sp</dimen>
     <dimen name="transaction_filter_date_container_height">150dp</dimen>
+    <dimen name="image_button_bottom_padding">4dp</dimen>
+    <dimen name="image_button_side_padding">20dp</dimen>
 
 </resources>

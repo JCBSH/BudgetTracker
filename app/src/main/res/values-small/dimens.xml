@@ -16,4 +16,6 @@
     <dimen name="summary_bar_text_size_1">12sp</dimen>
     <dimen name="transaction_filter_date_container_height">125dp</dimen>
     <dimen name="list_item_standard_3_margin">8dp</dimen>
+    <dimen name="image_button_bottom_padding">3dp</dimen>
+    <dimen name="image_button_side_padding">20dp</dimen>
 </resources>

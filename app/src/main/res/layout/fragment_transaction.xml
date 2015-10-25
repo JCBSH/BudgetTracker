@@ -51,7 +51,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/transaction_cancelDeleteButton"
             android:background="@null"
-            android:layout_margin="@dimen/bottom_button_margin_1"/>
+            android:layout_margin="@dimen/bottom_button_margin_1"
+            android:paddingBottom="@dimen/image_button_bottom_padding"/>
 
         <ImageButton
             android:src = "@drawable/add"
@@ -60,8 +61,8 @@
             android:id="@+id/transaction_AddDeleteButton"
             android:background="@null"
             android:layout_margin="@dimen/bottom_button_margin_1"
-            android:paddingRight="20dp"
-            android:paddingBottom="17dp" />
+            android:paddingRight="@dimen/image_button_side_padding"
+            android:paddingBottom="@dimen/image_button_bottom_padding" />
 
 
         </LinearLayout>
@@ -78,8 +79,8 @@
             android:id="@+id/transaction_FilterButton"
             android:background="@null"
             android:layout_margin="@dimen/bottom_button_margin_1"
-            android:paddingLeft="20dp"
-            android:paddingBottom="17dp" />
+            android:paddingLeft="@dimen/image_button_side_padding"
+            android:paddingBottom="@dimen/image_button_bottom_padding" />
 
         <ImageButton
             android:src = "@drawable/close"
@@ -87,7 +88,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/transaction_cancelFilterButton"
             android:background="@null"
-            android:layout_margin="@dimen/bottom_button_margin_1"/>
+            android:layout_margin="@dimen/bottom_button_margin_1"
+            android:paddingBottom="@dimen/image_button_bottom_padding"/>
 
     </LinearLayout>
 
@@ -99,6 +101,6 @@
         android:background="@null"
         android:layout_gravity="center|bottom"
         android:layout_margin="@dimen/bottom_button_margin_1"
-        android:paddingBottom="17dp" />
+        android:paddingBottom="@dimen/image_button_bottom_padding" />
 
 </FrameLayout>

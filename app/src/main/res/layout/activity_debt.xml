@@ -69,7 +69,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/debt_cancelDeleteButton"
             android:background="@null"
-            android:layout_margin="@dimen/bottom_button_margin_1"/>
+            android:layout_margin="@dimen/bottom_button_margin_1"
+            android:paddingBottom="@dimen/image_button_bottom_padding"/>
 
         <ImageButton
             android:src = "@drawable/add"
@@ -77,7 +78,9 @@
             android:layout_height="wrap_content"
             android:id="@+id/debt_AddDeleteButton"
             android:background="@null"
-            android:layout_margin="@dimen/bottom_button_margin_1"/>
+            android:layout_margin="@dimen/bottom_button_margin_1"
+            android:paddingRight="@dimen/image_button_side_padding"
+            android:paddingBottom="@dimen/image_button_bottom_padding"/>
 
 
     </LinearLayout>
