@@ -62,7 +62,7 @@ public class TransactionFragment extends ListFragment {
     private ImageButton mSummaryButton;
     private TransactionFragmentState saveState;
 
-    private Button mSpendingLimitButton;
+    public static Button mSpendingLimitButton;
 
     public TransactionFragment() {
 
@@ -207,7 +207,11 @@ public class TransactionFragment extends ListFragment {
     static TransactionFragment transactionFragment;
     public static void refresh() {
         ((TransactionAdapter) transactionFragment.getListAdapter()).notifyDataSetChanged();
-
+//        mSpendingLimitButton = (Button) rootView.findViewById(R.id.set_up_limit_button);
+//
+//        SpendingLimit limit = UserInfo.get(getActivity().getApplicationContext()).getSpendingLimit();
+//        double amount = limit.getAmount();
+//        mSpendingLimitButton.setText("Spending Limit: $" + amount);
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

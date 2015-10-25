@@ -95,8 +95,8 @@ public class UserInfo {
                 if (dataSnapshot.exists()) {
                     SpendingLimitDB limit = dataSnapshot.getValue(SpendingLimitDB.class);
                     mSpendingLimit = new SpendingLimit(limit.getAmount());
-
-                    TransactionFragment.refresh();
+                    TransactionFragment.mSpendingLimitButton.setText("Spending Limit: $" + limit.getAmount());
+//                    TransactionFragment.refresh();
                     //Log.e(TAG, "limit ----------------> " + mSpendingLimit.getAmount());
                 } else {
 
