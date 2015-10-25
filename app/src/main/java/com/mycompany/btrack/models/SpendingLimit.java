@@ -4,6 +4,7 @@ import android.text.format.DateFormat;
 
 import com.mycompany.btrack.utils.MoneyTextWatcher;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -52,8 +53,6 @@ public class SpendingLimit {
 
     public void setLimit(double d) {
         this.mLimit = d;
-
-        update();
     }
 
     public boolean overStatus() {
@@ -66,7 +65,8 @@ public class SpendingLimit {
         if (overStatus) {
             statusTitle = "Over";
         }
-        return (mMonth + " Limit : " + mLimit + " | " + statusTitle + ": " + mBalanceAfterLimit);
+
+        return (mMonth + " Limit : " + getFormat(mLimit) + " | " + statusTitle + ": " + getFormat(mBalanceAfterLimit));
     }
 
     public void update() {
@@ -92,15 +92,36 @@ public class SpendingLimit {
         mMonth = (String) DateFormat.format("MMM", curDate);
 
 
-        mBalanceAfterLimit = Transaction.getTotalAmount(thisMonthTransactions);
+        double balanceBeforeLimit = Transaction.getTotalAmount(thisMonthTransactions);
 
 
-        if (mBalanceAfterLimit > mLimit) {
+        if (-balanceBeforeLimit > mLimit) {
             overStatus = true;
         } else {
             overStatus = false;
         }
 
+        mBalanceAfterLimit = Math.abs(balanceBeforeLimit + mLimit);
 
+
+    }
+
+
+
+    public String getFormat(double balance) {
+
+
+        DecimalFormat df = new DecimalFormat("#.00");
+        String formatted = "";
+        if (balance > MoneyTextWatcher.MAX_AMOUNT_LIMIT) {
+            formatted = df.format(MoneyTextWatcher.MAX_AMOUNT_LIMIT);
+            formatted = "> " + formatted;
+        } else if (balance == 0.0){
+            formatted = "0.00";
+        } else {
+            formatted = df.format(balance);
+        }
+
+        return formatted;
     }
 }

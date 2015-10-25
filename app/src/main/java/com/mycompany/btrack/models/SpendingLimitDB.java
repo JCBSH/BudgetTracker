@@ -8,7 +8,6 @@ public class SpendingLimitDB {
     private double amount;
 
     public SpendingLimitDB() {
-
     }
 
     public SpendingLimitDB(double amount) {

@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.mycompany.btrack.models.UserInfo;
 import com.mycompany.btrack.utils.ErrorUtil;
+import com.mycompany.btrack.utils.MoneyTextWatcher;
 
 
 public class SetUpLimitActivity extends ActionBarActivity {
@@ -33,6 +34,7 @@ public class SetUpLimitActivity extends ActionBarActivity {
         setContentView(R.layout.activity_set_up_limit);
 
         mAmount = (EditText) findViewById(R.id.limit_amount_EditText);
+        mAmount.addTextChangedListener(new MoneyTextWatcher(mAmount));
         mSetLimit = (Button) findViewById(R.id.set_up_limit_button);
 
         mSetLimit.setOnClickListener(new View.OnClickListener() {

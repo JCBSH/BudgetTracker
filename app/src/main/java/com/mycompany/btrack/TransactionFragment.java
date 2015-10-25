@@ -126,6 +126,7 @@ public class TransactionFragment extends ListFragment {
                     UserInfo.get(getActivity().getApplicationContext()).saveUserInfo();
 
                     sortAndNotify(((TransactionAdapter) getListAdapter()));
+                    updateSpendingLimit();
                     //mDeleteStatus = false;
                 }
             }
@@ -248,18 +249,14 @@ public class TransactionFragment extends ListFragment {
             case REQUEST_SUCCESSFUL_EDIT:
                 Log.d(TAG, "transaction edit successful");
                 sortAndNotify(((TransactionAdapter) getListAdapter()));
+                updateSpendingLimit();
                 break;
             case REQUEST_NEW_SPENDING:
                 double newLimit = data.getDoubleExtra(SetUpLimitActivity.EXTRA_NEW_LIMIT, 0.00);
                 SpendingLimit limit = UserInfo.get(getActivity().getApplicationContext()).getSpendingLimit();
                 limit.setLimit(newLimit);
+                updateSpendingLimit();
 
-                //double amount = limit.getAmount();
-                mSpendingLimitButton.setText(limit.toString());
-
-                if (limit.overStatus()) {
-                    Toast.makeText(this.getActivity(), "Spending limit has been reached!!!", Toast.LENGTH_SHORT).show();
-                }
         }
     }
 
@@ -280,9 +277,21 @@ public class TransactionFragment extends ListFragment {
     }
 
 
+    private void updateSpendingLimit() {
+        SpendingLimit limit = UserInfo.get(getActivity().getApplicationContext()).getSpendingLimit();
+        limit.update();
+        mSpendingLimitButton.setText(limit.toString());
+
+        if (limit.overStatus()) {
+            Toast.makeText(this.getActivity(), "Spending limit has been reached!!!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
     private void sortAndNotify(TransactionAdapter listAdapter) {
         listAdapter.sort(new TransactionComparator());
         listAdapter.notifyDataSetChanged();
+        //updateSpendingLimit();
     }
     private void clearDeleteList() {
         mDeleteTransactionsList.clear();
