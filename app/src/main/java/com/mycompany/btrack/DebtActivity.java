@@ -82,10 +82,7 @@ public class DebtActivity extends ListActivity {
                     sortAndNotify(((DebtAdapter) getListAdapter()));
                     startEditDebt(d);
                 } else {
-                    for (Integer i : mDeleteListPosition) {
-                        CheckedTextView ch = (CheckedTextView) getListView().getChildAt(i).findViewById(R.id.delete_check);
-                        ch.setChecked(false);
-                    }
+
                     for (Debt d : mDeleteDebtsList) {
                         mDebtor.deleteDebt(d);
                         mDebts.remove(d);
@@ -184,10 +181,6 @@ public class DebtActivity extends ListActivity {
         listAdapter.notifyDataSetChanged();
     }
     private void clearDeleteList() {
-        for (Integer i : mDeleteListPosition) {
-            CheckedTextView ch = (CheckedTextView) getListView().getChildAt(i).findViewById(R.id.delete_check);
-            ch.setChecked(false);
-        }
         mDeleteDebtsList.clear();
         mDeleteListPosition.clear();
     }
@@ -320,12 +313,19 @@ public class DebtActivity extends ListActivity {
             descriptionTextView.setText(c.getDescription());
 
             CheckedTextView ch = (CheckedTextView) convertView.findViewById(R.id.delete_check);
+
             if (mDeleteStatus == true) {
                 ch.setVisibility(View.VISIBLE);
+                if (mDeleteListPosition.contains(position)) {
+                    ch.setChecked(true);
+                } else {
+                    ch.setChecked(false);
+                }
             } else {
                 //ch.setChecked(false);
                 ch.setVisibility(View.INVISIBLE);
             }
+
             return convertView;
         }
     }
