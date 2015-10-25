@@ -4,14 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import com.mycompany.btrack.models.UserInfo;
-import com.mycompany.btrack.utils.ErrorUtil;
 import com.mycompany.btrack.utils.MoneyTextWatcher;
 
 
@@ -24,9 +20,6 @@ public class SetUpLimitActivity extends ActionBarActivity {
 
     private EditText mAmount;
     private Button mSetLimit;
-    private ErrorUtil error;
-
-    private UserInfo user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,35 +41,8 @@ public class SetUpLimitActivity extends ActionBarActivity {
             }
         });
 
-        error = new ErrorUtil();
-        user.get(getApplicationContext());
-
     }
 
 
-    public void setSpendingLimit(View view) {
-        Log.i(TAG, "signUp()");
-
-        String limitAmount = String.valueOf(mAmount.getText());
-
-        //Log.i(TAG, "limit:" + limitAmount);
-
-        if (limitAmount.equals("") || limitAmount.equals("-") || limitAmount.equals(".")) {
-            user.get(getApplicationContext()).setSpendingLimit(0.00);
-            Log.e(TAG, "onError():"+ "invalid amount" + "!!");
-            Toast.makeText(getApplicationContext(), "Invalid amount", Toast.LENGTH_LONG).show();
-        } else {
-            Double d = Double.parseDouble(limitAmount);
-
-            user.get(getApplicationContext()).setSpendingLimit(d);
-            //mSetLimit.append(" = " + d);
-
-            user.get(getApplicationContext()).saveUserInfo();
-            Toast.makeText(getApplicationContext(), "Limit has been set to " + d, Toast.LENGTH_SHORT).show();
-        }
-
-        setResult(Activity.RESULT_OK);
-        finish();
-    }
 
 }

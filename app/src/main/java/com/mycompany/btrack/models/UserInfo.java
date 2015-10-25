@@ -1,6 +1,7 @@
 package com.mycompany.btrack.models;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 
 import com.firebase.client.DataSnapshot;
@@ -9,6 +10,7 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.mycompany.btrack.App;
 import com.mycompany.btrack.DebtorFragment;
+import com.mycompany.btrack.R;
 import com.mycompany.btrack.TransactionFragment;
 import com.mycompany.btrack.utils.DebtorComparator;
 import com.mycompany.btrack.utils.TransactionComparator;
@@ -31,7 +33,7 @@ public class UserInfo {
 
     private SpendingLimit mSpendingLimit;
 
-    private UserInfo(Context appContext) {
+    private UserInfo(final Context appContext) {
         mAppContext = appContext;
 
         mTransactions = new ArrayList<Transaction>();
@@ -89,6 +91,7 @@ public class UserInfo {
 
         Firebase limitRef = app.getFirebase().child("users").child(app.getUser().getUid()).child("spending_limit");
 
+        final Context c = appContext;
         limitRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -96,6 +99,12 @@ public class UserInfo {
                     SpendingLimitDB limit = dataSnapshot.getValue(SpendingLimitDB.class);
                     mSpendingLimit = new SpendingLimit(limit.getAmount(), mTransactions);
                     TransactionFragment.mSpendingLimitButton.setText(mSpendingLimit.toString());
+                    if (mSpendingLimit.overStatus()) {
+                        TransactionFragment.mSpendingLimitButton.setTextColor(Color.parseColor(c.getString(R.string.negative_red)));
+                    } else {
+                        TransactionFragment.mSpendingLimitButton.setTextColor(Color.parseColor(c.getString(R.string.positive_green)));
+                    }
+
 //                    TransactionFragment.refresh();
                     //Log.e(TAG, "limit ----------------> " + mSpendingLimit.getAmount());
                 } else {

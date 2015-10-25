@@ -3,6 +3,7 @@ package com.mycompany.btrack;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
@@ -96,7 +97,8 @@ public class TransactionFragment extends ListFragment {
         mAddDeleteButton = (ImageButton) rootView.findViewById(R.id.transaction_AddDeleteButton);
         mSpendingLimitButton = (Button) rootView.findViewById(R.id.set_up_limit_button);
 
-        mSpendingLimitButton.setText(UserInfo.get(getActivity().getApplicationContext()).getSpendingLimit().toString());
+        updateSpendingLimit();
+
         mSpendingLimitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -256,6 +258,7 @@ public class TransactionFragment extends ListFragment {
                 SpendingLimit limit = UserInfo.get(getActivity().getApplicationContext()).getSpendingLimit();
                 limit.setLimit(newLimit);
                 updateSpendingLimit();
+                UserInfo.get(getActivity().getApplicationContext()).saveUserInfo();
 
         }
     }
@@ -282,6 +285,11 @@ public class TransactionFragment extends ListFragment {
         limit.update();
         mSpendingLimitButton.setText(limit.toString());
 
+        if (limit.overStatus()) {
+            mSpendingLimitButton.setTextColor(Color.parseColor(getString(R.string.negative_red)));
+        } else {
+            mSpendingLimitButton.setTextColor(Color.parseColor(getString(R.string.positive_green)));
+        }
         if (limit.overStatus()) {
             Toast.makeText(this.getActivity(), "Spending limit has been reached!!!", Toast.LENGTH_SHORT).show();
         }
