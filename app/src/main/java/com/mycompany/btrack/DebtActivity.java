@@ -22,6 +22,7 @@ import com.mycompany.btrack.models.Debtor;
 import com.mycompany.btrack.models.UserInfo;
 import com.mycompany.btrack.savedStates.DebtActivityState;
 import com.mycompany.btrack.utils.DebtComparator;
+import com.mycompany.btrack.utils.InternetUtil;
 
 import java.util.ArrayList;
 
@@ -75,25 +76,29 @@ public class DebtActivity extends ListActivity {
         mAddDeleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mDeleteStatus == false) {
-                    Debt d = new Debt();
-                    mDebtor.addDebt(d);
-                    UserInfo.get(getApplicationContext()).saveUserInfo();
-                    sortAndNotify(((DebtAdapter) getListAdapter()));
-                    startEditDebt(d);
-                } else {
+                if (InternetUtil.isNetworkConnected(DebtActivity.this)) {
+                    if (mDeleteStatus == false) {
+                        Debt d = new Debt();
+                        mDebtor.addDebt(d);
+                        UserInfo.get(getApplicationContext()).saveUserInfo();
+                        sortAndNotify(((DebtAdapter) getListAdapter()));
+                        startEditDebt(d);
+                    } else {
 
-                    for (Debt d : mDeleteDebtsList) {
-                        mDebtor.deleteDebt(d);
-                        mDebts.remove(d);
+                        for (Debt d : mDeleteDebtsList) {
+                            mDebtor.deleteDebt(d);
+                            mDebts.remove(d);
+                        }
+
+                        mDeleteDebtsList.clear();
+                        mDeleteListPosition.clear();
+
+                        UserInfo.get(getApplicationContext()).saveUserInfo();
+                        sortAndNotify(((DebtAdapter) getListAdapter()));
+                        //mDeleteStatus = false;
                     }
-
-                    mDeleteDebtsList.clear();
-                    mDeleteListPosition.clear();
-
-                    UserInfo.get(getApplicationContext()).saveUserInfo();
-                    sortAndNotify(((DebtAdapter) getListAdapter()));
-                    //mDeleteStatus = false;
+                } else {
+                    InternetUtil.alertUserNetwork(DebtActivity.this);
                 }
             }
         });

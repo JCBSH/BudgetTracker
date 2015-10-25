@@ -16,6 +16,7 @@ import android.widget.Spinner;
 import com.mycompany.btrack.models.Transaction;
 import com.mycompany.btrack.models.UserInfo;
 import com.mycompany.btrack.utils.CategoryArrayAdaptor;
+import com.mycompany.btrack.utils.InternetUtil;
 import com.mycompany.btrack.utils.MoneyTextWatcher;
 import com.mycompany.btrack.utils.PriorityArrayAdaptor;
 import com.mycompany.btrack.utils.StringTextWatcher;
@@ -94,21 +95,27 @@ public class EditTransactionActivity extends ActionBarActivity implements DateTi
         mUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String amountString = String.valueOf(mAmount.getText());
-                if (amountString.equals("") || amountString.equals("-") || amountString.equals(".")) {
-                    mTransaction.setAmount(0.00);
+                boolean netResult = InternetUtil.isNetworkConnected(EditTransactionActivity.this);
+                if (netResult) {
+                    String amountString = String.valueOf(mAmount.getText());
+                    if (amountString.equals("") || amountString.equals("-") || amountString.equals(".")) {
+                        mTransaction.setAmount(0.00);
+                    } else {
+                        mTransaction.setAmount(Double.parseDouble(String.valueOf(mAmount.getText())));
+                    }
+                    mTransaction.setRecipient(String.valueOf(mRecipient.getText()));
+                    mTransaction.setDescription(String.valueOf(mDescription.getText()));
+                    mTransaction.setDate(mDate);
+                    mTransaction.setCategory((String) mCategorySpinner.getSelectedItem());
+                    mTransaction.setPriority((String) mPrioritySpinner.getSelectedItem());
+                    setResult(Activity.RESULT_OK);
+                    finish();
                 } else {
-                    mTransaction.setAmount(Double.parseDouble(String.valueOf(mAmount.getText())));
+                    InternetUtil.alertUserNetwork(EditTransactionActivity.this);
                 }
 
-                mTransaction.setRecipient(String.valueOf(mRecipient.getText()));
-                mTransaction.setDescription(String.valueOf(mDescription.getText()));
-                mTransaction.setDate(mDate);
-                mTransaction.setCategory((String) mCategorySpinner.getSelectedItem());
-                mTransaction.setPriority((String) mPrioritySpinner.getSelectedItem());
                 //UserInfo.get(getApplicationContext()).sortTransactions();
-                setResult(Activity.RESULT_OK);
-                finish();
+
             }
         });
         Log.d(TAG, "onCreate()");

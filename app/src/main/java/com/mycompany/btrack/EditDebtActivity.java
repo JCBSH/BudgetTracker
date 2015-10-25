@@ -14,6 +14,7 @@ import android.widget.EditText;
 import com.mycompany.btrack.models.Debt;
 import com.mycompany.btrack.models.Debtor;
 import com.mycompany.btrack.models.UserInfo;
+import com.mycompany.btrack.utils.InternetUtil;
 import com.mycompany.btrack.utils.MoneyTextWatcher;
 import com.mycompany.btrack.utils.StringTextWatcher;
 
@@ -77,17 +78,22 @@ public class EditDebtActivity extends ActionBarActivity implements DateTimePicke
         mUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String amountString = String.valueOf(mAmount.getText());
-                if (amountString.equals("") || amountString.equals("-") || amountString.equals(".")) {
-                    mDebt.setAmount(0.00);
-                } else {
-                    mDebt.setAmount(Double.parseDouble(String.valueOf(mAmount.getText())));
-                }
+                boolean netResult = InternetUtil.isNetworkConnected(EditDebtActivity.this);
+                if (netResult) {
+                    String amountString = String.valueOf(mAmount.getText());
+                    if (amountString.equals("") || amountString.equals("-") || amountString.equals(".")) {
+                        mDebt.setAmount(0.00);
+                    } else {
+                        mDebt.setAmount(Double.parseDouble(String.valueOf(mAmount.getText())));
+                    }
 
-                mDebt.setDescription(String.valueOf(mDescription.getText()));
-                mDebt.setDate(mDate);
-                setResult(Activity.RESULT_OK);
-                finish();
+                    mDebt.setDescription(String.valueOf(mDescription.getText()));
+                    mDebt.setDate(mDate);
+                    setResult(Activity.RESULT_OK);
+                    finish();
+                } else {
+                    InternetUtil.alertUserNetwork(EditDebtActivity.this);
+                }
             }
         });
         Log.d(TAG, "onCreate()");

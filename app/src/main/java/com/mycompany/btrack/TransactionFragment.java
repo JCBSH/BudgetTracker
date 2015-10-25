@@ -28,6 +28,7 @@ import com.mycompany.btrack.models.Transaction;
 import com.mycompany.btrack.models.UserInfo;
 import com.mycompany.btrack.savedStates.HomeActivityTabState;
 import com.mycompany.btrack.savedStates.TransactionFragmentState;
+import com.mycompany.btrack.utils.InternetUtil;
 import com.mycompany.btrack.utils.TransactionComparator;
 
 import java.io.Serializable;
@@ -119,26 +120,33 @@ public class TransactionFragment extends ListFragment {
             @Override
             public void onClick(View view) {
                 if (mDeleteStatus == false) {
-                    Transaction t = new Transaction();
-                    UserInfo.get(getActivity().getApplicationContext()).addTransaction(t);
-                    sortAndNotify(((TransactionAdapter) getListAdapter()));
-                    startEditTransaction(t);
-                } else {
-
-                    for (Transaction t : mDeleteTransactionsList) {
-                        UserInfo.get(getActivity().getApplicationContext()).deleteTransaction(t);
-                        mTransactions.remove(t);
+                    if (InternetUtil.isNetworkConnected(getActivity())) {
+                        Transaction t = new Transaction();
+                        UserInfo.get(getActivity().getApplicationContext()).addTransaction(t);
+                        sortAndNotify(((TransactionAdapter) getListAdapter()));
+                        startEditTransaction(t);
+                    } else {
+                        InternetUtil.alertUserNetwork(getActivity());
                     }
+                } else {
+                    if (InternetUtil.isNetworkConnected(getActivity())) {
+                        for (Transaction t : mDeleteTransactionsList) {
+                            UserInfo.get(getActivity().getApplicationContext()).deleteTransaction(t);
+                            mTransactions.remove(t);
+                        }
 
-                    clearDeleteList();
+                        clearDeleteList();
 
-                    UserInfo.get(getActivity().getApplicationContext()).saveUserInfo();
+                        UserInfo.get(getActivity().getApplicationContext()).saveUserInfo();
 
-                    sortAndNotify(((TransactionAdapter) getListAdapter()));
-                    updateSpendingLimit();
-                    mTransactionSummaryTextView.setText(Transaction.totalAmountSpanForTextView(
-                            (UserInfo.get(getActivity().getApplicationContext())).getTransactions(), getActivity()));
-                    //mDeleteStatus = false;
+                        sortAndNotify(((TransactionAdapter) getListAdapter()));
+                        updateSpendingLimit();
+                        mTransactionSummaryTextView.setText(Transaction.totalAmountSpanForTextView(
+                                (UserInfo.get(getActivity().getApplicationContext())).getTransactions(), getActivity()));
+                        //mDeleteStatus = false;
+                    } else {
+                        InternetUtil.alertUserNetwork(getActivity());
+                    }
                 }
             }
         });

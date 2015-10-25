@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.mycompany.btrack.models.Debtor;
 import com.mycompany.btrack.models.UserInfo;
+import com.mycompany.btrack.utils.InternetUtil;
 
 import java.util.ArrayList;
 
@@ -126,21 +127,25 @@ public class DebtorFragment extends ListFragment {
             @Override
             public void onClick(View view) {
                 if (mDeleteStatus == false) {
-                    //mCurrentSelectedDebtor = new Debtor();
-                    //UserInfo.get(getActivity().getApplicationContext()).addDebtor(mCurrentSelectedDebtor);
-                    mCurrentSelectedDebtor = UserInfo.get(getActivity().getApplicationContext()).createAndAddNewDebtor();
-                    FragmentManager fm = getActivity().getSupportFragmentManager();
-                    //DatePickerFragment dialog = DatePickerFragment.newInstance(mCrime.getDate());
-                    //TimePickerFragment dialog = TimePickerFragment.newInstance(mCrime.getDate());
-                    EditDebtorFragment editFragment = new EditDebtorFragment();
-                    editFragment.setOldName(mCurrentSelectedDebtor.getName());
-                    editFragment.setTargetFragment(DebtorFragment.this, REQUEST_NAME);
-                    //Log.d(TAG, "before");
-                    editFragment.show(fm, EDIT_NAME);
-                    //Log.d(TAG, "return");
-                    UserInfo.get(getActivity().getApplicationContext()).sortDebtors();
-                    UserInfo.get(getActivity().getApplicationContext()).saveUserInfo();
-                    ((DebtorAdapter) getListAdapter()).notifyDataSetChanged();
+                    if (InternetUtil.isNetworkConnected(getActivity())) {
+                        //mCurrentSelectedDebtor = new Debtor();
+                        //UserInfo.get(getActivity().getApplicationContext()).addDebtor(mCurrentSelectedDebtor);
+                        mCurrentSelectedDebtor = UserInfo.get(getActivity().getApplicationContext()).createAndAddNewDebtor();
+                        FragmentManager fm = getActivity().getSupportFragmentManager();
+                        //DatePickerFragment dialog = DatePickerFragment.newInstance(mCrime.getDate());
+                        //TimePickerFragment dialog = TimePickerFragment.newInstance(mCrime.getDate());
+                        EditDebtorFragment editFragment = new EditDebtorFragment();
+                        editFragment.setOldName(mCurrentSelectedDebtor.getName());
+                        editFragment.setTargetFragment(DebtorFragment.this, REQUEST_NAME);
+                        //Log.d(TAG, "before");
+                        editFragment.show(fm, EDIT_NAME);
+                        //Log.d(TAG, "return");
+                        UserInfo.get(getActivity().getApplicationContext()).sortDebtors();
+                        UserInfo.get(getActivity().getApplicationContext()).saveUserInfo();
+                        ((DebtorAdapter) getListAdapter()).notifyDataSetChanged();
+                    } else {
+                        InternetUtil.alertUserNetwork(getActivity());
+                    }
 
                 } else {
                     mAddCancelButton.setImageResource(R.drawable.add);
@@ -207,21 +212,25 @@ public class DebtorFragment extends ListFragment {
         if (resultCode != Activity.RESULT_OK) return;
         switch (requestCode) {
             case REQUEST_NAME:
-                mCurrentEditName = (String) data.getSerializableExtra(EditDebtorFragment.EXTRA_NAME);
-                if (mCurrentEditName.equalsIgnoreCase("")) {
-                    //Log.d(TAG,"skipped");
-                    break;
-                }
-                //Log.d(TAG,"no skipped");
-                if(UserInfo.get(getActivity().getApplicationContext()).
-                        changeName(mCurrentSelectedDebtor, mCurrentEditName) == true) {
-                    UserInfo.get(getActivity().getApplicationContext()).sortDebtors();
-                    UserInfo.get(getActivity().getApplicationContext()).saveUserInfo();
-                    ((DebtorAdapter) getListAdapter()).notifyDataSetChanged();
+                if (InternetUtil.isNetworkConnected(getActivity())) {
+                    mCurrentEditName = (String) data.getSerializableExtra(EditDebtorFragment.EXTRA_NAME);
+                    if (mCurrentEditName.equalsIgnoreCase("")) {
+                        //Log.d(TAG,"skipped");
+                        break;
+                    }
+                    //Log.d(TAG,"no skipped");
+                    if (UserInfo.get(getActivity().getApplicationContext()).
+                            changeName(mCurrentSelectedDebtor, mCurrentEditName) == true) {
+                        UserInfo.get(getActivity().getApplicationContext()).sortDebtors();
+                        UserInfo.get(getActivity().getApplicationContext()).saveUserInfo();
+                        ((DebtorAdapter) getListAdapter()).notifyDataSetChanged();
+                    } else {
+                        Toast toast = Toast.makeText(getActivity(), getString(R.string.debtor_name_exist_message), Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
+                    }
                 } else {
-                    Toast toast = Toast.makeText(getActivity(),getString(R.string.debtor_name_exist_message), Toast.LENGTH_SHORT);
-                    toast.setGravity(Gravity.CENTER, 0, 0);
-                    toast.show();
+                    InternetUtil.alertUserNetwork(getActivity());
                 }
                 break;
         }

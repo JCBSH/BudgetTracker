@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.mycompany.btrack.utils.InternetUtil;
 import com.mycompany.btrack.utils.MoneyTextWatcher;
 
 
@@ -36,8 +37,13 @@ public class SetUpLimitActivity extends ActionBarActivity {
                 double result =  Double.parseDouble(mAmount.getText().toString());
                 Intent i = new Intent();
                 i.putExtra(EXTRA_NEW_LIMIT, result);
-                setResult(Activity.RESULT_OK, i);
-                finish();
+                if (InternetUtil.isNetworkConnected(SetUpLimitActivity.this)) {
+                    setResult(Activity.RESULT_OK, i);
+                    finish();
+                } else {
+                    InternetUtil.alertUserNetwork(SetUpLimitActivity.this);
+                }
+
             }
         });
 
