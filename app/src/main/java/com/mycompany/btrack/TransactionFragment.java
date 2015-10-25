@@ -488,8 +488,18 @@ public class TransactionFragment extends ListFragment {
                     (TextView)convertView.findViewById(R.id.transaction_list_item_recipient_TextView);
             recipientTextView.setText(c.getRecipient());
 
+
             TextView amountTextView =
                     (TextView)convertView.findViewById(R.id.transaction_list_item_amount_TextView);
+
+            if (c.getAmount() > 0.00) {
+                amountTextView.setTextColor(Color.parseColor(getString(R.string.positive_green)));
+            } else if (c.getAmount() < 0.00) {
+                amountTextView.setTextColor(Color.parseColor(getString(R.string.negative_red)));
+            } else {
+                amountTextView.setTextColor(Color.BLACK);
+            }
+
             amountTextView.setText(c.getFormattedAmount());
 
             TextView dateTextView =
