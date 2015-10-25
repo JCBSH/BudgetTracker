@@ -34,10 +34,18 @@ public class SetUpLimitActivity extends ActionBarActivity {
         mSetLimit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                double result =  Double.parseDouble(mAmount.getText().toString());
-                Intent i = new Intent();
-                i.putExtra(EXTRA_NEW_LIMIT, result);
+
+
                 if (InternetUtil.isNetworkConnected(SetUpLimitActivity.this)) {
+                    Intent i = new Intent();
+                    String amountString = String.valueOf(mAmount.getText());
+                    double result = 0.00;
+                    if (amountString.equals("") || amountString.equals("-") || amountString.equals(".")) {
+                        result = 0.00;
+                    } else {
+                        result = Double.parseDouble(String.valueOf(mAmount.getText()));
+                    }
+                    i.putExtra(EXTRA_NEW_LIMIT, result);
                     setResult(Activity.RESULT_OK, i);
                     finish();
                 } else {
