@@ -95,6 +95,20 @@ public class TransactionFragment extends ListFragment {
         mAddDeleteButton = (ImageButton) rootView.findViewById(R.id.transaction_AddDeleteButton);
         mSpendingLimitButton = (Button) rootView.findViewById(R.id.set_up_limit_button);
 
+        SpendingLimit limit = UserInfo.get(getActivity().getApplicationContext()).getSpendingLimit();
+        double amount = limit.getAmount();
+        mSpendingLimitButton.setText("Spending Limit: $" + amount);
+        //Log.e("limit value: ", "limitvalue: " + limit);
+
+        mSpendingLimitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getActivity(), SetUpLimitActivity.class);
+                startActivity(i);
+
+            }
+        });
+
         mAddDeleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

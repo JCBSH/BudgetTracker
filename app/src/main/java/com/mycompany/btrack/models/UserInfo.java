@@ -10,22 +10,9 @@ import com.firebase.client.ValueEventListener;
 import com.mycompany.btrack.App;
 import com.mycompany.btrack.DebtorFragment;
 import com.mycompany.btrack.TransactionFragment;
-import com.mycompany.btrack.models.JSONParsers.DebtorJSONSerializer;
-import com.mycompany.btrack.models.JSONParsers.TransactionJSONSerializer;
 import com.mycompany.btrack.utils.DebtorComparator;
 import com.mycompany.btrack.utils.TransactionComparator;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.UUID;
@@ -35,32 +22,26 @@ import java.util.UUID;
  */
 public class UserInfo {
 
-    private JSONObject mJsonObject;
     private ArrayList<Transaction> mTransactions;
     private ArrayList<Debtor> mDebtors;
     private static UserInfo sUserInfo;
     private Context mAppContext;
 
-    public static final String JSON_TRANSACTIONS = "transactions";
-    public static final String JSON_DEBTORS = "debtors";
-    public static final String JSON_DEBTOR_COUNT = "debtor_count";
-
     private static final String TAG = UserInfo.class.getSimpleName();
-    private static final String FILENAME = "crimes.json";
-    private TransactionJSONSerializer mTransactionSerializer;
-    private DebtorJSONSerializer mDebtorSerializer;
 
     private SpendingLimit mSpendingLimit;
 
     private UserInfo(Context appContext) {
         mAppContext = appContext;
-        mTransactionSerializer = new TransactionJSONSerializer();
-        mDebtorSerializer = new DebtorJSONSerializer();
-        mJsonObject = new JSONObject();
+
+        mTransactions = new ArrayList<Transaction>();
+        mDebtors = new ArrayList<Debtor>();
+        mSpendingLimit = new SpendingLimit(0.00);
 
         App app = (App) mAppContext.getApplicationContext();
 
         Firebase userRef = app.getFirebase().child("users").child(app.getUser().getUid()).child("transactions");
+        //userRef.da
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -115,9 +96,10 @@ public class UserInfo {
                     SpendingLimitDB limit = dataSnapshot.getValue(SpendingLimitDB.class);
                     mSpendingLimit = new SpendingLimit(limit.getAmount());
 
+                    TransactionFragment.refresh();
                     //Log.e(TAG, "limit ----------------> " + mSpendingLimit.getAmount());
                 } else {
-                    mSpendingLimit = new SpendingLimit(0.00);
+
                     Log.e(TAG, "LIMIT does not exist########");
                 }
             }
@@ -128,64 +110,7 @@ public class UserInfo {
             }
         });
 
-        try {
-            BufferedReader reader = null;
-            try {
-                InputStream in = mAppContext.openFileInput(FILENAME);
-                reader = new BufferedReader(new InputStreamReader(in));
-                StringBuilder jsonString = new StringBuilder();
-                String line = null;
-                while ((line = reader.readLine()) != null) {
-                    // Line breaks are omitted and irrelevant
-                    jsonString.append(line);
-                }
-                Log.i(TAG + "json string**********", jsonString.toString());
 
-                mJsonObject = new JSONObject(jsonString.toString());
-                Log.d(TAG, mJsonObject.toString());
-
-
-                try {
-                    JSONArray transactionsJSONArray = mJsonObject.getJSONArray(UserInfo.JSON_TRANSACTIONS);
-                    mTransactions = mTransactionSerializer.loadTransactions(transactionsJSONArray);
-                } catch (JSONException e) {
-                    mTransactions = new ArrayList<Transaction>();
-                    Log.d(TAG, "Error loading Transactions, possibly that it doesn't exist");
-                }
-
-                try {
-                    JSONArray debtorsJSONArray = mJsonObject.getJSONArray(UserInfo.JSON_DEBTORS);
-                    mDebtors = mDebtorSerializer.loadDebtors(debtorsJSONArray);
-                } catch (JSONException e) {
-                    mDebtors = new ArrayList<Debtor>();
-                    Log.d(TAG, "Error loading Debtors, possibly that it doesn't exist");
-                }
-                try {
-                    int debtorsCount = mJsonObject.getInt(JSON_DEBTOR_COUNT);
-                    Debtor.setCount(debtorsCount);
-                } catch (JSONException e) {
-                    Debtor.setCount(0);
-                    Log.d(TAG, "Error loading Debtor count, possibly that it doesn't exist");
-                }
-
-                Log.d(TAG, "successfully load transaction");
-                sortTransactions();
-                sortDebtors();
-
-            } catch (Exception e) {
-                mTransactions = new ArrayList<Transaction>();
-                mDebtors = new ArrayList<Debtor>();
-
-                Log.e(TAG, "Error loading UserInfo: ", e);
-                e.printStackTrace();
-            } finally {
-                if (reader != null)
-                    reader.close();
-            }
-        } catch (IOException e) {
-            Log.e(TAG, "reader closing error: ", e);
-            e.printStackTrace();
-        }
     }
 
     public static UserInfo get(Context c) {
@@ -199,34 +124,7 @@ public class UserInfo {
         sUserInfo = null;
     }
 
-    private boolean saveTransactions() {
-        try {
-            JSONArray transactionsJsonArray = mTransactionSerializer.createJSONTransactions(mTransactions);
-            mJsonObject.put(JSON_TRANSACTIONS, transactionsJsonArray);
-            Log.d(TAG, "Transactions saved to JSONObject");
-            return true;
-        } catch (Exception e) {
-            Log.e(TAG, "Error saving Transactions: ", e);
-            e.printStackTrace();
-            return false;
-        }
-    }
 
-    private boolean saveDebtors() {
-        try {
-            JSONArray debtorsJsonArray = mDebtorSerializer.createJSONDebtors(mDebtors);
-            mJsonObject.put(JSON_DEBTORS, debtorsJsonArray);
-
-            mJsonObject.put(JSON_DEBTOR_COUNT, Debtor.getCount());
-
-            Log.d(TAG, "Debtors saved to JSONObject");
-            return true;
-        } catch (Exception e) {
-            Log.e(TAG, "Error saving Debtors: ", e);
-            e.printStackTrace();
-            return false;
-        }
-    }
 
     private void saveTransactionsToDB(Firebase userRef) {
         Log.d(TAG, "SAVE TRANSACTIONS TO DB ######################################");
@@ -271,36 +169,13 @@ public class UserInfo {
     }
 
     public boolean saveUserInfo() {
-        saveDebtors();
-        saveTransactions();
         App app = (App) mAppContext.getApplicationContext();
         Firebase userRef = app.getFirebase().child("users").child(app.getUser().getUid());
         saveTransactionsToDB(userRef);
         saveDebtorsToDB(userRef);
         saveSpendingLimitToDB(userRef);
 
-        try {
-            Writer writer = null;
-            try {
-                OutputStream out = mAppContext
-                        .openFileOutput(FILENAME, Context.MODE_PRIVATE);
-                writer = new OutputStreamWriter(out);
-                writer.write(mJsonObject.toString());
-                int d = Log.d(TAG, "UserInfo saved to file");
-            } catch (Exception e) {
-                Log.e(TAG, "Error saving UserInfo: ", e);
-                e.printStackTrace();
-                return false;
-            } finally {
-                if (writer != null)
-                    writer.close();
-            }
-            return true;
-        } catch (IOException e) {
-            Log.e(TAG, "writer closing error: ", e);
-            e.printStackTrace();
-            return true;
-        }
+        return true;
     }
 
     public void addTransaction(Transaction c) {

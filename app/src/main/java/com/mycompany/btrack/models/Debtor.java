@@ -1,16 +1,8 @@
 package com.mycompany.btrack.models;
 
-import android.util.Log;
-
-import com.mycompany.btrack.models.JSONParsers.DebtJSONSerializer;
 import com.mycompany.btrack.utils.DebtComparator;
 import com.mycompany.btrack.utils.MoneyTextWatcher;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,22 +14,14 @@ import java.util.UUID;
 public class Debtor {
     private static final String TAG = Debtor.class.getSimpleName();
 
-    private static final String JSON_NAME = "name";
-    private static final String JSON_DEBTS = "debts";
     private static final String DEFAULT_NAME = "person";
-    private JSONObject mJsonObject;
-    private DebtJSONSerializer mDebtSerializer;
     private String mName;
     private static int count = 0;
     private ArrayList<Debt> mDebts;
-    private JSONArray mDebtsJSONArray;
 
     public Debtor() {
         mName = getNextDefaultName();
         mDebts =  new ArrayList<Debt>();
-        mDebtSerializer = new DebtJSONSerializer();
-        mJsonObject = new JSONObject();
-        mDebtsJSONArray = new JSONArray();
         count++;
     }
 
@@ -49,59 +33,17 @@ public class Debtor {
                 mDebts.add(new Debt(debt));
             }
         }
-        mDebtSerializer = new DebtJSONSerializer();
-        mJsonObject = new JSONObject();
-        mDebtsJSONArray = new JSONArray();
         count++;
     }
-    public Debtor(JSONObject json) throws JSONException {
-        mDebtSerializer = new DebtJSONSerializer();
-        mJsonObject = json;
-        mDebtsJSONArray = new JSONArray();
-        if (json.has(JSON_NAME)) {
-            mName = json.getString(JSON_NAME);
-        }
 
-        if (json.has(JSON_DEBTS)) {
-            try {
-                JSONArray debtorsJSONArray = json.getJSONArray(JSON_DEBTS);
-                mDebts = mDebtSerializer.loadDebts(debtorsJSONArray);
-            } catch (JSONException e) {
-                mDebts = new ArrayList<Debt>();
-                Log.d(TAG, "Error loading Debts, possibly that it doesn't exist");
-            } catch (IOException e) {
-                mDebts = new ArrayList<Debt>();
-                Log.d(TAG, "Error loading Debts, possibly that it doesn't exist");
-                e.printStackTrace();
-            }
-        }
-    }
 
     @Override
     public String toString() {
         return mName;
     }
 
-    public JSONObject toJSON() throws JSONException{
-        saveDebts();
-        mJsonObject.put(JSON_NAME, mName);
-        mJsonObject.put(JSON_DEBTS, mDebtsJSONArray);
-        Log.d(TAG, "Debtor json returned");
-        Log.d(TAG, String.valueOf(mJsonObject));
-        return mJsonObject;
-    }
 
-    private boolean saveDebts() {
-        try {
-            mDebtsJSONArray = mDebtSerializer.createJSONDebts(mDebts);
-            Log.d(TAG, "Debts saved to JSONObject");
-            return true;
-        } catch (Exception e) {
-            Log.e(TAG, "Error saving Debts: ", e);
-            e.printStackTrace();
-            return false;
-        }
-    }
+
 
     public double getTotalDebtsAmount () {
         Double total = 0.0;

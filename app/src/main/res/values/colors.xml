@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="summary_bar_color">#00FF00</color>
+    <color name="summary_old_bar_color">#00FF00</color>
     <color name="custom_theme_color">#FFEA00</color>
+    <color name="summary_bar_color">#F5ECCE</color>
 </resources>

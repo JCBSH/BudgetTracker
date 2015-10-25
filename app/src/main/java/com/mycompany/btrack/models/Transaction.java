@@ -2,9 +2,6 @@ package com.mycompany.btrack.models;
 
 import android.text.format.DateFormat;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,13 +16,6 @@ public class Transaction {
     public static final  String DESCRIPTION_DEFAULT = "no description";
     public static final int RECIPIENT_SIZE_LIMIT = 20;
     public static final int DESCRIPTION_SIZE_LIMIT = 50;
-    private static final String JSON_ID = "id";
-    private static final String JSON_RECIPIENT = "recipient";
-    private static final String JSON_AMOUNT = "amount";
-    private static final String JSON_DATE = "date";
-    private static final String JSON_DESCRIPTION = "description";
-    private static final String JSON_CATEGORY = "category";
-    private static final String JSON_PRIORITY = "priority";
 
     public static final String FOOD = "Food";
     private static final String FOOD_ICON = "mipmap/food_icon";
@@ -77,32 +67,7 @@ public class Transaction {
         mCategory = t.getCategory();
         mPriority = t.getPriority();
     }
-    public Transaction(JSONObject json) throws JSONException {
-        mId = UUID.fromString(json.getString(JSON_ID));
-        if (json.has(JSON_RECIPIENT)) {
-            mRecipient = json.getString(JSON_RECIPIENT);
-        }
 
-        if (json.has(JSON_AMOUNT)) {
-            mAmount = json.getDouble(JSON_AMOUNT);
-        }
-
-        if (json.has(JSON_DATE)) {
-            mDate = new Date(json.getLong(JSON_DATE));
-        }
-
-        if (json.has(JSON_DESCRIPTION)) {
-            mDescription = json.getString(JSON_DESCRIPTION);
-        }
-
-        if (json.has(JSON_CATEGORY)) {
-            mCategory = json.getString(JSON_CATEGORY);
-        }
-
-        if (json.has(JSON_PRIORITY)) {
-            mPriority = json.getString(JSON_PRIORITY);
-        }
-    }
 
     public static ArrayList<String> getCategoryChoices() {
         ArrayList<String> choice =  new ArrayList<String>();
@@ -225,18 +190,6 @@ public class Transaction {
         return mRecipient;
     }
 
-    public JSONObject toJSON() throws JSONException{
-        JSONObject json = new JSONObject();
-        json.put(JSON_ID, mId.toString());
-        json.put(JSON_RECIPIENT, mRecipient);
-        //Log.d(TAG, mTitle);
-        json.put(JSON_AMOUNT, mAmount);
-        json.put(JSON_DATE, mDate.getTime());
-        json.put(JSON_DESCRIPTION, mDescription);
-        json.put(JSON_CATEGORY, mCategory);
-        json.put(JSON_PRIORITY, mPriority);
-        return json;
-    }
 
 
     public static ArrayList<Transaction> filterTransactions(

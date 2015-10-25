@@ -16,8 +16,6 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
-                android:text="@string/title_activity_set_up_limit"
-                android:onClick="setSpendingLimit"
                 android:id="@+id/set_up_limit_button" />
         </RelativeLayout>
 

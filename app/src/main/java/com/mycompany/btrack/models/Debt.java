@@ -2,9 +2,6 @@ package com.mycompany.btrack.models;
 
 import android.text.format.DateFormat;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,10 +14,6 @@ public class Debt {
     public static final  Double AMOUNT_DEFAULT = 0.00;
     public static final  String DESCRIPTION_DEFAULT = "no description";
     public static final int DESCRIPTION_SIZE_LIMIT = 50;
-    private static final String JSON_ID = "id";
-    private static final String JSON_AMOUNT = "amount";
-    private static final String JSON_DATE = "date";
-    private static final String JSON_DESCRIPTION = "description";
 
     private static final String TAG = Debt.class.getSimpleName();
 
@@ -43,20 +36,7 @@ public class Debt {
         mAmount = d.getAmount();
         mDescription = d.getDescription();
     }
-    public Debt(JSONObject json) throws JSONException {
-        mId = UUID.fromString(json.getString(JSON_ID));
 
-        if (json.has(JSON_AMOUNT)) {
-            mAmount = json.getDouble(JSON_AMOUNT);
-        }
-        if (json.has(JSON_DATE)) {
-            mDate = new Date(json.getLong(JSON_DATE));
-        }
-
-        if (json.has(JSON_DESCRIPTION)) {
-            mDescription = json.getString(JSON_DESCRIPTION);
-        }
-    }
 
     public double getAmount() {
         return mAmount;
@@ -125,14 +105,6 @@ public class Debt {
         return String.valueOf(mAmount);
     }
 
-    public JSONObject toJSON() throws JSONException{
-        JSONObject json = new JSONObject();
-        json.put(JSON_ID, mId.toString());
-        json.put(JSON_AMOUNT, mAmount);
-        json.put(JSON_DATE, mDate.getTime());
-        json.put(JSON_DESCRIPTION, mDescription);
-        return json;
-    }
 
 
     public static ArrayList<Debt> filterDebts(
