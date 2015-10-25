@@ -163,8 +163,9 @@ public class UserInfo {
 
     private void saveSpendingLimitToDB(Firebase userRef) {
         Firebase limitRef = userRef.child("spending_limit");
-        SpendingLimit spendingLimit = new SpendingLimit(mSpendingLimit.getLimit(), mTransactions);
-        limitRef.setValue(spendingLimit);
+
+        SpendingLimitDB spendingLimitDB = new SpendingLimitDB(mSpendingLimit.getLimit());
+        limitRef.setValue(spendingLimitDB);
         Log.d(TAG, "SAVE spending limit TO DB");
     }
 
